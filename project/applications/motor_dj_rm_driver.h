@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 17:44:36
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-23 21:51:38
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-12 11:16:30
  * @FilePath: \project\applications\motor_dj_rm_driver.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -29,7 +29,7 @@ enum{
     #if defined(MOTOR_DJ_M3508_ID3_CAN1) || defined(MOTOR_DJ_M2006_ID3_CAN1)
         DJ_M_CAN1_3,
     #endif
-
+    
     #if defined(MOTOR_DJ_M3508_ID4_CAN1) || defined(MOTOR_DJ_M2006_ID4_CAN1)
         DJ_M_CAN1_4,
     #endif

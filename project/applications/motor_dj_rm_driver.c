@@ -209,6 +209,7 @@ motor_measure_t *motor_get_by_canid(uint16_t can_id)
         else
             right = mid - 1;
     }
+    LOG_E("can_id:%d not found", can_id);
     return RT_NULL;
 }
 
@@ -577,9 +578,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
             motor_measure->round_cnt++;
             // LOG_D("id %d,total_angle %d ", motor_measure->id, motor_measure->round_cnt);
         }
-    // if(motor_measure->id==M2006_5_CAN1){
-    //     LOG_D("test");
-    // }
+
         motor_measure->msg_cnt = 0xff;
         motor_measure->total_angle = motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle;
         // LOG_D("id %d,cnt %d angle %d %d", motor_measure->id, motor_measure->round_cnt,motor_measure->round_cnt * 8191 + motor_measure->angle - motor_measure->offset_angle);
@@ -608,7 +607,7 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 }
 static void can_rx_thread1(void *parameter)
 {
-        //     motor_t *motor = motor_get(0);
+             motor_t *motor = motor_get(M2006_5_CAN1);
         // var_register(&(motor->tar_speed), "tarspeed", _f);
         // var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
         // var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
@@ -618,11 +617,17 @@ static void can_rx_thread1(void *parameter)
         // var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
         // var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
 
-        // motor_set_pos(0,100);
+         motor_set_pos(M2006_1_CAN1,0);
+         motor_set_pos(M2006_2_CAN1,0);
+         motor_set_pos(M2006_3_CAN1,0);
+         motor_set_pos(M2006_4_CAN1,0);
+         motor_set_pos(M2006_5_CAN1,0);
     while (1)
     {
         //motor_shakdown(0);
-        //motor_shakdown(1);
+        //motor_shakdown(M2006_5_CAN1);
+			        // motor_set_pos(M2006_5_CAN1,-100);
+
         rt_thread_delay(10);
     }
 }
@@ -865,12 +870,12 @@ static void set_motor_passive_feedback(void)
 #endif
 #if defined(MOTOR_DJ_M2006_ID5_CAN1)
     motor_set_passive_feedback(M2006_5_CAN1, 1);
-    APID_Set_Out_Limit(motor_get_pid_speed(M2006_5_CAN1), 30000);
+    APID_Set_Out_Limit(motor_get_pid_speed(M2006_5_CAN1), 10000);
     APID_Set_Integral_Limit(motor_get_pid_speed(M2006_5_CAN1), 200);
     APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_5_CAN1), 20);
-    APID_Set_Target_Limit(motor_get_pid_speed(M2006_5_CAN1),70);
+    APID_Set_Target_Limit(motor_get_pid_speed(M2006_5_CAN1),60);
 
-    APID_Set_Out_Limit(motor_get_pid_pos(M2006_5_CAN1), 50);
+    //APID_Set_Out_Limit(motor_get_pid_pos(M2006_5_CAN1), 50);
     APID_Set_Integral_Limit(motor_get_pid_pos(M2006_5_CAN1), 200);
     //APID_D_PART(motor_get_pid_pos(M2006_5_CAN1), 0.7);
 #endif

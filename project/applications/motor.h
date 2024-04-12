@@ -93,6 +93,8 @@ extern "C"
 
         motor_behiver behaver;
         float acc_out;
+
+        uint8_t timeout_cnt;
     } ;
 
     motor_t *motor_get(int id);

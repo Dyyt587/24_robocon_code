@@ -189,24 +189,26 @@ void rbmg_handle(void *parameter)
             */
 
 
-            action_relative_movement_car( 0.6f,0, 0);
-					
-            action_relative_movement_car( -0.6f,0, 0);
-            action_relative_movement_car( 0.f,0.3f, 0);
-            action_relative_movement_car( 0,-0.3f, 0);
-            while(1){
-            motor_set_pos(M2006_5_CAN1,-600);
-						                    rt_thread_mdelay(1500);
-							
-							
-            motor_set_pos(M2006_5_CAN1,-300);
-						                    rt_thread_mdelay(1000);
-            motor_set_pos(M2006_5_CAN1,-100);
-							rt_thread_mdelay(1000);
-            motor_set_pos(M2006_5_CAN1,-600);
-														rt_thread_mdelay(1000);
+//            action_relative_movement_car( 0.6f,0, 0);
+//					
+//            action_relative_movement_car( -0.6f,0, 0);
+//            action_relative_movement_car( 0.f,0.3f, 0);
+					            motor_set_pos(M2006_5_CAN1,-100);
+//
 
-            }
+            //action_relative_movement_car( 0,0.5f, 0);
+//            while(1){
+//            motor_set_pos(M2006_5_CAN1,-600);
+//						                    rt_thread_mdelay(1500);
+//							
+//							
+//            motor_set_pos(M2006_5_CAN1,-300);
+//						                    rt_thread_mdelay(1000);
+//							rt_thread_mdelay(1000);
+//            motor_set_pos(M2006_5_CAN1,-600);
+//														rt_thread_mdelay(1000);
+
+//            }
             //rbmg_mode = LINE_MODE;
             while (1)
             {
