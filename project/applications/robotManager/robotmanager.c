@@ -192,8 +192,10 @@ void rbmg_handle(void *parameter)
 //            action_relative_movement_car( 0.6f,0, 0);
 //					
 //            action_relative_movement_car( -0.6f,0, 0);
-//            action_relative_movement_car( 0.f,0.3f, 0);
-					            motor_set_pos(M2006_5_CAN1,-100);
+										            motor_set_pos(M2006_5_CAN1,-100);
+
+            //action_relative_movement_car( 0.f,0.1f, 0);
+//					rt_thread_mdelay(1000);
 //
 
             //action_relative_movement_car( 0,0.5f, 0);
@@ -270,7 +272,7 @@ int rbmg_init(void)
     tid_rbmg = rt_thread_create("robotmanger",
                                 rbmg_handle, RT_NULL,
                                 4096,
-                                7, 1);
+                                14, 1);
 
     /* 线程创建成功，则启动线程 */
     if (tid_rbmg != RT_NULL)

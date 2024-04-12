@@ -543,7 +543,7 @@ void dj_motor_BackToZero(motor_measure_t *motor)
     motor->offset_angle = motor->angle;
     motor->round_cnt = 0;
 }
-rt_mailbox_t dj_m_mailbox;
+//rt_mailbox_t dj_m_mailbox;
 rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, rt_size_t size)
 {
     /* CAN 接收到数据后产生中断，调用此回调函数，然后发送接收信号量 */
@@ -621,7 +621,7 @@ static void can_rx_thread1(void *parameter)
          motor_set_pos(M2006_2_CAN1,0);
          motor_set_pos(M2006_3_CAN1,0);
          motor_set_pos(M2006_4_CAN1,0);
-         motor_set_pos(M2006_5_CAN1,0);
+         motor_set_speed(M2006_5_CAN1,0);
     while (1)
     {
         //motor_shakdown(0);
@@ -716,7 +716,7 @@ int motor_dj_init(void)
 
     /* 初始化 CAN 接收信号量 */
     rt_sem_init(&rx_sem, "can_m_dj_sem", 0, RT_IPC_FLAG_PRIO);
-    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 4096, RT_IPC_FLAG_PRIO);
+//    dj_m_mailbox = rt_mb_create("dj_m_rx_mailbox", 4096, RT_IPC_FLAG_PRIO);
 
     dj_m_ringfifo =  rt_ringbuffer_create(4096);
     /* 以中断接收及中断发送方式打开 CAN 设备 */

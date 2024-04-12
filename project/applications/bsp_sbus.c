@@ -139,8 +139,8 @@ int dbus_uart_init(void)
 		PARITY_EVEN,				/* No parity  */
 		BIT_ORDER_LSB,				/* LSB first sent */
 		NRZ_NORMAL,					/* Normal mode */
-		RT_SERIAL_RX_MINBUFSZ,		/* rxBuf size */
-		RT_SERIAL_TX_MINBUFSZ,		/* txBuf size */
+		4096,		/* rxBuf size */
+		4096,		/* txBuf size */
 		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
 		0};
 	if (RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))

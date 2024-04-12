@@ -83,7 +83,7 @@ void cvRead(unsigned char dat, int pos, unsigned char *Dat)
         i = 0;
         static int cnt=0;
         if(cnt++%100==0){
-        //LOG_D("b:%s\r\n", Dat);
+        LOG_D("b:%s\r\n", Dat);
 
         }
         sscanf((char *)Dat, "%d,%.4f,%.4f", &ball[pos].id, &ball[pos].posX, &ball[pos].posY);
@@ -95,6 +95,7 @@ void cvRead(unsigned char dat, int pos, unsigned char *Dat)
 rt_err_t visual_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
     uint8_t ch = 0;
+	if(size>512)LOG_W("%d",size);
     while (size--)
     {
         rt_device_read(uart, 0, &ch, 1);
@@ -140,4 +141,4 @@ if(RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
     }
     return 0;
 }
-INIT_COMPONENT_EXPORT(visual_uart_init);
+INIT_DEVICE_EXPORT(visual_uart_init);

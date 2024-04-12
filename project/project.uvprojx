@@ -665,9 +665,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>afifo.c</FileName>
+              <FileName>apid.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\abus\afifo.c</FilePath>
+              <FilePath>applications\apid.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -721,9 +721,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>apid.c</FileName>
+              <FileName>afifo.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\apid.c</FilePath>
+              <FilePath>applications\abus\afifo.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>

@@ -41,7 +41,7 @@ void chassis_port_handle(void *parameter)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
 
-        //chassis_handle(&chassis_mai, 0);
+        chassis_handle(&chassis_mai, 0);
 #endif
 
         rt_thread_mdelay(50);
