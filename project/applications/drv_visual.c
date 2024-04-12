@@ -15,6 +15,7 @@
 #include <rtdevice.h>
 
 #include <rtdbg.h>
+		#include "board.h"
 
 static rt_device_t uart = 0;
 
@@ -125,8 +126,8 @@ int visual_uart_init(void)
 		
 //在打开串口设备之后对其参数进行修改
 config.baud_rate  =  BAUD_RATE_921600;
-config.rx_bufsz=4096*16;
-config.tx_bufsz=4096*16;
+config.rx_bufsz=BSP_UART3_RX_BUFSIZE;
+config.tx_bufsz=BSP_UART3_TX_BUFSIZE;
 if(RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
 {
 	 rt_kprintf("change %s failed!\n", uart->parent.name);
