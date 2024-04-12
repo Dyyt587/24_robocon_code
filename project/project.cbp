@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+  <FileVersion major="1" minor="6" />
+  <Project>
+    <Option title="project" />
+    <Option pch_mode="2" />
+    <Option compiler="gcc" />
+    <Build>
+      <Target title="Debug">
+        <Option extension_auto="1" output="build/bin/Debug/project" prefix_auto="1" />
+        <Option object_output="build/obj/Debug/" />
+        <Option type="1" />
+        <Option compiler="gcc" />
+        <Compiler>
+          <Add option="-g" />
+          <Add directory="." />
+          <Add directory="..\..\..\components\drivers\include" />
+          <Add directory="..\..\..\components\finsh" />
+          <Add directory="..\..\..\components\libc\compilers\common\extension" />
+          <Add directory="..\..\..\components\libc\compilers\common\extension\fcntl\octal" />
+          <Add directory="..\..\..\components\libc\compilers\common\include" />
+          <Add directory="..\..\..\components\libc\posix\io\epoll" />
+          <Add directory="..\..\..\components\libc\posix\io\eventfd" />
+          <Add directory="..\..\..\components\libc\posix\io\poll" />
+          <Add directory="..\..\..\components\libc\posix\ipc" />
+          <Add directory="..\..\..\components\utilities\ulog" />
+          <Add directory="..\..\..\include" />
+          <Add directory="..\..\..\libcpu\arm\common" />
+          <Add directory="..\..\..\libcpu\arm\cortex-m4" />
+          <Add directory="..\libraries\HAL_Drivers" />
+          <Add directory="..\libraries\HAL_Drivers\CMSIS\Include" />
+          <Add directory="..\libraries\HAL_Drivers\drivers" />
+          <Add directory="..\libraries\HAL_Drivers\drivers\config" />
+          <Add directory="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include" />
+          <Add directory="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc" />
+          <Add directory="applications" />
+          <Add directory="board" />
+          <Add directory="board\CubeMX_Config\Inc" />
+          <Add directory="board\ports" />
+          <Add option="-DSTM32F427xx" />
+          <Add option="-D__RTTHREAD__" />
+          <Add option="-DRT_USING_ARMLIBC" />
+          <Add option="-DRT_USING_LIBC" />
+          <Add option="-D__STDC_LIMIT_MACROS" />
+          <Add option="-D__CLK_TCK=RT_TICK_PER_SECOND" />
+          <Add option="-DUSE_HAL_DRIVER" />
+        </Compiler>
+      </Target>
+      <Target title="Release">
+        <Option extension_auto="1" output="build/bin/Release/project" prefix_auto="1" />
+        <Option object_output="build/obj/Release/" />
+        <Option type="1" />
+        <Option compiler="gcc" />
+        <Compiler>
+          <Add option="-O2" />
+        </Compiler>
+        <Linker>
+          <Add option="-s" />
+        </Linker>
+      </Target>
+    </Build>
+    <Compiler>
+      <Add option="-Wall" />
+    </Compiler>
+    <Extensions>
+      <code_completion />
+      <envvars />
+      <debugger />
+      <lib_finder disable_auto="1" />
+    </Extensions>
+    <Unit filename="applications\main.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\armlibc\syscall_mem.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\armlibc\syscalls.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\cctype.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\cstdlib.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\cstring.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\ctime.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\cunistd.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\libc\compilers\common\cwchar.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\can\can.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\core\device.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\completion.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\dataqueue.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\pipe.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\ringblk_buf.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\ringbuffer.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\waitqueue.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\ipc\workqueue.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\misc\adc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\misc\pin.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\drivers\serial\serial.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_adc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_can.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_gpio.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_usart.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\drv_common.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f427xx.s">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="board\CubeMX_Config\Src\stm32f4xx_hal_msp.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="board\board.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\finsh\shell.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\finsh\msh.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\finsh\msh_parse.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\finsh\cmd.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\clock.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\components.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\idle.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\ipc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\irq.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\kservice.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\mem.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\mempool.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\object.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\scheduler_comm.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\scheduler_up.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\thread.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\src\timer.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\libcpu\arm\common\atomic_arm.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\libcpu\arm\common\div0.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\libcpu\arm\common\showmem.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\libcpu\arm\cortex-m4\context_rvds.S">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\libcpu\arm\cortex-m4\cpuport.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp_ex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rng.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_usart.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cec.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_crc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_can.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cryp.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\utilities\ulog\ulog.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\..\..\components\utilities\ulog\backend\console_be.c">
+      <Option compilerVar="CC" />
+    </Unit>
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_armcc.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_armclang.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_compiler.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_gcc.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_iccarm.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\cmsis_version.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\core_cm4.h" />
+    <Unit filename="..\libraries\HAL_Drivers\CMSIS\Include\mpu_armv7.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f0\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\pulse_encoder_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f1\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f2\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f3\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f3\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f3\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f3\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\pulse_encoder_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f4\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\f7\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g0\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\pulse_encoder_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\g4\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h5\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h5\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h5\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\h7\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l0\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l0\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l4\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\l5\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\mp1\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\dac_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\sdio_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\u5\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\adc_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\pwm_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\qspi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wb\usbd_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wl\dma_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wl\spi_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wl\tim_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\config\wl\uart_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_can.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_config.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_dma.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_gpio.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_log.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_usart.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drivers\drv_usart_v2.h" />
+    <Unit filename="..\libraries\HAL_Drivers\drv_common.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f401xc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f401xe.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f410cx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f410rx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f410tx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f411xe.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f412cx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f412rx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f412vx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f412zx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f413xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f415xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f417xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f423xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f427xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f429xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f437xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f439xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f446xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f469xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f479xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_can.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cec.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_crc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cryp_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dac_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dfsdm.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma2d.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dsi.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_eth.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_exti.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_fmpi2c_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hash_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2s_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_irda.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_iwdg.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_lptim.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_ltdc_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nand.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_nor.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pccard.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pcd_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_qspi.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rng.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rtc_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sai_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sd.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sdram.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_smartcard.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_smbus.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spdifrx.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_sram.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_wwdg.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_adc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fmc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_fsmc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_sdmmc.h" />
+    <Unit filename="..\libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h" />
+    <Unit filename="board\CubeMX_Config\Inc\main.h" />
+    <Unit filename="board\CubeMX_Config\Inc\stm32f4xx_hal_conf.h" />
+    <Unit filename="board\board.h" />
+    <Unit filename="rtconfig.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\adc.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\alarm.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\audio.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\byteorder.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\can.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\classes\block.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\classes\char.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\classes\graphic.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\classes\mtd.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\classes\net.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\clk.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\core\dm.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\core\driver.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\cputime.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\cputimer.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\crypto.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\dac.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\hwtimer.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\i2c-bit-ops.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\i2c.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\i2c_dev.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\lcd.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\lptimer.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\misc.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mmcsd_card.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mmcsd_cmd.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mmcsd_core.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mmcsd_host.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mtd_nand.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\mtd_nor.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\ofw.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\ofw_fdt.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\ofw_io.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\ofw_irq.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\ofw_raw.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\phy.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\phy_mdio.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\pic.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\pin.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\pm.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\pulse_encoder.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\rt_dev_bus.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\rt_drv_pwm.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\rt_inputcapture.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\rtc.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\sd.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\sdio.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\sdio_func_ids.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\sensor.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\sensor_v2.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\serial.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\serial_v2.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\spi.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\touch.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\usb_common.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\usb_device.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\usb_host.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\watchdog.h" />
+    <Unit filename="..\..\..\components\drivers\include\drivers\wlan.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\completion.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\dataqueue.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\pipe.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\poll.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\ringblk_buf.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\ringbuffer.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\waitqueue.h" />
+    <Unit filename="..\..\..\components\drivers\include\ipc\workqueue.h" />
+    <Unit filename="..\..\..\components\drivers\include\rtdevice.h" />
+    <Unit filename="..\..\..\components\finsh\finsh.h" />
+    <Unit filename="..\..\..\components\finsh\msh.h" />
+    <Unit filename="..\..\..\components\finsh\msh_parse.h" />
+    <Unit filename="..\..\..\components\finsh\shell.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\extension\fcntl\octal\fcntl.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\extension\sys\errno.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\extension\sys\stat.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\extension\sys\types.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\compiler_private.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\posix\ctype.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\posix\stdlib.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\posix\string.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\posix\wchar.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\sys\ioctl.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\sys\signal.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\sys\time.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\sys\unistd.h" />
+    <Unit filename="..\..\..\components\libc\compilers\common\include\unistd.h" />
+    <Unit filename="..\..\..\components\libc\posix\io\poll\poll.h" />
+    <Unit filename="..\..\..\components\utilities\ulog\ulog.h" />
+    <Unit filename="..\..\..\components\utilities\ulog\ulog_def.h" />
+    <Unit filename="..\..\..\include\rtatomic.h" />
+    <Unit filename="..\..\..\include\rtcompiler.h" />
+    <Unit filename="..\..\..\include\rtdbg.h" />
+    <Unit filename="..\..\..\include\rtdef.h" />
+    <Unit filename="..\..\..\include\rthw.h" />
+    <Unit filename="..\..\..\include\rtm.h" />
+    <Unit filename="..\..\..\include\rtsched.h" />
+    <Unit filename="..\..\..\include\rtservice.h" />
+    <Unit filename="..\..\..\include\rtthread.h" />
+    <Unit filename="..\..\..\include\rttypes.h" />
+    <Unit filename="..\..\..\libcpu\arm\cortex-m4\cpuport.h" />
+  </Project>
+</CodeBlocks_project_file>
