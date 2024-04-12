@@ -111,6 +111,7 @@ rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 			rc_callback_handler(&rc, dbus_buf);
 		}
 	}
+	return 0;
 }
 
 /**
