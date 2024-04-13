@@ -1789,6 +1789,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\drv_visual.c</FilePath>
             </File>
+            <File>
+              <FileName>abus_hash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus\abus_hash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

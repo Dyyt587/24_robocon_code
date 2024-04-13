@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-03-24 15:50:43
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-13 16:09:50
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -546,9 +546,11 @@ void motor_init(void)
         motor_updata_cfg(i, motor_list[i].flag_accept_level);
     }
 }
+
+
 enum
 {
-    MOTOR_OPT_ID = 0,
+    MOTOR_OPT_ID = 1U,
     MOTOR_OPT_TORQUE,
     MOTOR_OPT_SPEED,
     MOTOR_OPT_POS,
@@ -642,12 +644,12 @@ void set_get_pos(int argc, char **argv)
 }
 
 // static int cmd_motor(int argc, char **argv);
-CMD_OPTIONS_STATEMENT(cmd_motor)
-static int cmd_motor(int argc, char **argv)
+CMD_OPTIONS_STATEMENT(cmd_motor_list)
+static int cmd_motor_list(int argc, char **argv)
 {
     if (argc >= 2)
     {
-        switch (MSH_OPT_ID_GET(cmd_motor))
+        switch (MSH_OPT_ID_GET(cmd_motor_list))
         {
         case MOTOR_OPT_ID:
             list_all_motor();
@@ -670,7 +672,7 @@ static int cmd_motor(int argc, char **argv)
 _usage:
     rt_kprintf("Usage: m [options]\n");
     rt_kprintf("[options]:\n");
-    MSH_OPT_DUMP(cmd_motor);
+    MSH_OPT_DUMP(cmd_motor_list);
     return 0;
 }
 static int start_shakdown(int argc, char **argv)
@@ -683,11 +685,11 @@ static int start_shakdown(int argc, char **argv)
 }
 MSH_CMD_EXPORT(start_shakdown, start motor shakdowm)
 
-CMD_OPTIONS_NODE_START(cmd_motor)
+CMD_OPTIONS_NODE_START(cmd_motor_list)
 CMD_OPTIONS_NODE(MOTOR_OPT_ID, id, list all motor id)
-CMD_OPTIONS_NODE(MOTOR_OPT_TORQUE, torque, set / get torque)
-CMD_OPTIONS_NODE(MOTOR_OPT_SPEED, speed, set / get speed)
-CMD_OPTIONS_NODE(MOTOR_OPT_POS, pos, set / get pos)
+CMD_OPTIONS_NODE(MOTOR_OPT_TORQUE, torque, set or get torque)
+CMD_OPTIONS_NODE(MOTOR_OPT_SPEED, speed, set or get speed)
+CMD_OPTIONS_NODE(MOTOR_OPT_POS, pos, set or get pos)
 CMD_OPTIONS_NODE_END
 #endif /* FINSH_USING_OPTION_COMPLETION */
-    MSH_CMD_EXPORT_ALIAS(cmd_motor, m, motor operate cmd, optenable);
+MSH_CMD_EXPORT_ALIAS(cmd_motor_list, m, motor operate cmd, optenable);

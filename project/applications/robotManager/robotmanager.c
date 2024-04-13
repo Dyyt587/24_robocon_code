@@ -8,7 +8,7 @@
 #include "chassis_port.h"
 #include "abus_topic.h"
 #include "math.h"
-//#include "PathFinder.h"
+// #include "PathFinder.h"
 #include "aboard_power_switch.h"
 
 extern abus_accounter_t rbmg_error_acc;         // 接收error
@@ -188,32 +188,38 @@ void rbmg_handle(void *parameter)
 
             */
 
+            //            action_relative_movement_car( 0.6f,0, 0);
+            //
+            //            action_relative_movement_car( -0.6f,0, 0);
+            motor_set_pos(M2006_5_CAN1, -100);
+            ctrl.type = 0;
+            ctrl.speed.x_m_s = 0.6;
+            ctrl.speed.y_m_s = 0;
+            ctrl.speed.z_rad_s = 0;
+            abus_public(&rbmg_chassis_acc, &ctrl);
+           // motor_set_speed(M2006_1_CAN1, -100);
 
-//            action_relative_movement_car( 0.6f,0, 0);
-//					
-//            action_relative_movement_car( -0.6f,0, 0);
-										            motor_set_pos(M2006_5_CAN1,-100);
+            // action_relative_movement_car( 0.f,0.1f, 0);
+            //					rt_thread_mdelay(1000);
+            //
 
-            //action_relative_movement_car( 0.f,0.1f, 0);
-//					rt_thread_mdelay(1000);
-//
+            // action_relative_movement_car( 0,0.5f, 0);
+            //            while(1){
+            //            motor_set_pos(M2006_5_CAN1,-600);
+            //						                    rt_thread_mdelay(1500);
+            //
+            //
+            //            motor_set_pos(M2006_5_CAN1,-300);
+            //						                    rt_thread_mdelay(1000);
+            //							rt_thread_mdelay(1000);
+            //            motor_set_pos(M2006_5_CAN1,-600);
+            //														rt_thread_mdelay(1000);
 
-            //action_relative_movement_car( 0,0.5f, 0);
-//            while(1){
-//            motor_set_pos(M2006_5_CAN1,-600);
-//						                    rt_thread_mdelay(1500);
-//							
-//							
-//            motor_set_pos(M2006_5_CAN1,-300);
-//						                    rt_thread_mdelay(1000);
-//							rt_thread_mdelay(1000);
-//            motor_set_pos(M2006_5_CAN1,-600);
-//														rt_thread_mdelay(1000);
-
-//            }
-            //rbmg_mode = LINE_MODE;
+            //            }
+            // rbmg_mode = LINE_MODE;
             while (1)
             {
+
                 LOG_D("cab mode");
                 if (rbmg_mode != CAB_MODE)
                 {
@@ -223,6 +229,8 @@ void rbmg_handle(void *parameter)
 
                 while (1)
                 {
+                    //abus_public(&rbmg_chassis_acc, &ctrl);
+
                     rt_thread_mdelay(50);
                 }
 
@@ -244,7 +252,7 @@ void rbmg_handle(void *parameter)
 
             /* 更新寻路器*/
             now_dir = next_dir;
-//            next_dir = Path_get_next_dir(this_table);
+            //            next_dir = Path_get_next_dir(this_table);
             LOG_D("now dir %d next dir %d", now_dir, next_dir);
             // 判断当前是否寻路完成进行切换或者特殊action
             // if (now_dir == 0)
@@ -255,7 +263,7 @@ void rbmg_handle(void *parameter)
             //     }
 
             // 转弯或特殊action
-         //   turn_actions(now_dir, next_dir);
+            //   turn_actions(now_dir, next_dir);
             rbmg_mode = LINE_MODE;
             LOG_D("action completion");
         }

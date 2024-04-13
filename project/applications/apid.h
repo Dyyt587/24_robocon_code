@@ -1,8 +1,8 @@
 /*
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
- * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
- * @LastEditTime: 2024-03-15 20:50:04
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-13 15:09:03
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.h
  * @Description: pid库
  */
@@ -258,6 +258,7 @@ typedef struct _var_list {
 
     void APID_Set_Target(apid_t *pid, PID_TYPE value);
     void APID_Set_Present(apid_t *pid, PID_TYPE value);
+    
     void APID_Set_Predict(apid_t *pid, PID_TYPE value);
 
     PID_TYPE APID_Get_Out(apid_t *pid);

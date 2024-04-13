@@ -3,15 +3,15 @@
 #include "stdlib.h"
 #include "stdio.h"
 uint8_t dbus_buf[DBUS_MAX_LEN];
-rc_info_t rc;
-
+static rc_info_t rc;
+static void sw_judge(rc_info_t *rc);
 #include "bus_sbus.h"
 #include <rtthread.h>
 #include <rtdevice.h>
 #include "math.h"
 
 #define DBG_TAG "drv.dbus"
-#define DBG_LVL DBG_LOG
+#define DBG_LVL DBG_INFO
 #include <rtdbg.h>
 
 #define myabs(x) x > 0 ? x : -x
@@ -77,22 +77,19 @@ void rc_callback_handler(rc_info_t *rc, uint8_t *buff)
 		rc->ch3 = 0;
 	if (rc->ch4 < min && rc->ch4 > -min)
 		rc->ch4 = 0;
-	LOG_D("rc: %d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d",
+	LOG_D("\nrc: %d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d",
 	rc->ch1, rc->ch2, rc->ch3, rc->ch4, rc->ch5, rc->ch6, rc->ch7, rc->ch8, rc->ch9, rc->ch10, rc->ch11, rc->ch12, rc->ch13, rc->ch14, rc->ch15, rc->ch16);
 }
 
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @param size 
+ * @return rt_err_t 
+ */
 rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
-	// if(size == 25){
-	// 	rt_device_read(uart, 0, dbus_buf, 25);
-
-	// 	rc_callback_handler(&rc, dbus_buf);
-	// }else if(size>25){
-	// 	//错误处理
-	// }else{
-	// 	/* 继续接收 */
-	// }
-
 	static uint8_t state = 0;
 	if (state == 0)
 	{
@@ -114,48 +111,6 @@ rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 	return 0;
 }
 
-/**
- * @brief   initialize dbus uart device
- * @param
- * @retval
- */
-int dbus_uart_init(void)
-{
-	uart = rt_device_find("uart1");
-	if (uart == RT_NULL)
-	{
-		LOG_E("uart1 not found");
-		return -1;
-	}
-	if (rt_device_open(uart, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_RX_NON_BLOCKING) != RT_EOK)
-	{
-		LOG_E("uart1 open failed");
-		return -1;
-	}
-	struct serial_configure config = {
-		100000,						/* 115200 bits/s */
-		DATA_BITS_9,				/* 8 databits */
-		STOP_BITS_1,				/* 1 stopbit */
-		PARITY_EVEN,				/* No parity  */
-		BIT_ORDER_LSB,				/* LSB first sent */
-		NRZ_NORMAL,					/* Normal mode */
-		4096,		/* rxBuf size */
-		4096,		/* txBuf size */
-		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
-		0};
-	if (RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
-	{
-		rt_kprintf("change %s failed!\n", uart->parent.name);
-	}
-
-	if (rt_device_set_rx_indicate(uart, dbus_uart_rx_ind) != RT_EOK)
-	{
-		LOG_E("uart1 set rx indicate failed");
-		return -1;
-	}
-	return 0;
-}
-INIT_COMPONENT_EXPORT(dbus_uart_init);
 
 void sw_judge(rc_info_t *rc)
 {
@@ -209,7 +164,59 @@ void sw_judge(rc_info_t *rc)
 		rc->ch12 = 2;
 };
 
-const rc_info_t *get_remote_control_point(void)
+const rc_info_t*dbus_get_info(void)
 {
 	return &rc;
 }
+/**
+ * @brief   initialize dbus uart device
+ * @param
+ * @retval
+ */
+int dbus_uart_init(void)
+{
+	uart = rt_device_find("uart1");
+	if (uart == RT_NULL)
+	{
+		LOG_E("uart1(sbus) not found");
+		return -1;
+	}
+	if (rt_device_open(uart, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_RX_NON_BLOCKING) != RT_EOK)
+	{
+		LOG_E("uart1(sbus) open failed");
+		return -1;
+	}
+	struct serial_configure config = {
+		100000,						/* 115200 bits/s */
+		DATA_BITS_9,				/* 8 databits */
+		STOP_BITS_1,				/* 1 stopbit */
+		PARITY_EVEN,				/* No parity  */
+		BIT_ORDER_LSB,				/* LSB first sent */
+		NRZ_NORMAL,					/* Normal mode */
+		4096,		/* rxBuf size */
+		4096,		/* txBuf size */
+		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
+		0};
+	if (RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
+	{
+		rt_kprintf("change %s failed!\n", uart->parent.name);
+	}
+
+	if (rt_device_set_rx_indicate(uart, dbus_uart_rx_ind) != RT_EOK)
+	{
+		LOG_E("uart1(sbus) set rx indicate failed");
+		return -1;
+	}
+	return 0;
+}
+INIT_COMPONENT_EXPORT(dbus_uart_init);
+
+static void dbus(int argc, char**argv)
+{
+
+    LOG_RAW("rc:\n\t 1 - 2 - 3 - 4 \n\t %d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n",
+		rc.ch1, rc.ch2, rc.ch3, rc.ch4, rc.ch5, rc.ch6, rc.ch7, rc.ch8, rc.ch9, rc.ch10, rc.ch11, rc.ch12, rc.ch13, rc.ch14, rc.ch15, rc.ch16);
+
+
+}
+MSH_CMD_EXPORT(dbus, see dbus state);

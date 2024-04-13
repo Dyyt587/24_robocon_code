@@ -30,8 +30,8 @@ void chassis_port_handle(void *parameter)
     chassis_speed.y_m_s = 0;
     //chassis_speed.z_rad_s = 10;
 
-    // chassis_pos.x_m = 10;
-    // chassis_pos.y_m = 0.55;
+     chassis_pos.x_m = 0;
+     chassis_pos.y_m = 0;
     chassis_pos.z_rad = 0;
     // chassis_set_speed(&chassis_mai, &chassis_speed);
 
