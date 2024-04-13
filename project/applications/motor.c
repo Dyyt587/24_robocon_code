@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-13 16:09:50
+ * @LastEditTime: 2024-04-13 16:36:27
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -562,9 +562,10 @@ static int cmd_motor(int argc, char **argv)
 
 void list_all_motor(void)
 {
+    rt_kprintf("total motors: %d\r\n id   name",MOTOR_NUM);
     for (int i = 0; i < MOTOR_NUM; ++i)
     {
-        LOG_D("motor id:%d name:%s", i, motor_list[i].name);
+        rt_kprintf("   %d\t %s\r\n", i, motor_list[i].name);
     }
 }
 void set_get_torque(int argc, char **argv)
@@ -574,7 +575,7 @@ void set_get_torque(int argc, char **argv)
         int id = atoi(argv[2]);
         if (id >= MOTOR_NUM)
         {
-            LOG_D("motor id error");
+            LOG_RAW("motor id error\r\n");
             return;
         }
         if (argc >= 4)
@@ -584,12 +585,12 @@ void set_get_torque(int argc, char **argv)
         }
         else
         {
-            LOG_D("motor id:%d torque:%f", id, motor_get_torque(id));
+            LOG_RAW("motor id:%d torque:%f\r\n", id, motor_get_torque(id));
         }
     }
     else
     {
-        LOG_D("motor id error");
+        LOG_RAW("motor id error\r\n");
     }
 }
 void set_get_speed(int argc, char **argv)
@@ -599,7 +600,7 @@ void set_get_speed(int argc, char **argv)
         int id = atoi(argv[2]);
         if (id >= MOTOR_NUM)
         {
-            LOG_D("motor id error");
+            LOG_RAW("motor id error\r\n");
             return;
         }
         if (argc >= 4)
@@ -609,12 +610,12 @@ void set_get_speed(int argc, char **argv)
         }
         else
         {
-            LOG_D("motor id:%d speed:%f", id, motor_get_speed(id));
+            LOG_RAW("motor id:%d speed:%f\r\n", id, motor_get_speed(id));
         }
     }
     else
     {
-        LOG_D("motor id error");
+        LOG_RAW("motor id error\r\n");
     }
 }
 void set_get_pos(int argc, char **argv)
@@ -624,7 +625,7 @@ void set_get_pos(int argc, char **argv)
         int id = atoi(argv[2]);
         if (id >= MOTOR_NUM)
         {
-            LOG_D("motor id error");
+            LOG_RAW("motor id error\r\n");
             return;
         }
         if (argc >= 4)
@@ -634,12 +635,12 @@ void set_get_pos(int argc, char **argv)
         }
         else
         {
-            LOG_D("motor id:%d pos:%f", id, motor_get_pos(id));
+            LOG_RAW("motor id:%d pos:%f\r\n", id, motor_get_pos(id));
         }
     }
     else
     {
-        LOG_D("motor id error");
+        LOG_RAW("motor id error\r\n");
     }
 }
 
@@ -670,20 +671,11 @@ static int cmd_motor_list(int argc, char **argv)
     }
 
 _usage:
-    rt_kprintf("Usage: m [options]\n");
-    rt_kprintf("[options]:\n");
+    LOG_RAW("Usage: m [options]\n");
+    LOG_RAW("[options]:\n");
     MSH_OPT_DUMP(cmd_motor_list);
     return 0;
 }
-static int start_shakdown(int argc, char **argv)
-{
-    if (argc >= 2)
-    {
-        int id = atoi(argv[1]);
-    }
-    return 0;
-}
-MSH_CMD_EXPORT(start_shakdown, start motor shakdowm)
 
 CMD_OPTIONS_NODE_START(cmd_motor_list)
 CMD_OPTIONS_NODE(MOTOR_OPT_ID, id, list all motor id)

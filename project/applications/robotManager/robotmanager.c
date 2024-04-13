@@ -229,7 +229,7 @@ void rbmg_handle(void *parameter)
 
                 while (1)
                 {
-                    //abus_public(&rbmg_chassis_acc, &ctrl);
+                    abus_public(&rbmg_chassis_acc, &ctrl);
 
                     rt_thread_mdelay(50);
                 }

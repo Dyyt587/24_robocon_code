@@ -23,7 +23,7 @@ extern "C"
  * @brief 用于初始化电机的操作函数和支持功能的宏函数
  *
  */
-#define MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, _torque_pid, _speed_pid, _pos_pid) [index] = {.ops = (&((motor_ops_t)__ops)), .flag_accept_level = __level, .pid_torque = _torque_pid, .pid_speed = _speed_pid, .pid_pos = _pos_pid}
+#define MOTOR_INIT_OPS_PID_ALL(_index, __ops, __level, _torque_pid, _speed_pid, _pos_pid) [_index] = {.name=#_index, .ops = (&((motor_ops_t)__ops)), .flag_accept_level = __level, .pid_torque = _torque_pid, .pid_speed = _speed_pid, .pid_pos = _pos_pid}
 
 #define MOTOR_INIT_OPS(_index, _ops, _level)  MOTOR_INIT_OPS_PID_ALL(_index, _ops, (_level), (NULL), (NULL), (NULL))
 #define MOTOR_INIT_OPS_PID_POS(index, __ops, __level, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), (NULL), _pos_pid)
