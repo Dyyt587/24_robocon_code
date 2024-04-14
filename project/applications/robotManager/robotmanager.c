@@ -10,7 +10,7 @@
 #include "math.h"
 // #include "PathFinder.h"
 #include "aboard_power_switch.h"
-
+#include "drv_visual.h"
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
@@ -188,16 +188,12 @@ void rbmg_handle(void *parameter)
 
             */
 
-            //            action_relative_movement_car( 0.6f,0, 0);
-            //
-            //            action_relative_movement_car( -0.6f,0, 0);
-            motor_set_pos(M2006_5_CAN1, -100);
-            ctrl.type = 0;
-            ctrl.speed.x_m_s = 0.6;
-            ctrl.speed.y_m_s = 0;
-            ctrl.speed.z_rad_s = 0;
-            abus_public(&rbmg_chassis_acc, &ctrl);
-           // motor_set_speed(M2006_1_CAN1, -100);
+            //             action_relative_movement_car( 0.6f,0, 0);
+            // //
+            // //            action_relative_movement_car( -0.6f,0, 0);
+            // motor_set_pos(M2006_5_CAN1, -100);
+
+            // motor_set_speed(M2006_1_CAN1, -100);
 
             // action_relative_movement_car( 0.f,0.1f, 0);
             //					rt_thread_mdelay(1000);
@@ -229,8 +225,14 @@ void rbmg_handle(void *parameter)
 
                 while (1)
                 {
-                    abus_public(&rbmg_chassis_acc, &ctrl);
 
+                    extern cvdat aball;
+                    ctrl.type = 0;
+                    ctrl.speed.x_m_s = (aball.posX - 0.5) * 1.f;
+                    ctrl.speed.y_m_s = (aball.posY - 0.5) * 1.f;
+                    LOG_D("ballxy carxy:%f,%f,%f,%f,",aball.posX ,aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
+                    ctrl.speed.z_rad_s = 0;
+                    abus_public(&rbmg_chassis_acc, &ctrl);
                     rt_thread_mdelay(50);
                 }
 

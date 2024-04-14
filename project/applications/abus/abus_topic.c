@@ -1,12 +1,13 @@
 /*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-03-11 00:05:09
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-04-03 11:05:51
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-15 01:41:38
  * @FilePath: \abus_v2.0.1\abus_v2.0.1\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "abus_topic.h"
+#include "abus_hash.h"
 #include "ulog.h"
 static abus_accounter_t* accs[ABUS_ACCS_NUM]={0};
 static uint32_t accs_index=0;
@@ -14,6 +15,13 @@ static uint32_t accs_index=0;
 static abus_topic_t* topics[ABUS_TOPICS_NUM]={0};
 static uint32_t topics_index=0;
 
+static hashTable* hash_table=0;
+
+
+void abus_topic_init_hash(void)
+{
+    //hash_table = hash_init(ABUS_TOPICS_NUM);
+}
 int abus_topic_init(abus_topic_t *topic, abus_topic_init_t *init)
 {
     topic->name = init->name;

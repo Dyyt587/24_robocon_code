@@ -179,8 +179,8 @@ typedef struct msh_cmd_opt
     const char      *des;
 } msh_cmd_opt_t;
 
-#define CMD_OPTIONS_STATEMENT(command) static volatile struct msh_cmd_opt command##_msh_options[];
-#define CMD_OPTIONS_NODE_START(command) static volatile struct msh_cmd_opt command##_msh_options[] = {
+#define CMD_OPTIONS_STATEMENT(command) static struct msh_cmd_opt command##_msh_options[];
+#define CMD_OPTIONS_NODE_START(command) static  struct msh_cmd_opt command##_msh_options[] = {
 #define CMD_OPTIONS_NODE(_id, _name, _des) {.id = _id, .name = #_name, .des = #_des},
 #define CMD_OPTIONS_NODE_END    {0},};
 
