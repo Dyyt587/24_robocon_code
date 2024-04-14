@@ -49,4 +49,4 @@ int chassis_init(void)
 }
 
 
-INIT_BOARD_EXPORT(test1_init);//自动初始化
+//INIT_BOARD_EXPORT(test1_init);//自动初始化
