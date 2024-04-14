@@ -88,7 +88,6 @@ int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
         motor->acc_out = APID_Get_Out(pid_torque);
         break;
     }
-
     default:
     {
         break;
@@ -149,7 +148,6 @@ int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
     PID_TYPE tmpout = 0;
     switch (mode)
     {
-
     case MOTOR_MODE_POS:
     {
         APID_Set_Target(pid_pos, motor->tar_pos);
@@ -167,7 +165,6 @@ int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
         motor->acc_out = motor->tar_torque;
         break;
     }
-
     default:
     {
         break;
@@ -411,6 +408,7 @@ apid_t *motor_get_pid_pos(int id)
     MOTOR_ASSERT(motor);
     return motor->pid_pos;
 }
+
 /**
  * @brief   获取电机的位置
  *

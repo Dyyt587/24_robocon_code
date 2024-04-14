@@ -93,11 +93,14 @@ rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 	static uint8_t state = 0;
 	if (state == 0)
 	{
+		while(size--){
 		rt_device_read(uart, 0, dbus_buf, 1);
+		
 		if (dbus_buf[0] == 0x0f)
 		{
 			state = 1;
 		}
+	}
 	}
 	else if (state == 1) /* 接收到包头*/
 	{
