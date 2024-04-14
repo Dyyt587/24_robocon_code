@@ -13,7 +13,6 @@
 
 #include <rtthread.h>
 #include <rtdevice.h>
-
 #include <rtdbg.h>
 		#include "board.h"
 
@@ -21,51 +20,58 @@ static rt_device_t uart = 0;
 
 typedef struct cvDat
 {
-    unsigned char datHead;
     int id;
     float posX;
     float posY;
-    unsigned char datEnd;
-} cvdat;
+} cvdat;//
+
+
+
+typedef struct ball
+{
+	uint8_t count;//球的个数
+	cvdat Dat[10];//球的数据
+}Ball;//这个是不同的id的球的
 
 cvdat ball[10];
+Ball realball[3];//三个id
+
 unsigned char b[200] = {0};
 void cvRead(unsigned char dat, int pos, unsigned char *Dat);
 void cvhandle(unsigned char dat, unsigned char *Dat);
-// int main(void)
-// {
-//     unsigned char a[100] = "b3,0.4142,0.2341\n2,0,2221,0.3331\ne";
-//     unsigned char b[100] = {0};
-//     int i = 0;
-//     for (i = 0; i < 40; i++)
-//     {
-//         cvhandle(a[i], b);
-//     }
-//     printf("%d\r\n", ball[0].id);
-//     while (getchar() != '\n')
-//     {
-//         continue;
-//     }
 
-//     return 0;
-// }
+
+
+//存球，对应的球存入对应id的结构体
+void Storeball(void)
+{
+	uint8_t i=0,j=0;
+	for(i=0;i<10;i++)
+	{
+		realball[ball[i].id].Dat[j]=ball[i];
+		j=realball[ball[i].id].count++;
+	}
+}
+
+
+
 void cvhandle(unsigned char dat, unsigned char *Dat)
 {
     static unsigned char state = 0, ballNum = 0, i = 0;
     if (dat == 'b')
     {
-        state = 1; // ���⵽��ͷ
+        state = 1; //
     }
     else if (dat == 'e')
     {
-        state = 0; // ���⵽��β
+        state = 0; //
         ballNum=0;
     }
     if (dat == '\n')
     {
         ballNum++;
     }
-    if (state == 1) // ���⵽��ͷ��ʼ��¼����
+    if (state == 1) //
     {
         cvRead(dat, ballNum, Dat);
     }
@@ -77,19 +83,18 @@ void cvRead(unsigned char dat, int pos, unsigned char *Dat)
     {
         Dat[i] = dat;
         i++;
-    } // �ȿ����ַ���
+    } 
     else if (dat == '\n')
     {
         i = 0;
         static int cnt=0;
         if(cnt++%100==0){
         LOG_D("b:%s\r\n", Dat);
-
         }
         sscanf((char *)Dat, "%d,%.4f,%.4f", &ball[pos].id, &ball[pos].posX, &ball[pos].posY);
         memset(Dat, 0, strlen((char *)Dat));
-        return;
     }
+		Storeball();
 }
 
 rt_err_t visual_uart_rx_ind(rt_device_t dev, rt_size_t size)
@@ -104,6 +109,10 @@ rt_err_t visual_uart_rx_ind(rt_device_t dev, rt_size_t size)
     }
 		return RT_EOK;
 }
+
+
+
+
 /**
  * @brief   initialize dbus uart device
  * @param
@@ -122,7 +131,6 @@ int visual_uart_init(void)
         LOG_E("uart1 open failed");
         return -1;
     }
-
 		struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
 		
 //在打开串口设备之后对其参数进行修改
@@ -133,7 +141,6 @@ if(RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
 {
 	 rt_kprintf("change %s failed!\n", uart->parent.name);
 }
-
     if (rt_device_set_rx_indicate(uart, visual_uart_rx_ind) != RT_EOK)
     {
         LOG_E("uart1 set rx indicate failed");

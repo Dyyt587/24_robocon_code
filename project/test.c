@@ -35,7 +35,7 @@ void test1_entry(void *parameter)
 
 
 //创建动态线程
-int test1_init(void)
+int chassis_init(void)
 {
 	test1=rt_thread_create("Test",
 													test1_entry,RT_NULL,
