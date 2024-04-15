@@ -69,7 +69,7 @@ static rt_uint32_t pulse = 1000000;           /* PWM脉冲宽度值的增减方向 */
 void setAngle(float angle)
 {
 	 /* step 1.2、设置 PWM 周期和脉冲宽度 */
-	rt_pwm_set(pwm_dev,PWM_DEV_CHANNEL,period,angle*74075);
+	rt_pwm_set(pwm_dev,PWM_DEV_CHANNEL,period,500000+angle*7407);
 }
 
 
