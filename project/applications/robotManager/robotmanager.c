@@ -172,6 +172,42 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
     // 接收底盘控制数据
     return 0;
 }
+void action_pick(void)
+{
+									  motor_set_speed(M2006_5_CAN1, 1000);//下
+													while(1)
+													{
+														static float last_speed=0;
+													float speed=motor_get_speed(M2006_5_CAN1);
+														LOG_D("speed %f lastspeed %f",speed,last_speed);
+														if(last_speed-speed>10){
+															motor_set_speed(M2006_5_CAN1,0);
+															return;
+														}
+														last_speed=speed;
+														rt_thread_mdelay(20);
+													}
+
+}
+
+void action_up(void)
+{
+									  motor_set_speed(M2006_5_CAN1, -1000);//下
+													while(1)
+													{
+														static float last_speed=0;
+													float speed=motor_get_speed(M2006_5_CAN1);
+														LOG_D("speed %f lastspeed %f",speed,last_speed);
+														if(last_speed-speed<-10){
+															motor_set_speed(M2006_5_CAN1,0);
+															return;
+														}
+														last_speed=speed;
+														rt_thread_mdelay(20);
+													}
+
+}
+
 
 void rbmg_handle(void *parameter)
 {
@@ -247,7 +283,7 @@ void rbmg_handle(void *parameter)
                     LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
                     ctrl.speed.z_rad_s = 0;
                     abus_public(&rbmg_chassis_acc, &ctrl);
-									                            motor_set_torque(M2006_5_CAN1, 500);
+									
 
                     rt_thread_mdelay(50);
 
@@ -265,7 +301,7 @@ void rbmg_handle(void *parameter)
 //                            motor_set_torque(M2006_5_CAN1, -500);
 //                            rt_thread_mdelay(5000);
 //                            // 抓取，上升
-//                            motor_set_torque(M2006_5_CAN1, 2000);
+//                            motor_set_torque(M2006_5_CAN1, -3500);
 //                            rt_thread_mdelay(5000);
 //                            // 开始平移车辆，
 //                            action_relative_movement_car(0, -0.6, 0); // 后退

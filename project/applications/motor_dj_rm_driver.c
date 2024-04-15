@@ -870,7 +870,7 @@ static void set_motor_passive_feedback(void)
 #endif
 #if defined(MOTOR_DJ_M2006_ID5_CAN1)
     motor_set_passive_feedback(M2006_5_CAN1, 1);
-    APID_Set_Out_Limit(motor_get_pid_speed(M2006_5_CAN1), 10000);
+    APID_Set_Out_Limit(motor_get_pid_speed(M2006_5_CAN1), 5500);
     APID_Set_Integral_Limit(motor_get_pid_speed(M2006_5_CAN1), 200);
     APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M2006_5_CAN1), 20);
     APID_Set_Target_Limit(motor_get_pid_speed(M2006_5_CAN1),60);

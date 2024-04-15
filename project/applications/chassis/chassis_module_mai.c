@@ -134,7 +134,7 @@ static int driver_mai(struct chassis *chassis, const void *output, const void *i
         {
         case CHASSIS_SPEED:
             // 速度控制
-             LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
             motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
             motor_set_speed(MOTOR_MAI_ID_3, data->motor3);
