@@ -10,7 +10,12 @@
 #include "math.h"
 // #include "PathFinder.h"
 #include "aboard_power_switch.h"
+<<<<<<< Updated upstream
 #include "drv_visual.h"
+=======
+#include "bus_sbus.h"
+
+>>>>>>> Stashed changes
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
@@ -180,6 +185,7 @@ void rbmg_handle(void *parameter)
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
+			const rc_info_t* rc= dbus_get_info();
         if (rbmg_mode == CAB_MODE)
         {
 
@@ -188,12 +194,22 @@ void rbmg_handle(void *parameter)
 
             */
 
+<<<<<<< Updated upstream
             //             action_relative_movement_car( 0.6f,0, 0);
             // //
             // //            action_relative_movement_car( -0.6f,0, 0);
             // motor_set_pos(M2006_5_CAN1, -100);
 
             // motor_set_speed(M2006_1_CAN1, -100);
+=======
+            //            action_relative_movement_car( 0.6f,0, 0);
+            //
+            //            action_relative_movement_car( -0.6f,0, 0);
+            motor_set_pos(M2006_5_CAN1, 0);
+					
+
+           // motor_set_speed(M2006_1_CAN1, -100);
+>>>>>>> Stashed changes
 
             // action_relative_movement_car( 0.f,0.1f, 0);
             //					rt_thread_mdelay(1000);
@@ -225,6 +241,7 @@ void rbmg_handle(void *parameter)
 
                 while (1)
                 {
+<<<<<<< Updated upstream
 
                     extern cvdat aball;
                     ctrl.type = 0;
@@ -268,6 +285,20 @@ void rbmg_handle(void *parameter)
                         // 完成一次抓取,向右平移到下一个球
                         action_relative_movement_car(-0.6, 0, 0);
                     }
+=======
+//									            ctrl.type = 0;
+//            ctrl.speed.x_m_s = (rc->ch2)*0.001;
+//            ctrl.speed.y_m_s = (rc->ch1)*0.001;
+//            ctrl.speed.z_rad_s = (rc->ch4)*0.01;
+//									
+////									            ctrl.speed.x_m_s = -0.6;
+////            ctrl.speed.y_m_s =0;
+////            ctrl.speed.z_rad_s =0;
+//									//LOG_D("x%f y%f z%f rc1 %d rc2 %d",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s,rc->ch1,rc->ch2);
+//            abus_public(&rbmg_chassis_acc, &ctrl);
+action_relative_movement_car(0.6,0,0);
+                    rt_thread_mdelay(1000);
+>>>>>>> Stashed changes
                 }
 
                 rt_thread_mdelay(500);
