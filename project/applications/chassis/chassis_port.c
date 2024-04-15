@@ -60,9 +60,6 @@ int chassis_sub_callback(abus_topic_t *sub)
     if (ctrl.type == 0)
     {
         //LOG_D("speed x:%f y:%f w:%f",ctrl.speed.ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
-			ctrl.speed.x_m_s=0;
-			ctrl.speed.y_m_s=0.6;
-			ctrl.speed.z_rad_s=0;
         chassis_set_speed(&chassis_mai, &ctrl.speed);
     }
     else

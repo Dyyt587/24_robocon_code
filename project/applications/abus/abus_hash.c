@@ -28,6 +28,7 @@ hashTable* HashTableInit(void)
         H->list[i].next = NULL;
     }
     ABUS_HASH_PRINTF("已初始化哈希表!\n");
+		return H;
 }
 
 // 定义哈希函数
