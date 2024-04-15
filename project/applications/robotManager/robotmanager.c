@@ -230,10 +230,44 @@ void rbmg_handle(void *parameter)
                     ctrl.type = 0;
                     ctrl.speed.x_m_s = (aball.posX - 0.5) * 1.f;
                     ctrl.speed.y_m_s = (aball.posY - 0.5) * 1.f;
-                    LOG_D("ballxy carxy:%f,%f,%f,%f,",aball.posX ,aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
+                    LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
                     ctrl.speed.z_rad_s = 0;
                     abus_public(&rbmg_chassis_acc, &ctrl);
                     rt_thread_mdelay(50);
+
+                    if ((fabs(aball.posX - 0.5) < 0.03) && (fabs(aball.posY - 0.5) < 0.03))
+                    {
+                        // 停车
+                        ctrl.type = 0;
+                        ctrl.speed.x_m_s = 0;
+                        ctrl.speed.y_m_s = 0;
+                        abus_public(&rbmg_chassis_acc, &ctrl);
+
+                        if (aball.color == 1)
+                        {
+
+                            // 抓取,下降
+                            power_on(SWITCH_24V_1);
+                            motor_set_torque(M2006_5_CAN1, -500);
+                            rt_thread_mdelay(5000);
+                            // 抓取，上升
+                            motor_set_torque(M2006_5_CAN1, 2000);
+                            rt_thread_mdelay(5000);
+
+                            // 开始平移车辆，
+                            action_relative_movement_car(0, -0.6, 0); // 后退
+                            action_relative_movement_car(0, 0, 180);  // 旋转
+                            // 放球
+                            power_off(SWITCH_24V_1);
+                            rt_thread_mdelay(1000);
+
+                            // 接着后退
+                            action_relative_movement_car(0, -0.3, 0); // 后退
+                            action_relative_movement_car(0, 0, 180);  // 旋转
+                        }
+                        // 完成一次抓取,向右平移到下一个球
+                        action_relative_movement_car(-0.6, 0, 0);
+                    }
                 }
 
                 rt_thread_mdelay(500);
