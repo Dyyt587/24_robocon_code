@@ -1,9 +1,12 @@
 
-#define DBG_TAG "Chassis.mai"
-#define DBG_LVL DBG_INFO
-#include <rtdbg.h>
+
+
 #include "chassis_module_mai.h"
 #include "math.h"
+
+#define DBG_TAG "Chassis.mai"
+#define DBG_LVL DBG_DBG
+#include <ulog.h>
 
 #ifdef CHASSIS_MODULE_MAI
 int module_mai(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd);
@@ -46,11 +49,12 @@ int module_mai(struct chassis *chassis, const void *output, const void *input, c
         {
         case CHASSIS_SPEED:
             // 速度控制
-            data->motor1 = -(((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) - (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
-            data->motor2 = -(((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
-            data->motor3 = -(((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
-            data->motor4 = -(((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) - (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
-            break;
+            data->motor1 = (( (chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
+            data->motor2 = (( (chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) - (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
+            data->motor3 = ((-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) - (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
+            data->motor4 = ((-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + (chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)) - ((chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s) * CHASSIS_HALF_A_B)) / CHASSIS_2PIR * 60.f;
+
+				break;
         case CHASSIS_POS:
             // 位置控制
             data->motor1 = (( (chassis->target.pos.x_m + chassis->offset.pos.x_m) +  (chassis->target.pos.y_m + chassis->offset.pos.y_m)) - ((chassis->target.pos.z_rad +chassis->offset.pos.z_rad) * CHASSIS_HALF_A_B)) * conversion;  // 430  chassis->target.pos.z_rad  CHASSIS_R
@@ -130,7 +134,7 @@ static int driver_mai(struct chassis *chassis, const void *output, const void *i
         {
         case CHASSIS_SPEED:
             // 速度控制
-            // LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
+            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
             motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
             motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
             motor_set_speed(MOTOR_MAI_ID_3, data->motor3);

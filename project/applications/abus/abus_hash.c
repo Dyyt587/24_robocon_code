@@ -1,8 +1,8 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-04-13 09:47:14
- * @LastEditors: Dyyt587 805207319@qq.com
- * @LastEditTime: 2024-04-13 10:18:55
+ * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
+ * @LastEditTime: 2024-04-15 03:06:26
  * @FilePath: \project\applications\abus\abus_hash.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,8 +13,9 @@
 
 
 // 初始化哈希表
-void HashTableInit(hashTable* H)
+hashTable* HashTableInit(void)
 {
+    hashTable* H;
     // 分配多个链表头结点空间
     H->list = (LNode*)rt_malloc(MaxSize * sizeof(LNode));//分配20个LNode大的元素空间 
     H->count = 0;
@@ -27,6 +28,7 @@ void HashTableInit(hashTable* H)
         H->list[i].next = NULL;
     }
     ABUS_HASH_PRINTF("已初始化哈希表!\n");
+		return H;
 }
 
 // 定义哈希函数
@@ -86,6 +88,7 @@ void InsertHashKey(hashTable* H, const char* key,void *data)
     {
         // 若未发生冲突，则直接赋值给头结点
         H->list[address].name = key;
+        H->list[address].data = data;
         ABUS_HASH_PRINTF("插入下标地址[%d], 插入成功!\n\n", address);
     }
     else
