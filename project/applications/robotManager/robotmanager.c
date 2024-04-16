@@ -177,11 +177,13 @@ void action_pick(void)
     power_on(SWITCH_24V_1);
 
     motor_set_speed(M2006_5_CAN1, 1000); // 下
+	        rt_thread_mdelay(2000);
+
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
-        LOG_D("speed %f lastspeed %f", speed, last_speed);
+        LOG_D("pick speed %f lastspeed %f", speed, last_speed);
         if (last_speed - speed > 10)
         {
             motor_set_speed(M2006_5_CAN1, 0);
@@ -195,11 +197,13 @@ void action_pick(void)
 void action_up(void)
 {
     motor_set_speed(M2006_5_CAN1, -1000);
+		        rt_thread_mdelay(2000);
+
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
-        LOG_D("speed %f lastspeed %f", speed, last_speed);
+        LOG_D("up speed %f lastspeed %f", speed, last_speed);
         if (last_speed - speed < -10)
         {
             motor_set_speed(M2006_5_CAN1, 0);
@@ -274,8 +278,14 @@ void rbmg_handle(void *parameter)
 
                     extern cvdat aball;
                     ctrl.type = 0;
-                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 0.6f;
-                    ctrl.speed.y_m_s = (aball.posY - 0.4) * 0.6f;
+                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
+                    ctrl.speed.y_m_s = (aball.posY - 0.4) * 2.f;
+									
+										if(ctrl.speed.x_m_s>0.2)ctrl.speed.x_m_s=0.2;
+										if(ctrl.speed.x_m_s<-0.2)ctrl.speed.x_m_s=-0.2;
+									
+										if(ctrl.speed.y_m_s>0.2)ctrl.speed.y_m_s=0.2;
+										if(ctrl.speed.y_m_s<-0.2)ctrl.speed.y_m_s=-0.2;
 
                     //									  ctrl.speed.x_m_s = 0.2;
                     //                    ctrl.speed.y_m_s = 0;
@@ -286,7 +296,7 @@ void rbmg_handle(void *parameter)
 
                     rt_thread_mdelay(50);
 
-                    if ((fabs(aball.posX - 0.5) < 0.01) && (fabs(aball.posY - 0.5) < 0.001))
+                    if ((fabs(aball.posX - 0.5) < 0.08) && (fabs(aball.posY - 0.5) < 0.08))
                     {
                         // 停车
                         ctrl.type = 0;
@@ -295,8 +305,10 @@ void rbmg_handle(void *parameter)
                         abus_public(&rbmg_chassis_acc, &ctrl);
 
                         action_pick();
-                        rt_thread_mdelay(1000);
+                        rt_thread_mdelay(2000);
                         action_up();
+											
+
                         while(1){
                             motor_set_pos(M2006_5_CAN1, 0);
                             rt_thread_mdelay(1000);
