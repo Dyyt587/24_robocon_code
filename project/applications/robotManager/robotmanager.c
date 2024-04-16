@@ -174,42 +174,41 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 }
 void action_pick(void)
 {
-		power_on(SWITCH_24V_1);
+    power_on(SWITCH_24V_1);
 
-									  motor_set_speed(M2006_5_CAN1, 1000);//下
-													while(1)
-													{
-														static float last_speed=0;
-													float speed=motor_get_speed(M2006_5_CAN1);
-														LOG_D("speed %f lastspeed %f",speed,last_speed);
-														if(last_speed-speed>10){
-															motor_set_speed(M2006_5_CAN1,0);
-															return;
-														}
-														last_speed=speed;
-														rt_thread_mdelay(20);
-													}
-
+    motor_set_speed(M2006_5_CAN1, 1000); // 下
+    while (1)
+    {
+        static float last_speed = 0;
+        float speed = motor_get_speed(M2006_5_CAN1);
+        LOG_D("speed %f lastspeed %f", speed, last_speed);
+        if (last_speed - speed > 10)
+        {
+            motor_set_speed(M2006_5_CAN1, 0);
+            return;
+        }
+        last_speed = speed;
+        rt_thread_mdelay(20);
+    }
 }
 
 void action_up(void)
 {
-									  motor_set_speed(M2006_5_CAN1, -1000);
-													while(1)
-													{
-														static float last_speed=0;
-													float speed=motor_get_speed(M2006_5_CAN1);
-														LOG_D("speed %f lastspeed %f",speed,last_speed);
-														if(last_speed-speed<-10){
-															motor_set_speed(M2006_5_CAN1,0);
-															return;
-														}
-														last_speed=speed;
-														rt_thread_mdelay(20);
-													}
-
+    motor_set_speed(M2006_5_CAN1, -1000);
+    while (1)
+    {
+        static float last_speed = 0;
+        float speed = motor_get_speed(M2006_5_CAN1);
+        LOG_D("speed %f lastspeed %f", speed, last_speed);
+        if (last_speed - speed < -10)
+        {
+            motor_set_speed(M2006_5_CAN1, 0);
+            return;
+        }
+        last_speed = speed;
+        rt_thread_mdelay(20);
+    }
 }
-
 
 void rbmg_handle(void *parameter)
 {
@@ -220,7 +219,7 @@ void rbmg_handle(void *parameter)
         // LOG_D("rbmg he
 
         // 接到处理数据的消息
-			const rc_info_t* rc= dbus_get_info();
+        const rc_info_t *rc = dbus_get_info();
         if (rbmg_mode == CAB_MODE)
         {
 
@@ -239,9 +238,8 @@ void rbmg_handle(void *parameter)
             //
             //            action_relative_movement_car( -0.6f,0, 0);
             motor_set_pos(M2006_5_CAN1, 0);
-					
 
-           // motor_set_speed(M2006_1_CAN1, -100);
+            // motor_set_speed(M2006_1_CAN1, -100);
 
             // action_relative_movement_car( 0.f,0.1f, 0);
             //					rt_thread_mdelay(1000);
@@ -278,14 +276,13 @@ void rbmg_handle(void *parameter)
                     ctrl.type = 0;
                     ctrl.speed.x_m_s = -(aball.posX - 0.5) * 0.6f;
                     ctrl.speed.y_m_s = (aball.posY - 0.4) * 0.6f;
-									
-//									  ctrl.speed.x_m_s = 0.2;
-//                    ctrl.speed.y_m_s = 0;
-									
+
+                    //									  ctrl.speed.x_m_s = 0.2;
+                    //                    ctrl.speed.y_m_s = 0;
+
                     LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
                     ctrl.speed.z_rad_s = 0;
                     abus_public(&rbmg_chassis_acc, &ctrl);
-									
 
                     rt_thread_mdelay(50);
 
@@ -296,13 +293,22 @@ void rbmg_handle(void *parameter)
                         ctrl.speed.x_m_s = 0;
                         ctrl.speed.y_m_s = 0;
                         abus_public(&rbmg_chassis_acc, &ctrl);
- 
-//                        // 完成一次抓取,向右平移到下一个球
-//                        action_relative_movement_car(-0.6, 0, 0);
+
+                        action_pick();
+                        rt_thread_mdelay(1000);
+                        action_up();
+                        while(1){
+                            motor_set_pos(M2006_5_CAN1, 0);
+                            rt_thread_mdelay(1000);
+                            LOG_D("action_over");
+                        }
+
+                        //                        // 完成一次抓取,向右平移到下一个球
+                        //                        action_relative_movement_car(-0.6, 0, 0);
                     }
 
-										//action_relative_movement_car(-0.1,0,0);
-                    //rt_thread_mdelay(1000);
+                    // action_relative_movement_car(-0.1,0,0);
+                    // rt_thread_mdelay(1000);
                 }
 
                 rt_thread_mdelay(500);
