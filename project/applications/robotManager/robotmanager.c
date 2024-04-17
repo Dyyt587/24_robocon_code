@@ -13,6 +13,15 @@
 #include "drv_visual.h"
 #include "bus_sbus.h"
 
+
+#define PWM_DEV_NAME            "pwm4"  /* PWM设备名称 */
+#define PWM_DEV_CHANNEL         1       /* PWM通道 */
+
+struct rt_device_pwm *pwm_dev;          /* PWM设备句柄 */
+
+static rt_uint32_t period = 20000000;     /* 周期为20ms，单位为纳秒ns */
+static rt_uint32_t pulse =500000;           /* PWM脉冲宽度值 */
+
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
 extern abus_accounter_t rbmg_special_point_acc; // 接收special point
@@ -59,6 +68,16 @@ uint8_t blue_cnt;
 uint8_t yellow_cnt;
 
 #define HALF_CAR_WIDTH 0.09f
+
+
+
+void setAngle(float angle)
+{
+	rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period,500000+angle*7407);
+}
+
+
+
 
 void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
@@ -184,7 +203,7 @@ void action_pick(void)
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("pick speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed > 10)
+        if (last_speed - speed > 4)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -196,15 +215,15 @@ void action_pick(void)
 
 void action_up(void)
 {
-    motor_set_speed(M2006_5_CAN1, -1000);
-		        rt_thread_mdelay(2000);
+    motor_set_speed(M2006_5_CAN1, -1500);
+		rt_thread_mdelay(2000);
 
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("up speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed < -10)
+        if (last_speed - speed < -20)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -279,13 +298,13 @@ void rbmg_handle(void *parameter)
                     extern cvdat aball;
                     ctrl.type = 0;
                     ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
-                    ctrl.speed.y_m_s = (aball.posY - 0.4) * 2.f;
+                    ctrl.speed.y_m_s = (aball.posY - 0.5) * 2.f;
 									
-										if(ctrl.speed.x_m_s>0.2)ctrl.speed.x_m_s=0.2;
-										if(ctrl.speed.x_m_s<-0.2)ctrl.speed.x_m_s=-0.2;
+										if(ctrl.speed.x_m_s>0.12)ctrl.speed.x_m_s=0.12;
+										if(ctrl.speed.x_m_s<-0.12)ctrl.speed.x_m_s=-0.12;
 									
-										if(ctrl.speed.y_m_s>0.2)ctrl.speed.y_m_s=0.2;
-										if(ctrl.speed.y_m_s<-0.2)ctrl.speed.y_m_s=-0.2;
+										if(ctrl.speed.y_m_s>0.12)ctrl.speed.y_m_s=0.12;
+										if(ctrl.speed.y_m_s<-0.12)ctrl.speed.y_m_s=-0.12;
 
                     //									  ctrl.speed.x_m_s = 0.2;
                     //                    ctrl.speed.y_m_s = 0;
@@ -296,16 +315,23 @@ void rbmg_handle(void *parameter)
 
                     rt_thread_mdelay(50);
 
-                    if ((fabs(aball.posX - 0.5) < 0.08) && (fabs(aball.posY - 0.5) < 0.08))
+                    if ((fabs(aball.posX - 0.5) < 0.07) && (fabs(aball.posY - 0.4) < 0.07))
                     {
                         // 停车
-                        ctrl.type = 0;
-                        ctrl.speed.x_m_s = 0;
-                        ctrl.speed.y_m_s = 0;
-                        abus_public(&rbmg_chassis_acc, &ctrl);
-
+//                        ctrl.type = 1;
+//                        ctrl.pos.x_m = 0;
+//                        ctrl.pos.y_m = 0;
+//                        abus_public(&rbmg_chassis_acc, &ctrl);
+											
+												action_relative_movement_car(0,0,0);
+												
+												setAngle(125.0f);//放下吸盘
+												rt_thread_mdelay(1000);
                         action_pick();
                         rt_thread_mdelay(2000);
+												
+												
+												
                         action_up();
 											
 
@@ -362,7 +388,20 @@ void rbmg_handle(void *parameter)
 
 int rbmg_init(void)
 {
+		 /* step 1.1、查找 PWM 设备 */
+    pwm_dev = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
+    if (pwm_dev == RT_NULL)
+    {
+        rt_kprintf("pwm sample run failed! can't find %s device!\n", PWM_DEV_NAME);
+        return RT_ERROR;
+    }
 
+    /* step 1.2、设置 PWM 周期和脉冲宽度默认值 */
+    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 1900000);//20ms，初始化0度
+    /* step 1.3、使能 PWM 设备的输出通道 */
+    rt_pwm_enable(pwm_dev, PWM_DEV_CHANNEL);
+
+		
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
