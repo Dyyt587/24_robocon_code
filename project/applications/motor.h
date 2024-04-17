@@ -20,12 +20,13 @@ extern "C"
 #include <stdint.h>
 #include <stdlib.h>
 #include "motor_dj_rm_driver.h"
+#include "motor_planning.h"
 
 /* Compiler Related Definitions */
 #include "rtcompiler.h"
 
-#define MOTOR_USING_AUTO_INIT
-#define MOTOR_DEBUGING_AUTO_INIT
+#define MOTOR_USING_AUTO_INIT   /* 自动初始化 */
+#define MOTOR_DEBUGING_AUTO_INIT  
 
     typedef enum
     {
@@ -83,15 +84,16 @@ extern "C"
 
         uint8_t flag_run_mode : 2;         // 记录当前运行模式
         uint8_t flag_out_mode : 2;         // 记录当前输出模式
-        uint8_t flag_accept_level : 2;     // 记录支持的模式 0 - 3
-        uint8_t flag_passive_feedback : 1; // 记录支持的模式 0 - 3
-        uint8_t flag_passive_handle : 1;   // 记录支持的模式 0 - 3
+        uint8_t flag_accept_level : 2;     // 记录允许的模式 0 - 3
+        uint8_t flag_passive_feedback : 1; // 用户自行反馈当前值
         uint8_t flag_is_stop : 1;          // 记录支持的模式 0 - 3
 
         motor_behiver behaver;
         float acc_out;
 
         uint8_t timeout_cnt;
+
+        motor_planning* plan;
     };
 
     motor_t *motor_get(int id);

@@ -252,7 +252,6 @@ int motor_handle(int id, float cycle)
     {
         __motor_read_feedback(motor, cycle); // 更新反馈值
     }
-		motor->flag_is_stop=0;
     if (motor->flag_is_stop)
     {
         motor->acc_out = 0;
