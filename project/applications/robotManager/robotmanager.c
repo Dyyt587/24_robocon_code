@@ -203,7 +203,7 @@ void action_pick(void)
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("pick speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed > 4)
+        if (last_speed - speed > 10 || fabs(speed)<0.001)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -223,7 +223,7 @@ void action_up(void)
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("up speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed < -20)
+        if (last_speed - speed < -10 || fabs(speed)<0.001)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -260,7 +260,7 @@ void rbmg_handle(void *parameter)
             //            action_relative_movement_car( 0.6f,0, 0);
             //
             //            action_relative_movement_car( -0.6f,0, 0);
-            motor_set_pos(M2006_5_CAN1, 0);
+            motor_set_speed(M2006_5_CAN1, -1000);
 
             // motor_set_speed(M2006_1_CAN1, -100);
 
@@ -282,6 +282,8 @@ void rbmg_handle(void *parameter)
 
             //            }
             // rbmg_mode = LINE_MODE;
+						   // motor_set_speed(M2006_5_CAN1, -1500);
+		//rt_thread_mdelay(6000);
             while (1)
             {
 
@@ -334,9 +336,15 @@ void rbmg_handle(void *parameter)
 												
                         action_up();
 											
-
+					                           // motor_set_pos(M2006_5_CAN1, 0);
+												//setAngle(12.0f);//放下吸盘
+												//action_relative_movement_car(0,0,3.14);
+												 ctrl.type = 1;
+                        ctrl.pos.x_m = 0;
+                        ctrl.pos.y_m = 0;
+                        abus_public(&rbmg_chassis_acc, &ctrl);
                         while(1){
-                            motor_set_pos(M2006_5_CAN1, 0);
+                            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
                             rt_thread_mdelay(1000);
                             LOG_D("action_over");
                         }
