@@ -42,6 +42,7 @@ void cvparse_data(int count)
     if (sscanf(raw_str, "%d,%d,%f,%f.", &aball.color, &aball.id, &aball.posX, &aball.posY) != 4)
     {
         LOG_E("format error");
+			return;
     }
 
     // LOG_D("%d,%d,%f,%f", ball.color, ball.id, ball.posX, ball.posY);
@@ -93,6 +94,8 @@ rt_err_t visual_uart_rx_ind(rt_device_t dev, rt_size_t size)
 int visual_uart_init(void)
 {
     sem_visual = rt_sem_create("sem_visual", 0, RT_IPC_FLAG_FIFO);
+		aball.posY = 0.001;
+		aball.posX = 0.5;
 
     uart = rt_device_find("uart3");
     if (uart == RT_NULL)

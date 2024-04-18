@@ -195,7 +195,7 @@ void action_pick(void)
 {
     power_on(SWITCH_24V_1);
 
-    motor_set_speed(M2006_5_CAN1, 1000); // 下
+    motor_set_speed(M2006_5_CAN1, 60); // 下
 	        rt_thread_mdelay(2000);
 
     while (1)
@@ -203,7 +203,7 @@ void action_pick(void)
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("pick speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed > 10 || fabs(speed)<0.001)
+        if (last_speed - speed > 2 || fabs(speed)<0.001)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -215,7 +215,7 @@ void action_pick(void)
 
 void action_up(void)
 {
-    motor_set_speed(M2006_5_CAN1, -1500);
+    motor_set_speed(M2006_5_CAN1, -60);
 		rt_thread_mdelay(2000);
 
     while (1)
@@ -223,7 +223,7 @@ void action_up(void)
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("up speed %f lastspeed %f", speed, last_speed);
-        if (last_speed - speed < -10 || fabs(speed)<0.001)
+        if (last_speed - speed < -2 || fabs(speed)<0.001)
         {
             motor_set_speed(M2006_5_CAN1, 0);
             return;
@@ -232,7 +232,44 @@ void action_up(void)
         rt_thread_mdelay(20);
     }
 }
+                    extern cvdat aball;
 
+void wait1(void)
+{
+												static int count=0;
+
+	while(1){
+		
+		#define NN 0.16
+                    ctrl.type = 0;
+                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.8f;
+                    ctrl.speed.y_m_s = (aball.posY - 0.3) * 2.8f;
+									
+										if(ctrl.speed.x_m_s>NN)ctrl.speed.x_m_s=NN;
+										if(ctrl.speed.x_m_s<-NN)ctrl.speed.x_m_s=-NN;
+									
+										if(ctrl.speed.y_m_s>NN)ctrl.speed.y_m_s=NN;
+										if(ctrl.speed.y_m_s<-NN)ctrl.speed.y_m_s=-NN;
+
+                    //									  ctrl.speed.x_m_s = 0.2;
+                    //                    ctrl.speed.y_m_s = 0;
+
+                    //LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
+                    ctrl.speed.z_rad_s = 0;
+                    abus_public(&rbmg_chassis_acc, &ctrl);
+		
+	     if ((fabs(aball.posX - 0.5) < 0.07) && (fabs(aball.posY - 0.4) < 0.07))
+                    {
+											if(count++>10)return;
+										}else{
+											count=0;
+										}
+										rt_thread_mdelay(50);
+	
+	
+	}
+	               
+									}
 void rbmg_handle(void *parameter)
 {
     // rbmg_mode = ACTION_MODE;
@@ -260,7 +297,7 @@ void rbmg_handle(void *parameter)
             //            action_relative_movement_car( 0.6f,0, 0);
             //
             //            action_relative_movement_car( -0.6f,0, 0);
-            motor_set_speed(M2006_5_CAN1, -1000);
+            motor_set_speed(M2006_5_CAN1, -50);
 
             // motor_set_speed(M2006_1_CAN1, -100);
 
@@ -297,28 +334,11 @@ void rbmg_handle(void *parameter)
                 while (1)
                 {
 
-                    extern cvdat aball;
-                    ctrl.type = 0;
-                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
-                    ctrl.speed.y_m_s = (aball.posY - 0.5) * 2.f;
-									
-										if(ctrl.speed.x_m_s>0.12)ctrl.speed.x_m_s=0.12;
-										if(ctrl.speed.x_m_s<-0.12)ctrl.speed.x_m_s=-0.12;
-									
-										if(ctrl.speed.y_m_s>0.12)ctrl.speed.y_m_s=0.12;
-										if(ctrl.speed.y_m_s<-0.12)ctrl.speed.y_m_s=-0.12;
-
-                    //									  ctrl.speed.x_m_s = 0.2;
-                    //                    ctrl.speed.y_m_s = 0;
-
-                    LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
-                    ctrl.speed.z_rad_s = 0;
-                    abus_public(&rbmg_chassis_acc, &ctrl);
 
                     rt_thread_mdelay(50);
 
-                    if ((fabs(aball.posX - 0.5) < 0.07) && (fabs(aball.posY - 0.4) < 0.07))
-                    {
+									wait1();
+
                         // 停车
 //                        ctrl.type = 1;
 //                        ctrl.pos.x_m = 0;
@@ -336,13 +356,14 @@ void rbmg_handle(void *parameter)
 												
                         action_up();
 											
-					                           // motor_set_pos(M2006_5_CAN1, 0);
+					              // motor_set_pos(M2006_5_CAN1, 0);
 												//setAngle(12.0f);//放下吸盘
 												//action_relative_movement_car(0,0,3.14);
 												 ctrl.type = 1;
-                        ctrl.pos.x_m = 0;
-                        ctrl.pos.y_m = 0;
+                        ctrl.pos.x_m = 0.1;
+                        ctrl.pos.y_m = 1;
                         abus_public(&rbmg_chassis_acc, &ctrl);
+												
                         while(1){
                             motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
                             rt_thread_mdelay(1000);
@@ -355,7 +376,7 @@ void rbmg_handle(void *parameter)
 
                     // action_relative_movement_car(-0.1,0,0);
                     // rt_thread_mdelay(1000);
-                }
+                
 
                 rt_thread_mdelay(500);
             }
@@ -415,7 +436,7 @@ int rbmg_init(void)
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
     tid_rbmg = rt_thread_create("robotmanger",
                                 rbmg_handle, RT_NULL,
-                                4096,
+                                4096*2,
                                 14, 1);
 
     /* 线程创建成功，则启动线程 */
