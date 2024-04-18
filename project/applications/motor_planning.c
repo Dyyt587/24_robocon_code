@@ -28,7 +28,7 @@ float motor_cal_next_point(motor_planning *planning, int32_t interval_ms)
     float end_v = planning->end->speed;
     float acc_pos = (POW_2(max_v) - POW_2(present_v)) / (2.f * planning->max_accelerated_speed);
     float dec_pos = (POW_2(end_v) - POW_2(max_v)) / (2.f * planning->max_accelerated_speed);
-    float max_acc = planning->max_accelerated_speed;
+    float max_acc = planning->max_accelerated_speed;//不带符号
     float max_dec = planning->max_decelerated_speed;
 
     if (fabs(acc_pos + dec_pos) > fabs(delta_pos))
@@ -40,9 +40,9 @@ float motor_cal_next_point(motor_planning *planning, int32_t interval_ms)
         else
         {
             /*加速 减速*/
-            float tmp = sqrt(((-2) * max_acc * max_dec * delta_pos + max_acc * POW_2(end_v) - POW_2(present_v)) / (max_acc - max_dec));
-            float acc_time = (-present_v + tmp) / max_acc;
-            float dec_time = (present_v - tmp) / max_dec;
+            float vx = sqrt(((-2) * max_acc * (-max_dec) * delta_pos + max_acc * POW_2(end_v) - POW_2(present_v)) / (max_acc + max_dec));
+            float acc_time = (-present_v + vx) / max_acc;
+            float dec_time = (vx-present_v ) / max_dec;
             if (acc_time > interval_ms)
             {
                 // 下一次来还会加速
