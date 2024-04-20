@@ -13,14 +13,13 @@
 #include "drv_visual.h"
 #include "bus_sbus.h"
 
+#define PWM_DEV_NAME "pwm4" /* PWM设备名称 */
+#define PWM_DEV_CHANNEL 1   /* PWM通道 */
 
-#define PWM_DEV_NAME            "pwm4"  /* PWM设备名称 */
-#define PWM_DEV_CHANNEL         1       /* PWM通道 */
+struct rt_device_pwm *pwm_dev; /* PWM设备句柄 */
 
-struct rt_device_pwm *pwm_dev;          /* PWM设备句柄 */
-
-static rt_uint32_t period = 20000000;     /* 周期为20ms，单位为纳秒ns */
-static rt_uint32_t pulse =500000;           /* PWM脉冲宽度值 */
+static rt_uint32_t period = 20000000; /* 周期为20ms，单位为纳秒ns */
+static rt_uint32_t pulse = 500000;    /* PWM脉冲宽度值 */
 
 extern abus_accounter_t rbmg_error_acc;         // 接收error
 extern abus_accounter_t rbmg_dir_acc;           // 发布dir
@@ -69,15 +68,10 @@ uint8_t yellow_cnt;
 
 #define HALF_CAR_WIDTH 0.09f
 
-
-
 void setAngle(float angle)
 {
-	rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period,500000+angle*7407);
+    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 500000 + angle * 7407);
 }
-
-
-
 
 void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
 {
@@ -195,17 +189,26 @@ void action_pick(void)
 {
     power_on(SWITCH_24V_1);
 
+<<<<<<< Updated upstream
     motor_set_speed(M2006_5_CAN1, 60); // 下
 	        rt_thread_mdelay(2000);
+=======
+    motor_set_speed(M2006_5_CAN1, 20); // 下
+    rt_thread_mdelay(2000);
+>>>>>>> Stashed changes
 
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("pick speed %f lastspeed %f", speed, last_speed);
+<<<<<<< Updated upstream
         if (last_speed - speed > 2 || fabs(speed)<0.001)
+=======
+        if (last_speed - speed > 2 || fabs(speed) < 0.001)
+>>>>>>> Stashed changes
         {
-            motor_set_speed(M2006_5_CAN1, 0);
+            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)-360);
             return;
         }
         last_speed = speed;
@@ -215,23 +218,33 @@ void action_pick(void)
 
 void action_up(void)
 {
+<<<<<<< Updated upstream
     motor_set_speed(M2006_5_CAN1, -60);
 		rt_thread_mdelay(2000);
+=======
+    motor_set_speed(M2006_5_CAN1, -30);
+    rt_thread_mdelay(2000);
+>>>>>>> Stashed changes
 
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("up speed %f lastspeed %f", speed, last_speed);
+<<<<<<< Updated upstream
         if (last_speed - speed < -2 || fabs(speed)<0.001)
+=======
+        if (last_speed - speed < -2 || fabs(speed) < 0.001)
+>>>>>>> Stashed changes
         {
-            motor_set_speed(M2006_5_CAN1, 0);
+            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)+360);
             return;
         }
         last_speed = speed;
         rt_thread_mdelay(20);
     }
 }
+<<<<<<< Updated upstream
                     extern cvdat aball;
 
 void wait1(void)
@@ -270,6 +283,34 @@ void wait1(void)
 	}
 	               
 									}
+=======
+extern cvdat aball;
+
+void wait_for_ball_to_center(void)
+{
+    int count = 0;
+    int cnt = 0;
+#define N 50
+    while (1)
+    {
+        if (cnt++ % 100 == 0)
+            LOG_D("wait for ball to center %f %f", aball.posX, aball.posY);
+        if ((fabs(aball.posX - 0.5) < 0.07) && (fabs(aball.posY - 0.4) < 0.07))
+        {
+            count++;
+            rt_thread_mdelay(10);
+        }
+        else
+        {
+            count = 0;
+        }
+        if (count > N)
+        {
+            break;
+        }
+    }
+}
+>>>>>>> Stashed changes
 void rbmg_handle(void *parameter)
 {
     // rbmg_mode = ACTION_MODE;
@@ -297,7 +338,10 @@ void rbmg_handle(void *parameter)
             //            action_relative_movement_car( 0.6f,0, 0);
             //
             //            action_relative_movement_car( -0.6f,0, 0);
+<<<<<<< Updated upstream
             motor_set_speed(M2006_5_CAN1, -50);
+=======
+>>>>>>> Stashed changes
 
             // motor_set_speed(M2006_1_CAN1, -100);
 
@@ -319,8 +363,12 @@ void rbmg_handle(void *parameter)
 
             //            }
             // rbmg_mode = LINE_MODE;
-						   // motor_set_speed(M2006_5_CAN1, -1500);
-		//rt_thread_mdelay(6000);
+            // motor_set_speed(M2006_5_CAN1, -1500);
+            // rt_thread_mdelay(6000);
+
+            LOG_D("cab mode wait lifting ready");
+            action_up();
+            LOG_D("lifting is ready");
             while (1)
             {
 
@@ -334,6 +382,7 @@ void rbmg_handle(void *parameter)
                 while (1)
                 {
 
+<<<<<<< Updated upstream
 
                     rt_thread_mdelay(50);
 
@@ -369,10 +418,63 @@ void rbmg_handle(void *parameter)
                             rt_thread_mdelay(1000);
                             LOG_D("action_over");
                         }
+=======
+                    ctrl.type = 0;
+                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
+                    ctrl.speed.y_m_s = (aball.posY - 0.5) * 2.f;
 
-                        //                        // 完成一次抓取,向右平移到下一个球
-                        //                        action_relative_movement_car(-0.6, 0, 0);
+                    if (ctrl.speed.x_m_s > 0.12)
+                        ctrl.speed.x_m_s = 0.12;
+                    if (ctrl.speed.x_m_s < -0.12)
+                        ctrl.speed.x_m_s = -0.12;
+
+                    if (ctrl.speed.y_m_s > 0.12)
+                        ctrl.speed.y_m_s = 0.12;
+                    if (ctrl.speed.y_m_s < -0.12)
+                        ctrl.speed.y_m_s = -0.12;
+
+                    //									  ctrl.speed.x_m_s = 0.2;
+                    //                    ctrl.speed.y_m_s = 0;
+
+                    LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
+                    ctrl.speed.z_rad_s = 0;
+                    abus_public(&rbmg_chassis_acc, &ctrl);
+
+                    rt_thread_mdelay(50);
+
+                    wait_for_ball_to_center();
+                    // 停车
+                    //                        ctrl.type = 1;
+                    //                        ctrl.pos.x_m = 0;
+                    //                        ctrl.pos.y_m = 0;
+                    //                        abus_public(&rbmg_chassis_acc, &ctrl);
+>>>>>>> Stashed changes
+
+                    action_relative_movement_car(0, 0, 0);
+
+                    setAngle(125.0f); // 放下吸盘
+                    rt_thread_mdelay(1000);
+                    action_pick();
+                    rt_thread_mdelay(2000);
+
+                    action_up();
+
+                    // motor_set_pos(M2006_5_CAN1, 0);
+                    // setAngle(12.0f);//放下吸盘
+                    // action_relative_movement_car(0,0,3.14);
+                    ctrl.type = 1;
+                    ctrl.pos.x_m = 0;
+                    ctrl.pos.y_m = 0;
+                    abus_public(&rbmg_chassis_acc, &ctrl);
+                    while (1)
+                    {
+                        motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
+                        rt_thread_mdelay(1000);
+                        LOG_D("action_over");
                     }
+
+                    //                        // 完成一次抓取,向右平移到下一个球
+                    //                        action_relative_movement_car(-0.6, 0, 0);
 
                     // action_relative_movement_car(-0.1,0,0);
                     // rt_thread_mdelay(1000);
@@ -417,7 +519,7 @@ void rbmg_handle(void *parameter)
 
 int rbmg_init(void)
 {
-		 /* step 1.1、查找 PWM 设备 */
+    /* step 1.1、查找 PWM 设备 */
     pwm_dev = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
     if (pwm_dev == RT_NULL)
     {
@@ -426,11 +528,10 @@ int rbmg_init(void)
     }
 
     /* step 1.2、设置 PWM 周期和脉冲宽度默认值 */
-    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 1900000);//20ms，初始化0度
+    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 1900000); // 20ms，初始化0度
     /* step 1.3、使能 PWM 设备的输出通道 */
     rt_pwm_enable(pwm_dev, PWM_DEV_CHANNEL);
 
-		
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
