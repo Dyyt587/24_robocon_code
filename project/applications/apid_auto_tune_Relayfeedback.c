@@ -11,6 +11,10 @@ float returned_autopid_pram[3];
 void __auto_pid_handle(apid_t *pid, PID_TYPE cycle)
 {
     Handle_Auto_PID(pid->auto_pid, APID_Get_Target(pid), APID_Get_Present(pid), cycle);
+    if(((apid_auto_t*)pid->auto_pid)->pid_params.State == STATE_End)
+    {
+        //LOG_D("endendned");
+    }
 }
 void return_auto_pid(void)
 {
@@ -24,7 +28,6 @@ void auto_pid_init(apid_t *apid,apid_auto_t *apid_auto, uint8_t type, uint16_t f
     apid_auto->frequent = (float)frequent;
     // apid_auto->ctrl = ctrl;
     APID_Set_Target(apid, target);
-    apid_auto->pid = apid;
     apid->auto_pid = apid;
     apid->auto_pid_handler = __auto_pid_handle;
     return_auto_pid();

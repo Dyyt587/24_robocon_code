@@ -4,6 +4,7 @@
 
 #include "apid_auto_tune_ZNmode.h"
 #include "apid.h"
+#include "ulog.h"
 /**
 #include <pidautotuner.h>
 
@@ -78,17 +79,22 @@ void apid_auto_tune_ZNmode_deinit(apid_t *pid);
 void __auto_pid_handle1(apid_t *pid, PID_TYPE cycle)
 {
     //覆盖输出
-    APID_STOP(pid);
+   // APID_(pid);
     pid->parameter.out = tunePID(pid->auto_pid,APID_Get_Present(pid),cycle);
-    if(isFinished(pid->auto_pid)){
-        apid_auto_tune_ZNmode_deinit(pid);
-        APID_Enable(pid);
-    }
+    LOG_D(":%f",pid->parameter.out);
+    // if(isFinished(pid->auto_pid)){
+    //     apid_auto_tune_ZNmode_deinit(pid);
+    //     APID_Enable(pid);
+    // }
 }
-void apid_auto_tune_ZNmode_init(apid_auto_tune_ZNmode_t *tuner,int tuneCycles)
+
+void apid_auto_tune_ZNmode_init(apid_t*pid ,apid_auto_tune_ZNmode_t *tuner,int tuneCycles)
 {
-    tuner-> targetInputValue = 0;
-    tuner-> loopInterval = 0;
+    pid->auto_pid = tuner;
+    pid->auto_pid_handler = __auto_pid_handle1;
+
+    tuner-> targetInputValue = 300;
+    tuner-> loopInterval = 5;
     tuner-> znMode = ZNModeNoOvershoot;
     tuner-> cycles = tuneCycles;
     tuner->microseconds = 0;

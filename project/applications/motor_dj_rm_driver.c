@@ -380,7 +380,7 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         {
             if (
 #ifdef MOTOR_DJ_M2006_ID1_CAN1
-                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff &&
+                dj_motors[DJ_M_CAN1_1].msg_cnt == 0xff ||
 #endif
 #ifdef MOTOR_DJ_M2006_ID2_CAN1
                 dj_motors[DJ_M_CAN1_2].msg_cnt == 0xff &&
