@@ -607,21 +607,21 @@ rt_err_t ind_dj_can_motor_callback(rt_device_t dev, void *args, rt_int32_t hdr, 
 }
 static void can_rx_thread1(void *parameter)
 {
-             motor_t *motor = motor_get(M2006_5_CAN1);
-        // var_register(&(motor->tar_speed), "tarspeed", _f);
-        // var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
-        // var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
-        // var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
-        // var_register(&(motor->tar_pos), "tarpos", _f);
-        // var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
-        // var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
-        // var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
+//             motor_t *motor = motor_get(M2006_5_CAN1);
+//        // var_register(&(motor->tar_speed), "tarspeed", _f);
+//        // var_register(&(motor->pid_speed->parameter.kp), "kp", _f);
+//        // var_register(&(motor->pid_speed->parameter.ki), "ki", _f);
+//        // var_register(&(motor->pid_speed->parameter.kd), "kd", _f);
+//        // var_register(&(motor->tar_pos), "tarpos", _f);
+//        // var_register(&(motor->pid_pos->parameter.kp), "kp1", _f);
+//        // var_register(&(motor->pid_pos->parameter.ki), "ki1", _f);
+//        // var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
 
-         motor_set_pos(M2006_1_CAN1,0);
-         motor_set_pos(M2006_2_CAN1,0);
-         motor_set_pos(M2006_3_CAN1,0);
-         motor_set_pos(M2006_4_CAN1,0);
-         motor_set_speed(M2006_5_CAN1,0);
+//         motor_set_pos(M2006_1_CAN1,0);
+//         motor_set_pos(M2006_2_CAN1,0);
+//         motor_set_pos(M2006_3_CAN1,0);
+//         motor_set_pos(M2006_4_CAN1,0);
+//         motor_set_speed(M2006_5_CAN1,0);
     while (1)
     {
         //motor_shakdown(0);
@@ -771,18 +771,68 @@ static void set_motor_passive_feedback(void)
 {
 #if defined(MOTOR_DJ_M3508_ID1_CAN1)
     motor_set_passive_feedback(M3508_1_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_1_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_1_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_1_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_1_CAN1),2000);
+    APID_Set_Target_Limit(motor_get_pid_speed(M3508_1_CAN1),70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1), 20000);
+    APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_1_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M3508_1_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M3508_ID2_CAN1)
     motor_set_passive_feedback(M3508_2_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_2_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_2_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_2_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_2_CAN1),2000);
+    APID_Set_Target_Limit(motor_get_pid_speed(M3508_2_CAN1),70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_2_CAN1), 20000);
+    APID_Set_Out_Limit(motor_get_pid_pos(M3508_2_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_2_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M3508_2_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M3508_ID3_CAN1)
     motor_set_passive_feedback(M3508_3_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_3_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_3_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_3_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_3_CAN1),2000);
+    APID_Set_Target_Limit(motor_get_pid_speed(M3508_3_CAN1),70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_3_CAN1), 20000);
+    APID_Set_Out_Limit(motor_get_pid_pos(M3508_3_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_3_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M3508_3_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M3508_ID4_CAN1)
     motor_set_passive_feedback(M3508_4_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_4_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_4_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_4_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_4_CAN1),2000);
+    APID_Set_Target_Limit(motor_get_pid_speed(M3508_4_CAN1),70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_4_CAN1), 20000);
+    APID_Set_Out_Limit(motor_get_pid_pos(M3508_4_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_4_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M3508_4_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M3508_ID5_CAN1)
     motor_set_passive_feedback(M3508_5_CAN1, 1);
+    APID_Set_Out_Limit(motor_get_pid_speed(M3508_5_CAN1), 30000);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_5_CAN1), 200);
+    APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_5_CAN1), 20);
+    APID_Set_Bias_Limit(motor_get_pid_speed(M3508_5_CAN1),2000);
+    APID_Set_Target_Limit(motor_get_pid_speed(M3508_5_CAN1),70);
+
+    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_5_CAN1), 20000);
+    APID_Set_Out_Limit(motor_get_pid_pos(M3508_5_CAN1), 50);
+    APID_Set_Integral_Limit(motor_get_pid_pos(M3508_5_CAN1), 200);
+    //APID_D_PART(motor_get_pid_pos(M3508_5_CAN1), 0.7);
 #endif
 #if defined(MOTOR_DJ_M3508_ID6_CAN1)
     motor_set_passive_feedback(M3508_6_CAN1, 1);

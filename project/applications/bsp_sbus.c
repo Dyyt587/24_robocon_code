@@ -4,16 +4,16 @@
 #include <rtdevice.h>
 #include "math.h"
 
-//#define DBG_TAG "drv.dbus"
-//#define DBG_LVL DBG_DBG
-//#include <rtdbg.h>
+// #define DBG_TAG "drv.dbus"
+// #define DBG_LVL DBG_DBG
+// #include <rtdbg.h>
 #include "ulog.h"
 uint8_t dbus_buf[DBUS_MAX_LEN];
 static rc_info_t rc;
 static void sw_judge(rc_info_t *rc);
-static int flag=0;
-	static uint8_t state = 0;
-
+static int flag = 0;
+static uint8_t state = 0;
+static rt_sem_t sbus_sem;
 #define myabs(x) x > 0 ? x : -x
 static rt_device_t uart = 0;
 /**
@@ -40,7 +40,7 @@ void rc_callback_handler(rc_info_t *rc, uint8_t *buff)
 	rc->ch6 = (buff[5] >> 4) & 0x0003;
 
 #else
-	//if(buff[24]==0){
+	// if(buff[24]==0){
 	rc->ch1 = ((uint16_t)buff[1]) | ((uint16_t)((buff[2] & 0x07) << 8));
 	rc->ch2 = ((uint16_t)((buff[2] & 0xf8) >> 3)) | (((uint16_t)(buff[3] & 0x3f)) << 5);
 	rc->ch3 = ((uint16_t)((buff[3] & 0xc0) >> 6)) | ((((uint16_t)buff[4]) << 2)) | (((uint16_t)(buff[5] & 0x01)) << 10);
@@ -70,8 +70,8 @@ void rc_callback_handler(rc_info_t *rc, uint8_t *buff)
 	sw_judge(rc);
 //}else{
 
-//LOG_E("sbus receiver error");
-//}
+// LOG_E("sbus receiver error");
+// }
 #endif
 	if (rc->ch1 < min && rc->ch1 > -min)
 		rc->ch1 = 0;
@@ -81,47 +81,80 @@ void rc_callback_handler(rc_info_t *rc, uint8_t *buff)
 		rc->ch3 = 0;
 	if (rc->ch4 < min && rc->ch4 > -min)
 		rc->ch4 = 0;
-//	LOG_D("\nrc: %d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d",
-//	rc->ch1, rc->ch2, rc->ch3, rc->ch4, rc->ch5, rc->ch6, rc->ch7, rc->ch8, rc->ch9, rc->ch10, rc->ch11, rc->ch12, rc->ch13, rc->ch14, rc->ch15, rc->ch16);
-//	//LOG_D("bug[25] %d",dbus_buf[24]);
+	//	LOG_D("\nrc: %d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d\r\n%d %d %d %d",
+	//	rc->ch1, rc->ch2, rc->ch3, rc->ch4, rc->ch5, rc->ch6, rc->ch7, rc->ch8, rc->ch9, rc->ch10, rc->ch11, rc->ch12, rc->ch13, rc->ch14, rc->ch15, rc->ch16);
+	//	//LOG_D("bug[25] %d",dbus_buf[24]);
 }
 
+
+
+uint8_t ibus_buf[32];
+
+void ibus_in(rc_t *rc, uint8_t data)
+{
+
+    if (rc->flag == 0)
+    {
+        if (data == 0x20)
+        {
+            rc->buf[rc->flag] = data;
+            rc->flag = 1;
+        }
+    }
+    else if (rc->flag == 1)
+    {
+        if (data == 0x40)
+        {
+            rc->buf[rc->flag] = data;
+            rc->flag = 2;
+        }
+        else
+        {
+            flag = 0;
+        }
+    }
+    if (rc->flag >= 2)
+    {
+        // 一直接收数据
+        rc->buf[flag++] = data;
+        if (rc->flag == 32)
+        {
+            // 开始解析一包数据并且清空flag
+            uint16_t checksum_cal = 0xffff - rc->buf[0] - rc->buf[1];
+
+            for (int i = 0; i < RC_CHENNEL_NUM; i++)
+            {
+                rc->ch[i] = (uint16_t)(rc->buf[i * 2 + 3] << 8 | rc->buf[i * 2 + 2]);
+                checksum_cal = checksum_cal - rc->buf[i * 2 + 3] - rc->buf[i * 2 + 2];
+            }
+
+            checksum_ibus = rc->buf[31] << 8 | rc->buf[30];
+
+            if (checksum_cal == checksum_ibus)
+            {
+                for (int j = 0; j < RC_CHENNEL_NUM; j++)
+                {
+                    rc->chs[j] = rc->ch[j];
+                }
+            }
+            rc->new_pkg = 1;
+            /*一包数据解析*/
+            rc->flag = 0;
+        }
+    }
+}
 /**
- * @brief 
- * 
- * @param dev 
- * @param size 
- * @return rt_err_t 
+ * @brief
+ *
+ * @param dev
+ * @param size
+ * @return rt_err_t
  */
 rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
-			while(size--){
-
-	if (state == 0)
-	{
-		rt_device_read(uart, 0, dbus_buf, 1);
-		
-		if (dbus_buf[0] == 0x0f)
-		{
-			state = 1;
-		}
-	
-	}
-	else if (state == 1) /* 接收到包头*/
-	{
-		if (size >= 24)
-		{
-			flag=1;
-//			rt_device_read(uart, 0, dbus_buf + 1, 24);
-//			state = 0;
-//			rc_callback_handler(&rc, dbus_buf);
-			//LOG_HEX("rcbuf",10,dbus_buf,25);
-		}
-	}
-}
+	rt_sem_release(sbus_sem);
 	return 0;
 }
-
 
 void sw_judge(rc_info_t *rc)
 {
@@ -175,32 +208,32 @@ void sw_judge(rc_info_t *rc)
 		rc->ch12 = 2;
 };
 
-const rc_info_t*dbus_get_info(void)
+const rc_info_t *dbus_get_info(void)
 {
 	return &rc;
 }
-
-
-void dbus_handle(void*d)
+rc_t rc;
+void dbus_handle(void *d)
 {
-		if (rt_device_set_rx_indicate(uart, dbus_uart_rx_ind) != RT_EOK)
+	if (rt_device_set_rx_indicate(uart, dbus_uart_rx_ind) != RT_EOK)
 	{
 		LOG_E("uart1(sbus) set rx indicate failed");
-		//return -1;
+		// return -1;
 	}
-	
-	while(1)
+	uint8_t buf=0;
+	while (1)
 	{
-		if(flag){
-						rt_device_read(uart, 0, dbus_buf + 1, 24);
-			rc_callback_handler(&rc, dbus_buf);
-						state = 0;
-
-			flag=0;
+		if (rt_device_read(uart, 0, &buf,1)==0)
+		{
+			rt_sem_take(sbus_sem, RT_WAITING_FOREVER);
+			continue;
 		}
-		rt_thread_mdelay(1);
+		ibus_in(&rc, buf);
+		// LOG_D("buf 0x%x",buf);
+		// if(buf == 0x20){
+		// 	LOG_D("ibus start");
+		// }	
 	}
-	
 }
 /**
  * @brief   initialize dbus uart device
@@ -209,29 +242,29 @@ void dbus_handle(void*d)
  */
 int dbus_uart_init(void)
 {
-	uart = rt_device_find("uart1");
+	uart = rt_device_find("uart8");
 	if (uart == RT_NULL)
 	{
-		LOG_E("uart1(sbus) not found");
+		LOG_E("uart8(ibus) not found");
 		return -1;
 	}
 	if (rt_device_open(uart, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_RX_NON_BLOCKING) != RT_EOK)
 	{
-		LOG_E("uart1(sbus) open failed");
+		LOG_E("uart8(ibus) open failed");
 		return -1;
 	}
-//			DATA_BITS_8,				/* 8 databits */
-//		STOP_BITS_2,				/* 1 stopbit */
-//		PARITY_EVEN,				/* No parity  */
+	//			DATA_BITS_8,				/* 8 databits */
+	//		STOP_BITS_2,				/* 1 stopbit */
+	//		PARITY_EVEN,				/* No parity  */
 	struct serial_configure config = {
-		100000,						/* 115200 bits/s */
+		115200,						/* 115200 bits/s */
 		DATA_BITS_8,				/* 8 databits */
 		STOP_BITS_1,				/* 1 stopbit */
-		PARITY_EVEN,				/* No parity  */
+		PARITY_NONE,				/* No parity  */
 		BIT_ORDER_LSB,				/* LSB first sent */
 		NRZ_NORMAL,					/* Normal mode */
-		4096,		/* rxBuf size */
-		4096,		/* txBuf size */
+		4096,						/* rxBuf size */
+		4096,						/* txBuf size */
 		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
 		0};
 	if (RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
@@ -239,34 +272,30 @@ int dbus_uart_init(void)
 		rt_kprintf("change %s failed!\n", uart->parent.name);
 	}
 
+	rt_thread_t tid_chassis = RT_NULL;
 
-	
-	
-	   rt_thread_t tid_chassis = RT_NULL;
+	/* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
+	tid_chassis = rt_thread_create("ibus",
+								   dbus_handle, RT_NULL,
+								   4096,
+								   8, 1);
+	sbus_sem = rt_sem_create("dbus_sem", 0, RT_IPC_FLAG_FIFO);
 
-    /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
-    tid_chassis = rt_thread_create("dbus",
-                                   dbus_handle, RT_NULL,
-                                   4096,
-                                   8, 1);
+	/* 线程创建成功，则启动线程 */
+	if (tid_chassis != RT_NULL)
+	{
+		rt_thread_startup(tid_chassis);
+	}
+	return 0;
 
-    /* 线程创建成功，则启动线程 */
-    if (tid_chassis != RT_NULL)
-    {
-        rt_thread_startup(tid_chassis);
-    }
-    return 0;
-		
 	return 0;
 }
 INIT_COMPONENT_EXPORT(dbus_uart_init);
 
-static void dbus(int argc, char**argv)
+static void dbus(int argc, char **argv)
 {
 
-    LOG_RAW("rc:\n\t 1 - 2 - 3 - 4 \n\t %d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n",
-		rc.ch1, rc.ch2, rc.ch3, rc.ch4, rc.ch5, rc.ch6, rc.ch7, rc.ch8, rc.ch9, rc.ch10, rc.ch11, rc.ch12, rc.ch13, rc.ch14, rc.ch15, rc.ch16);
-
-
+	LOG_RAW("rc:\n\t 1 - 2 - 3 - 4 \n\t %d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n\t%d %d %d %d\r\n",
+			rc.ch1, rc.ch2, rc.ch3, rc.ch4, rc.ch5, rc.ch6, rc.ch7, rc.ch8, rc.ch9, rc.ch10, rc.ch11, rc.ch12, rc.ch13, rc.ch14, rc.ch15, rc.ch16);
 }
 MSH_CMD_EXPORT(dbus, see dbus state);
