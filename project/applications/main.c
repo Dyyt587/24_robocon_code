@@ -22,6 +22,7 @@
 //#include "drv_stepper_motor.h"
 #include "aboard_power_switch.h"
 #include "motor.h"
+#include "apid_auto_tune_Relayfeedback.h"
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN GET_PIN(F, 14)
 
@@ -77,39 +78,15 @@ int main(void)
 	// 	rt_err_t ret = RT_EOK;
 	// 	rt_uint8_t count =0;
 	// rt_thread_mdelay(2000);
+		apid_auto_t auto_1;
+    motor_t *motor = motor_get(0);
+		motor_set_speed(0,0);
+   // auto_pid_init(motor->pid_speed,&auto_1, VECTOR, 200,10);
 
 	while (1)
 	{
-		/* 查找设备 */
-		// adc_dev = (rt_adc_device_t)rt_device_find(ADC_DEV_NAME);
-		// if(adc_dev == RT_NULL)
-		// {
-		// 	rt_kprintf("adc smaple run failed! can't find %s device!\n", ADC_DEV_NAME);
-		// 	return RT_ERROR;
-		// }
+				motor_set_speed(0,100);
 
-		/* 使能设备 */
-
-		// ret  = rt_adc_enable(adc_dev, ADC_DEV_CHANNEL);
-
-		// while(count <10)
-		// 	count ++;
-		// 	/* 读取采集值 */
-		// 	value = rt_adc_read(adc_dev, ADC_DEV_CHANNEL);
-		// 	rt_kprintf("the value is :%d \n", value);
-
-		// 	/* 转换为对应电压值 */
-		// 	vol = (float)(value * 3.3f) / CONVERT_BITS;
-		// 	rt_kprintf("the voltage is :%f \n", vol);
-		// 	float tt = (1.43 - vol)/0.0043 + 25;   //根据公式算出温度值
-		// LOG_D("VSense:%.2f\r\n",tt);
-
-		// 	rt_thread_mdelay(500);
-
-		//  Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
-		// Emm_V5_Pos_Control(1, 0, 100, 0, 1000, false, false);
-
-		//
 		rt_pin_write(LED0_PIN, PIN_HIGH);
 		rt_thread_mdelay(500);
 		rt_pin_write(LED0_PIN, PIN_LOW);

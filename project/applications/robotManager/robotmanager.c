@@ -189,24 +189,17 @@ void action_pick(void)
 {
     power_on(SWITCH_24V_1);
 
-<<<<<<< Updated upstream
-    motor_set_speed(M2006_5_CAN1, 60); // 下
-	        rt_thread_mdelay(2000);
-=======
+
     motor_set_speed(M2006_5_CAN1, 20); // 下
     rt_thread_mdelay(2000);
->>>>>>> Stashed changes
 
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("pick speed %f lastspeed %f", speed, last_speed);
-<<<<<<< Updated upstream
-        if (last_speed - speed > 2 || fabs(speed)<0.001)
-=======
+
         if (last_speed - speed > 2 || fabs(speed) < 0.001)
->>>>>>> Stashed changes
         {
             motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)-360);
             return;
@@ -218,24 +211,17 @@ void action_pick(void)
 
 void action_up(void)
 {
-<<<<<<< Updated upstream
-    motor_set_speed(M2006_5_CAN1, -60);
-		rt_thread_mdelay(2000);
-=======
+
     motor_set_speed(M2006_5_CAN1, -30);
     rt_thread_mdelay(2000);
->>>>>>> Stashed changes
 
     while (1)
     {
         static float last_speed = 0;
         float speed = motor_get_speed(M2006_5_CAN1);
         LOG_D("up speed %f lastspeed %f", speed, last_speed);
-<<<<<<< Updated upstream
-        if (last_speed - speed < -2 || fabs(speed)<0.001)
-=======
+
         if (last_speed - speed < -2 || fabs(speed) < 0.001)
->>>>>>> Stashed changes
         {
             motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)+360);
             return;
@@ -244,7 +230,6 @@ void action_up(void)
         rt_thread_mdelay(20);
     }
 }
-<<<<<<< Updated upstream
                     extern cvdat aball;
 
 void wait1(void)
@@ -283,8 +268,7 @@ void wait1(void)
 	}
 	               
 									}
-=======
-extern cvdat aball;
+
 
 void wait_for_ball_to_center(void)
 {
@@ -310,7 +294,6 @@ void wait_for_ball_to_center(void)
         }
     }
 }
->>>>>>> Stashed changes
 void rbmg_handle(void *parameter)
 {
     // rbmg_mode = ACTION_MODE;
@@ -338,10 +321,7 @@ void rbmg_handle(void *parameter)
             //            action_relative_movement_car( 0.6f,0, 0);
             //
             //            action_relative_movement_car( -0.6f,0, 0);
-<<<<<<< Updated upstream
             motor_set_speed(M2006_5_CAN1, -50);
-=======
->>>>>>> Stashed changes
 
             // motor_set_speed(M2006_1_CAN1, -100);
 
@@ -382,7 +362,6 @@ void rbmg_handle(void *parameter)
                 while (1)
                 {
 
-<<<<<<< Updated upstream
 
                     rt_thread_mdelay(50);
 
@@ -418,7 +397,7 @@ void rbmg_handle(void *parameter)
                             rt_thread_mdelay(1000);
                             LOG_D("action_over");
                         }
-=======
+
                     ctrl.type = 0;
                     ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
                     ctrl.speed.y_m_s = (aball.posY - 0.5) * 2.f;
@@ -440,48 +419,10 @@ void rbmg_handle(void *parameter)
                     ctrl.speed.z_rad_s = 0;
                     abus_public(&rbmg_chassis_acc, &ctrl);
 
-                    rt_thread_mdelay(50);
-
-                    wait_for_ball_to_center();
-                    // 停车
-                    //                        ctrl.type = 1;
-                    //                        ctrl.pos.x_m = 0;
-                    //                        ctrl.pos.y_m = 0;
-                    //                        abus_public(&rbmg_chassis_acc, &ctrl);
->>>>>>> Stashed changes
-
-                    action_relative_movement_car(0, 0, 0);
-
-                    setAngle(125.0f); // 放下吸盘
-                    rt_thread_mdelay(1000);
-                    action_pick();
-                    rt_thread_mdelay(2000);
-
-                    action_up();
-
-                    // motor_set_pos(M2006_5_CAN1, 0);
-                    // setAngle(12.0f);//放下吸盘
-                    // action_relative_movement_car(0,0,3.14);
-                    ctrl.type = 1;
-                    ctrl.pos.x_m = 0;
-                    ctrl.pos.y_m = 0;
-                    abus_public(&rbmg_chassis_acc, &ctrl);
-                    while (1)
-                    {
-                        motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
-                        rt_thread_mdelay(1000);
-                        LOG_D("action_over");
-                    }
-
-                    //                        // 完成一次抓取,向右平移到下一个球
-                    //                        action_relative_movement_car(-0.6, 0, 0);
-
-                    // action_relative_movement_car(-0.1,0,0);
-                    // rt_thread_mdelay(1000);
-                
+                    
 
                 rt_thread_mdelay(500);
-            }
+            }}
         }
         else if (rbmg_mode == LINE_MODE)
         {

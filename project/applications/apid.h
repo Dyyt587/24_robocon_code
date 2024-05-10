@@ -2,7 +2,7 @@
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-13 15:09:03
+ * @LastEditTime: 2024-04-23 08:46:09
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.h
  * @Description: pid库
  */
@@ -16,9 +16,9 @@ extern "C"
 #endif
 #include "float.h"
 #include "stdint.h"
-//#ifndef uint8_t
-//#define uint8_t unsigned char
-//#endif
+    // #ifndef uint8_t
+    // #define uint8_t unsigned char
+    // #endif
 
 #define TARGET_MAX FLT_MAX // 默认最大限幅值
 #define OUT_MAX FLT_MAX    // 默认最大限幅值
@@ -28,29 +28,30 @@ extern "C"
 // 注意，钩子函数对所有pid节点都有效，但每个节点都可自行编写属于自己的函数
 #define USE_HOOK_FIRST 0 // 使用钩子函数，自行编写
 #define USE_HOOK_END 0
-
+#define APID_USING_AUTO_PID 1
 #ifndef ABS
 #define ABS(x) ((x > 0) ? x : -x)
 #endif
 
-typedef enum {
-     _8=0U,
+    typedef enum
+    {
+        _8 = 0U,
 
-     _16,
+        _16,
 
-     _32,
-      _64,
+        _32,
+        _64,
 
-     _f,
-     _lf
-}var_type_e;
-typedef struct _var_list {
-    const char* name;
-    void* body;
-    var_type_e type;
-    struct _var_list *next;
-}var_list_t;
-
+        _f,
+        _lf
+    } var_type_e;
+    typedef struct _var_list
+    {
+        const char *name;
+        void *body;
+        var_type_e type;
+        struct _var_list *next;
+    } var_list_t;
 
     enum
     {
@@ -113,7 +114,7 @@ typedef struct _var_list {
         PID_TYPE bias_for_integral; // 开始积分的误差	--	用于积分分离
         PID_TYPE integral_limit;    // 积分限幅				--	用于抗积分饱和
         PID_TYPE out_limit;         // 输出限幅
- 
+
         PID_TYPE k; // 并行pid相加系数          -- 用于并行pid
 
         PID_TYPE out; // 此节点pid输出
@@ -125,7 +126,7 @@ typedef struct _var_list {
 #if USE_HOOK_FIRST
         void (*user_hook_first)(apid_t *pid); // 钩子函数，在计算result之前，其他必要操作之后
 #endif
-#if USE_HOOK_FIRST
+#if USE_HOOK_END
         void (*user_hook_out)(apid_t *pid); // 钩子函数，在计算result之后，限幅之前
 #endif
     } PID_Parameter;
@@ -164,7 +165,6 @@ typedef struct _var_list {
 
     } PID_Process;
 
-
     typedef struct
     {
         ALL_PID_Mode mode;
@@ -174,9 +174,9 @@ typedef struct _var_list {
         PID_TYPE ki;
         PID_TYPE kd;
     } PID_Config_t;
-    typedef  struct _PID_T apid_t;
+    typedef struct _PID_T apid_t;
 
-     struct _PID_T
+    struct _PID_T
     {
         ALL_PID_Flag flag;
         PID_Parameter parameter;
@@ -186,52 +186,59 @@ typedef struct _var_list {
         void (*i_handle)(apid_t *pid);
         void (*d_handle)(apid_t *pid);
         void (*variable)(apid_t *pid); // 变速积分
+#if APID_USING_AUTO_PID
+        void *auto_pid;
+        void (*auto_pid_handler)(apid_t *pid, PID_TYPE cycle);
+#endif
     };
 
-/*用户不该使用该注释下面的函数*/
-	void _PID_Hander(apid_t* pid, PID_TYPE cycle);
-	void i_handle_Increment_Normal(apid_t* pid);
-	void d_handle_Increment_Complete(apid_t* pid);
-    
-	void i_handle_Position_Normal(apid_t* pid);
-	void d_handle_Position_Complete(apid_t* pid);
+    /*用户不该使用该注释下面的函数*/
+    void _PID_Hander(apid_t *pid, PID_TYPE cycle);
+    void i_handle_Increment_Normal(apid_t *pid);
+    void d_handle_Increment_Complete(apid_t *pid);
+
+    void i_handle_Position_Normal(apid_t *pid);
+    void d_handle_Position_Complete(apid_t *pid);
 /*用户不该使用该注释上面的函数*/
 /**
  * @brief 对于特殊的使用环境，可以使用该宏创建一个匿名的pid实例，但该实例不会被自动初始化，任然需要调用init函数
- * 
+ *
  */
 #define APID_CREATE_STATIC_ANONYMOUS(mode, kp, ki, kd) \
-    &(apid_t){                                          \
-        .flag = {.pid_mode = mode},                      \
-        .parameter = {.kp = kp, .ki = ki, .kd = kd},     \
+    &(apid_t)                                          \
+    {                                                  \
+        .flag = {.pid_mode = mode},                    \
+        .parameter = {.kp = kp, .ki = ki, .kd = kd},   \
     }
 
 /**
  * @brief 对于特殊的使用环境，可以使用下面宏创建一个匿名的pid实例，该实例不用调用初始化函数
- * 
+ *
  */
-#define APID_CREATE_STATIC_ANONYMOUS_INCREMENT( _kp, _ki, _kd) \
-    &(apid_t){                                          \
-        .flag = {.pid_mode = PID_INCREMENT},                      \
-        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},     \
-        .handle = _PID_Hander,\
-        .i_handle = i_handle_Increment_Normal,\
-				.d_handle = d_handle_Increment_Complete,\
+#define APID_CREATE_STATIC_ANONYMOUS_INCREMENT(_kp, _ki, _kd) \
+    &(apid_t)                                                 \
+    {                                                         \
+        .flag = {.pid_mode = PID_INCREMENT},                  \
+        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},       \
+        .handle = _PID_Hander,                                \
+        .i_handle = i_handle_Increment_Normal,                \
+        .d_handle = d_handle_Increment_Complete,              \
     }
-#define APID_CREATE_STATIC_ANONYMOUS_POSITION( _kp, _ki, _kd) \
-    &(apid_t){                                          \
-        .flag = {.pid_mode = PID_POSITION},                      \
-        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},     \
-        .handle = _PID_Hander,\
-        .i_handle = i_handle_Position_Normal,\
-				.d_handle = d_handle_Position_Complete,\
+#define APID_CREATE_STATIC_ANONYMOUS_POSITION(_kp, _ki, _kd) \
+    &(apid_t)                                                \
+    {                                                        \
+        .flag = {.pid_mode = PID_POSITION},                  \
+        .parameter = {.kp = _kp, .ki = _ki, .kd = _kd},      \
+        .handle = _PID_Hander,                               \
+        .i_handle = i_handle_Position_Normal,                \
+        .d_handle = d_handle_Position_Complete,              \
     }
 
     void APID_STOP(apid_t *pid);
     void APID_Pause(apid_t *pid);
     void APID_Enable(apid_t *pid);
     void APID_Init(apid_t *pid, ALL_PID_Mode mode, PID_TYPE kp, PID_TYPE ki, PID_TYPE kd);
-	void APID_Reset(apid_t* pid);
+    void APID_Reset(apid_t *pid);
 
     void APID_SET_I_Function(apid_t *pid, ALL_PID_I_Function imode, ...);
     void APID_SET_D_Function(apid_t *pid, ALL_PID_D_Function dmode, ...);
@@ -258,7 +265,7 @@ typedef struct _var_list {
 
     void APID_Set_Target(apid_t *pid, PID_TYPE value);
     void APID_Set_Present(apid_t *pid, PID_TYPE value);
-    
+
     void APID_Set_Predict(apid_t *pid, PID_TYPE value);
 
     PID_TYPE APID_Get_Out(apid_t *pid);
@@ -275,18 +282,20 @@ typedef struct _var_list {
     PID_TYPE APID_Get_Target(apid_t *pid);
     PID_TYPE APID_Get_Present(apid_t *pid);
     PID_TYPE APID_Get_Predict(apid_t *pid);
-		
-		
-#define VAR_CMD_REGISTER(var,type) do{\
-    var_register(&var,#var,type);\
-}while (0)
-#define VAR_CMD_ARR_REGISTER(var,type,size) do{\
-    var_arr_register(&var,#var,type,size);\
-}while (0)
-void var_register(void* var,const char* name, var_type_e type);
-void var_arr_register(void *var,const char* name, var_type_e type,int size);
-void var_init(void);
 
+#define VAR_CMD_REGISTER(var, type)     \
+    do                                  \
+    {                                   \
+        var_register(&var, #var, type); \
+    } while (0)
+#define VAR_CMD_ARR_REGISTER(var, type, size)     \
+    do                                            \
+    {                                             \
+        var_arr_register(&var, #var, type, size); \
+    } while (0)
+    void var_register(void *var, const char *name, var_type_e type);
+    void var_arr_register(void *var, const char *name, var_type_e type, int size);
+    void var_init(void);
 
 #ifdef __cplusplus
 }

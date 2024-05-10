@@ -1952,6 +1952,16 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>apid_auto_tune_ZNmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\apid_auto_tune_ZNmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid_auto_tune_Relayfeedback.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\apid_auto_tune_Relayfeedback.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -5128,5 +5138,14 @@
     <components/>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>project</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

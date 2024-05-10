@@ -2,7 +2,7 @@
  * @Author: dyyt 805207319@qq.com
  * @Date: 2023-05-29 16:03:17
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-03-08 15:41:56
+ * @LastEditTime: 2024-04-23 10:54:28
  * @FilePath: \undefinedc:\Users\LENOVO\Documents\programs\PID\VS_Project\ConsoleApplication1\ConsoleApplication1\pid.c
  * @Description:pid库
  */
@@ -65,7 +65,7 @@ extern "C"
 	void APID_Enable(apid_t* pid)
 	{
 		//pid->parameter.present = pid->parameter.target;
-		pid->parameter.target = pid->parameter.present;
+		//pid->parameter.target = pid->parameter.present;
 		pid->flag.run_status = PID_ENABLE;
 	}
 
@@ -343,7 +343,6 @@ extern "C"
 		pid->process.last_bias = 0;\
 		pid->process.last_target = 0;\
 		pid->process.lastlast_bias = 0;\
-		pid->parameter.present = 0;\
 		pid->parameter.predict = 0;\
 		return;\
 	}
@@ -396,6 +395,8 @@ extern "C"
 		pid->d_handle(pid);
 		////////////////////////////////输出操作，包含p操作
 		__PID_Out(pid);
+		
+		if(pid->auto_pid_handler)pid->auto_pid_handler(pid,cycle);
 		// LOG_RAW("t p o:%f,%f,%f\r\n",pid->parameter.target,pid->parameter.present,pid->parameter.out);
 	}
 
