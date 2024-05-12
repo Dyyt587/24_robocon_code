@@ -94,6 +94,8 @@ extern "C"
         uint8_t timeout_cnt;
 
         motor_planning* plan;
+
+        float ratio;/*减速比*/
     };
 
     motor_t *motor_get(int id);
@@ -105,6 +107,9 @@ extern "C"
     int motor_read_feedback(int id, int cycle);
 
     void motor_set_passive_feedback(int id, bool is_true);
+
+    void motor_set_ratio(int id, float ratio);
+
 
     int motor_feedback_torque(int id, float value);
     int motor_feedback_speed(int id, float value);

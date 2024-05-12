@@ -91,8 +91,8 @@ int main(void)
 	motor_t *motor = motor_get(0);
 	motor_set_speed(0, 0);
 	// auto_pid_init(motor->pid_speed,&auto_1, VECTOR, 200,10);
-	apid_auto_tune_ZNmode_t auto_2;
-	apid_auto_tune_ZNmode_init(motor->pid_speed,&auto_2,200);
+//	apid_auto_tune_ZNmode_t auto_2;
+//	apid_auto_tune_ZNmode_init(motor->pid_speed,&auto_2,200);
 	while (1)
 	{
 		motor_set_speed(0, 100);

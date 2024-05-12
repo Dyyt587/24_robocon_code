@@ -526,6 +526,11 @@ void motor_set_passive_feedback(int id, bool is_true)
     motor_t *motor = motor_get(id);
     motor->flag_passive_feedback = is_true;
 }
+void motor_set_ratio(int id, float ratio)
+{
+    motor_t *motor = motor_get(id);
+    motor->ratio = ratio;
+}
 void motor_init(void)
 {
     for (int i = 0; i < MOTOR_NUM; ++i)
