@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-13 16:36:27
+ * @LastEditTime: 2024-05-13 00:39:00
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -54,6 +54,13 @@ inline motor_t *motor_get(int id)
     return &motor_list[id];
 }
 
+void motor_set_pid_speed_ratio(int id,uint8_t ratio_speed, uint8_t ratio_pos)
+{
+    motor_t *motor = motor_get(id);
+    motor->ratio_speed = ratio_speed;
+    motor->ratio_pos = ratio_pos;
+}
+
 // 底层不支持
 int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
 {
@@ -68,17 +75,23 @@ int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
 
     case MOTOR_MODE_POS:
     {
-        APID_Set_Target(pid_pos, motor->tar_pos);
-        APID_Set_Present(pid_pos, motor->cur_pos);
-        APID_Hander(pid_pos, cycle);
-        motor->tar_speed = APID_Get_Out(pid_pos);
+        if (motor->time % motor->ratio_pos == 0)
+        {
+            APID_Set_Target(pid_pos, motor->tar_pos);
+            APID_Set_Present(pid_pos, motor->cur_pos);
+            APID_Hander(pid_pos, cycle*motor->ratio_pos);
+            motor->tar_speed = APID_Get_Out(pid_pos);
+        }
     }
     case MOTOR_MODE_SPEED:
     {
-        APID_Set_Target(pid_speed, motor->tar_speed);
-        APID_Set_Present(pid_speed, motor->cur_speed);
-        APID_Hander(pid_speed, cycle);
-        motor->tar_torque = APID_Get_Out(pid_speed);
+        if (motor->time % motor->ratio_speed == 0)
+        {
+            APID_Set_Target(pid_speed, motor->tar_speed);
+            APID_Set_Present(pid_speed, motor->cur_speed);
+            APID_Hander(pid_speed, cycle*motor->ratio_speed);
+            motor->tar_torque = APID_Get_Out(pid_speed);
+        }
     }
     case MOTOR_MODE_TORQUE:
     {
@@ -109,17 +122,23 @@ int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
 
     case MOTOR_MODE_POS:
     {
-        APID_Set_Target(pid_pos, motor->tar_pos);
-        APID_Set_Present(pid_pos, motor->cur_pos);
-        APID_Hander(pid_pos, cycle);
-        motor->tar_speed = APID_Get_Out(pid_pos);
+        if (motor->time % motor->ratio_pos == 0)
+        {
+            APID_Set_Target(pid_pos, motor->tar_pos);
+            APID_Set_Present(pid_pos, motor->cur_pos);
+            APID_Hander(pid_pos, cycle*motor->ratio_pos);
+            motor->tar_speed = APID_Get_Out(pid_pos);
+        }
     }
     case MOTOR_MODE_SPEED:
     {
-        APID_Set_Target(pid_speed, motor->tar_speed);
-        APID_Set_Present(pid_speed, motor->cur_speed);
-        APID_Hander(pid_speed, cycle);
-        motor->tar_torque = APID_Get_Out(pid_speed);
+        if (motor->time % motor->ratio_speed == 0)
+        {
+            APID_Set_Target(pid_speed, motor->tar_speed);
+            APID_Set_Present(pid_speed, motor->cur_speed);
+            APID_Hander(pid_speed, cycle*motor->ratio_pos);
+            motor->tar_torque = APID_Get_Out(pid_speed);
+        }
         // LOG_RAW("name%d speed t p o:%f,%f,%f\r\n", motor->name, pid_speed->parameter.target, pid_speed->parameter.present, pid_speed->parameter.out);
         ////////////////////////////////
     }
@@ -150,10 +169,13 @@ int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
     {
     case MOTOR_MODE_POS:
     {
-        APID_Set_Target(pid_pos, motor->tar_pos);
-        APID_Set_Present(pid_pos, motor->cur_pos);
-        APID_Hander(pid_pos, cycle);
-        motor->tar_speed = APID_Get_Out(pid_pos);
+        if (motor->time % motor->ratio_pos == 0)
+        {
+            APID_Set_Target(pid_pos, motor->tar_pos);
+            APID_Set_Present(pid_pos, motor->cur_pos);
+            APID_Hander(pid_pos, cycle*motor->ratio_pos);
+            motor->tar_speed = APID_Get_Out(pid_pos);
+        }
     }
     case MOTOR_MODE_SPEED:
     {
@@ -208,8 +230,8 @@ int motor_behiver_4(int id, uint16_t mode, void *data, void *user_data)
     return 0;
 }
 
-#define MOTOD_IS_POS_TIME(motor) (motor->time % motor->pos_tick == 0)
-#define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->speed_tick == 0)
+#define MOTOD_IS_POS_TIME(motor) (motor->time % motor->ratio_pos == 0)
+#define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->ratio_speed == 0)
 #define MOTOD_IS_TORQUE_TIME(motor) (motor->time % motor->torque_tick == 0)
 
 static int __motor_read_feedback(motor_t *motor, PID_TYPE cycle)
@@ -328,26 +350,25 @@ int motor_set_speed(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_SPEED;
-    motor->tar_speed = value*motor->ratio;
-    //motor->tar_speed = value;
-    LOG_W("motor id:%d speed:%f radio:%f", id, value,motor->ratio);
+    motor->tar_speed = value * motor->ratio;
+    // motor->tar_speed = value;
+    // LOG_W("motor id:%d speed:%f radio:%f", id, value,motor->ratio);
     return M_EOK;
-
 }
- /**
-   * @brief 设置电机的位置
-   *
-   * @param id 电机id
-   * @param value 位置值，单位rad
-   * @return int 获取状态
-   */
+/**
+ * @brief 设置电机的位置
+ *
+ * @param id 电机id
+ * @param value 位置值，单位rad
+ * @return int 获取状态
+ */
 int motor_set_pos(int id, float value)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_POS;
-    motor->tar_pos = value*motor->ratio;
+    motor->tar_pos = value * motor->ratio;
 
     return M_EOK;
 }
@@ -364,7 +385,7 @@ int motor_set_torque(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_TORQUE;
-    motor->tar_torque = value*motor->ratio;
+    motor->tar_torque = value * motor->ratio;
 
     return M_EOK;
 }
@@ -380,7 +401,7 @@ float motor_get_speed(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    return motor->cur_speed/motor->ratio;
+    return motor->cur_speed / motor->ratio;
 }
 
 /**
@@ -394,7 +415,7 @@ float motor_get_pos(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    return motor->cur_pos/motor->ratio;
+    return motor->cur_pos / motor->ratio;
 }
 /**
  * @brief   获取电机的力矩
@@ -407,7 +428,7 @@ float motor_get_torque(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    return motor->cur_torque/motor->ratio;
+    return motor->cur_torque / motor->ratio;
 }
 /**
  * @brief   获取电机的速度
@@ -445,7 +466,7 @@ void motor_shakdown(int id)
     {
         //  将力矩环路pid的当前值，设定值，输出值
         if (MOTOD_IS_TORQUE_TIME(motor))
-            LOG_RAW("q%d :%f,%f,%f\r\n",id,
+            LOG_RAW("q%d :%f,%f,%f\r\n", id,
                     motor->pid_torque->parameter.target,
                     motor->pid_torque->parameter.present,
                     motor->pid_torque->parameter.out);
@@ -455,7 +476,7 @@ void motor_shakdown(int id)
         //  将速度环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("s%d :%f,%f,%f\r\n",id,
+            LOG_RAW("s%d :%f,%f,%f\r\n", id,
                     motor->pid_speed->parameter.target,
                     motor->pid_speed->parameter.present,
                     motor->pid_speed->parameter.out);
@@ -466,7 +487,7 @@ void motor_shakdown(int id)
         //  将位置环路pid的当前值，设定值，输出值
         if (time % 10 == 0)
         {
-            LOG_RAW("p%d:%f,%f,%f\r\n",id,
+            LOG_RAW("p%d:%f,%f,%f\r\n", id,
                     motor->pid_pos->parameter.target,
                     motor->pid_pos->parameter.present,
                     motor->pid_pos->parameter.out);
@@ -540,16 +561,15 @@ void motor_init(void)
         motor_list[i].time = 0;
 
         // TODO: 为什么要设置为1
-        motor_list[i].pos_tick = 10;
-        motor_list[i].speed_tick = 5;
-        motor_list[i].torque_tick = 1;
+//        motor_list[i].ratio_pos = 10;
+//        motor_list[i].ratio_speed = 5;
+//        motor_list[i].torque_tick = 1;
 
         motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
         motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;
         motor_updata_cfg(i, motor_list[i].flag_accept_level);
     }
 }
-
 
 enum
 {
@@ -565,7 +585,7 @@ static int cmd_motor(int argc, char **argv)
 
 void list_all_motor(void)
 {
-    rt_kprintf("total motors: %d\r\n id   name",MOTOR_NUM);
+    rt_kprintf("total motors: %d\r\n id   name", MOTOR_NUM);
     for (int i = 0; i < MOTOR_NUM; ++i)
     {
         rt_kprintf("   %d\t %s\r\n", i, motor_list[i].name);
@@ -687,4 +707,4 @@ CMD_OPTIONS_NODE(MOTOR_OPT_SPEED, speed, set or get speed)
 CMD_OPTIONS_NODE(MOTOR_OPT_POS, pos, set or get pos)
 CMD_OPTIONS_NODE_END
 #endif /* FINSH_USING_OPTION_COMPLETION */
-MSH_CMD_EXPORT_ALIAS(cmd_motor_list, m, motor operate cmd, optenable);
+    MSH_CMD_EXPORT_ALIAS(cmd_motor_list, m, motor operate cmd, optenable);

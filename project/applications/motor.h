@@ -67,9 +67,9 @@ extern "C"
         const char *name;
         
         long long time;
-        uint8_t pos_tick;
-        uint8_t speed_tick;
-        uint8_t torque_tick;
+        uint8_t ratio_pos:3;
+        uint8_t ratio_speed:3;
+        uint8_t torque_tick:2;
         apid_t *pid_speed;
         apid_t *pid_pos;
         apid_t *pid_torque;
@@ -137,6 +137,8 @@ extern "C"
     void motor_shakdown(int id);
 
     int motor_control(int id, MOTOR_VALUE_TYPE mode, void *data);
+
+    void motor_set_pid_speed_ratio(int id,uint8_t ratio_speed,uint8_t ratio_pos);
 
 #if defined(__cplusplus)
 }
