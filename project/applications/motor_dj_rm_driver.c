@@ -625,12 +625,12 @@ static void can_rx_thread1(void *parameter)
     var_register(&(motor->pid_pos->parameter.kd), "kd1", _f);
 
     motor_set_pos(M3508_1_CAN1, 0);
-    //motor_set_speed(M3508_1_CAN1, 200);
-    //  motor_set_pos(M2006_1_CAN1,0);
-    //  motor_set_pos(M2006_2_CAN1,0);
-    //  motor_set_pos(M2006_3_CAN1,0);
-    //  motor_set_pos(M2006_4_CAN1,0);
-    //  motor_set_speed(M2006_5_CAN1,0);
+    // motor_set_speed(M3508_1_CAN1, 200);
+    //   motor_set_pos(M2006_1_CAN1,0);
+    //   motor_set_pos(M2006_2_CAN1,0);
+    //   motor_set_pos(M2006_3_CAN1,0);
+    //   motor_set_pos(M2006_4_CAN1,0);
+    //   motor_set_speed(M2006_5_CAN1,0);
 
     while (1)
     {
@@ -775,12 +775,27 @@ int motor_dj_init(void)
 }
 INIT_COMPONENT_EXPORT(motor_dj_init);
 
-// void motor_cmd_
+#define DJ_DEFAULT_CFG_3508(id)                                     \
+    do                                                         \
+    {                                                          \
+        motor_set_passive_feedback(id, 1);                     \
+        motor_set_ratio(id, 19.20204388f);                     \
+        APID_Set_Out_Limit(motor_get_pid_speed(id), 20000);    \
+        APID_Set_Integral_Limit(motor_get_pid_speed(id), 200); \
+        APID_Set_Bias_Dead_Zone(motor_get_pid_speed(id), 40);  \
+        APID_Set_Bias_Limit(motor_get_pid_speed(id), 2000);    \
+        APID_Set_Integral_Limit(motor_get_pid_pos(id), 200);   \
+        APID_Set_Bias_Dead_Zone(motor_get_pid_pos(id), 0.02);  \
+    } while (0)
+
 static void set_motor_passive_feedback(void)
 {
 #if defined(MOTOR_DJ_M3508_ID1_CAN1)
+    DJ_DEFAULT_CFG_3508(M3508_1_CAN1);
+
+//////////////////////////////////参数覆盖//////////////////////////////////////////////////////
     motor_set_passive_feedback(M3508_1_CAN1, 1);
-    motor_set_ratio(M3508_1_CAN1, 19.2130255f); // TODO:大概是19，不准,10圈校准19.2130255f
+    motor_set_ratio(M3508_1_CAN1, 19.20204388f); // TODO:大概是19，不准,100圈校准值19.20204388f
     ////////////////////////////speed///////////////////////////////
     APID_Set_Out_Limit(motor_get_pid_speed(M3508_1_CAN1), 20000);
     APID_Set_Integral_Limit(motor_get_pid_speed(M3508_1_CAN1), 200);
@@ -790,57 +805,58 @@ static void set_motor_passive_feedback(void)
 
     ////////////////////////////position///////////////////////////
     // APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1),      20000);
-    //APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1), 50);
+    // APID_Set_Out_Limit(motor_get_pid_pos(M3508_1_CAN1), 50);
     APID_Set_Integral_Limit(motor_get_pid_pos(M3508_1_CAN1), 200);
     APID_Set_Bias_Dead_Zone(motor_get_pid_pos(M3508_1_CAN1), 0.02);
     // APID_Set_Bias_Limit(motor_get_pid_pos(M3508_1_CAN1), 2000);
     // APID_Set_Target_Limit(motor_get_pid_pos(M3508_1_CAN1), 70);
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif
 #if defined(MOTOR_DJ_M3508_ID2_CAN1)
-    motor_set_passive_feedback(M3508_2_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_2_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID3_CAN1)
-    motor_set_passive_feedback(M3508_3_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_3_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID4_CAN1)
-    motor_set_passive_feedback(M3508_4_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_4_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID5_CAN1)
-    motor_set_passive_feedback(M3508_5_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_5_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID6_CAN1)
-    motor_set_passive_feedback(M3508_6_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_6_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID7_CAN1)
-    motor_set_passive_feedback(M3508_7_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_7_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID8_CAN1)
-    motor_set_passive_feedback(M3508_8_CAN1, 1);
+    DJ_DEFAULT_CFG_3508(M3508_8_CAN1);
 #endif
 #if defined(MOTOR_DJ_M3508_ID1_CAN2)
-    motor_set_passive_feedback(M3508_1_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_1_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID2_CAN2)
-    motor_set_passive_feedback(M3508_2_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_2_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID3_CAN2)
-    motor_set_passive_feedback(M3508_3_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_3_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID4_CAN2)
-    motor_set_passive_feedback(M3508_4_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_4_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID5_CAN2)
-    motor_set_passive_feedback(M3508_5_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_5_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID6_CAN2)
-    motor_set_passive_feedback(M3508_6_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_6_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID7_CAN2)
-    motor_set_passive_feedback(M3508_7_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_7_CAN2);
 #endif
 #if defined(MOTOR_DJ_M3508_ID8_CAN2)
-    motor_set_passive_feedback(M3508_8_CAN2, 1);
+    DJ_DEFAULT_CFG_3508(M3508_8_CAN2);
 #endif
 
 #if defined(MOTOR_DJ_M2006_ID1_CAN1)
