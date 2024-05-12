@@ -328,8 +328,9 @@ int motor_set_speed(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_SPEED;
-    motor->tar_speed = value;
-    //LOG_D("motor id:%d speed:%f", id, value);
+    motor->tar_speed = value*motor->ratio;
+    //motor->tar_speed = value;
+    LOG_W("motor id:%d speed:%f radio:%f", id, value,motor->ratio);
     return M_EOK;
 
 }
@@ -346,7 +347,7 @@ int motor_set_pos(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_POS;
-    motor->tar_pos = value;
+    motor->tar_pos = value*motor->ratio;
 
     return M_EOK;
 }
@@ -363,7 +364,7 @@ int motor_set_torque(int id, float value)
     MOTOR_ASSERT(motor);
 
     motor->flag_run_mode = MOTOR_MODE_TORQUE;
-    motor->tar_torque = value;
+    motor->tar_torque = value*motor->ratio;
 
     return M_EOK;
 }
@@ -379,9 +380,35 @@ float motor_get_speed(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    return motor->cur_speed;
+    return motor->cur_speed/motor->ratio;
 }
 
+/**
+ * @brief   获取电机的位置
+ *
+ * @param id    电机id
+ * @param value     位置值，单位rad
+ * @return int  获取状态
+ */
+float motor_get_pos(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    return motor->cur_pos/motor->ratio;
+}
+/**
+ * @brief   获取电机的力矩
+ *
+ * @param id    电机id
+ * @param value     力矩值，单位N*m
+ * @return int  获取状态
+ */
+float motor_get_torque(int id)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+    return motor->cur_torque/motor->ratio;
+}
 /**
  * @brief   获取电机的速度
  *
@@ -399,7 +426,7 @@ apid_t *motor_get_pid_speed(int id)
 {
     motor_t *motor = motor_get(id);
     MOTOR_ASSERT(motor);
-    return motor->pid_speed;
+    return (motor->pid_speed);
 }
 apid_t *motor_get_pid_pos(int id)
 {
@@ -408,32 +435,6 @@ apid_t *motor_get_pid_pos(int id)
     return motor->pid_pos;
 }
 
-/**
- * @brief   获取电机的位置
- *
- * @param id    电机id
- * @param value     位置值，单位rad
- * @return int  获取状态
- */
-float motor_get_pos(int id)
-{
-    motor_t *motor = motor_get(id);
-    MOTOR_ASSERT(motor);
-    return motor->cur_pos;
-}
-/**
- * @brief   获取电机的力矩
- *
- * @param id    电机id
- * @param value     力矩值，单位N*m
- * @return int  获取状态
- */
-float motor_get_torque(int id)
-{
-    motor_t *motor = motor_get(id);
-    MOTOR_ASSERT(motor);
-    return motor->cur_torque;
-}
 void motor_shakdown(int id)
 {
     static int time = 0;

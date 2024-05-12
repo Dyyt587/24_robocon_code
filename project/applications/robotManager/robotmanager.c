@@ -185,51 +185,51 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
     // 接收底盘控制数据
     return 0;
 }
-void action_pick(void)
-{
-    power_on(SWITCH_24V_1);
+//void action_pick(void)
+//{
+//    power_on(SWITCH_24V_1);
 
 
-    motor_set_speed(M2006_5_CAN1, 20); // 下
-    rt_thread_mdelay(2000);
+//    motor_set_speed(M2006_5_CAN1, 20); // 下
+//    rt_thread_mdelay(2000);
 
-    while (1)
-    {
-        static float last_speed = 0;
-        float speed = motor_get_speed(M2006_5_CAN1);
-        LOG_D("pick speed %f lastspeed %f", speed, last_speed);
+//    while (1)
+//    {
+//        static float last_speed = 0;
+//        float speed = motor_get_speed(M2006_5_CAN1);
+//        LOG_D("pick speed %f lastspeed %f", speed, last_speed);
 
-        if (last_speed - speed > 2 || fabs(speed) < 0.001)
-        {
-            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)-360);
-            return;
-        }
-        last_speed = speed;
-        rt_thread_mdelay(20);
-    }
-}
+//        if (last_speed - speed > 2 || fabs(speed) < 0.001)
+//        {
+//            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)-360);
+//            return;
+//        }
+//        last_speed = speed;
+//        rt_thread_mdelay(20);
+//    }
+//}
 
-void action_up(void)
-{
+//void action_up(void)
+//{
 
-    motor_set_speed(M2006_5_CAN1, -30);
-    rt_thread_mdelay(2000);
+//    motor_set_speed(M2006_5_CAN1, -30);
+//    rt_thread_mdelay(2000);
 
-    while (1)
-    {
-        static float last_speed = 0;
-        float speed = motor_get_speed(M2006_5_CAN1);
-        LOG_D("up speed %f lastspeed %f", speed, last_speed);
+//    while (1)
+//    {
+//        static float last_speed = 0;
+//        float speed = motor_get_speed(M2006_5_CAN1);
+//        LOG_D("up speed %f lastspeed %f", speed, last_speed);
 
-        if (last_speed - speed < -2 || fabs(speed) < 0.001)
-        {
-            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)+360);
-            return;
-        }
-        last_speed = speed;
-        rt_thread_mdelay(20);
-    }
-}
+//        if (last_speed - speed < -2 || fabs(speed) < 0.001)
+//        {
+//            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)+360);
+//            return;
+//        }
+//        last_speed = speed;
+//        rt_thread_mdelay(20);
+//    }
+//}
                     extern cvdat aball;
 
 void wait1(void)
@@ -321,7 +321,7 @@ void rbmg_handle(void *parameter)
             //            action_relative_movement_car( 0.6f,0, 0);
             //
             //            action_relative_movement_car( -0.6f,0, 0);
-            motor_set_speed(M2006_5_CAN1, -50);
+//            motor_set_speed(M2006_5_CAN1, -50);
 
             // motor_set_speed(M2006_1_CAN1, -100);
 
@@ -347,7 +347,7 @@ void rbmg_handle(void *parameter)
             // rt_thread_mdelay(6000);
 
             LOG_D("cab mode wait lifting ready");
-            action_up();
+//            action_up();
             LOG_D("lifting is ready");
             while (1)
             {
@@ -377,12 +377,12 @@ void rbmg_handle(void *parameter)
 												
 												setAngle(125.0f);//放下吸盘
 												rt_thread_mdelay(1000);
-                        action_pick();
+//                        action_pick();
                         rt_thread_mdelay(2000);
 												
 												
 												
-                        action_up();
+//                        action_up();
 											
 					              // motor_set_pos(M2006_5_CAN1, 0);
 												//setAngle(12.0f);//放下吸盘
@@ -393,7 +393,7 @@ void rbmg_handle(void *parameter)
                         abus_public(&rbmg_chassis_acc, &ctrl);
 												
                         while(1){
-                            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
+//                            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
                             rt_thread_mdelay(1000);
                             LOG_D("action_over");
                         }
