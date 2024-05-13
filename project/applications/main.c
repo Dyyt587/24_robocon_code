@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-13 01:15:51
+ * @LastEditTime: 2024-05-13 10:51:14
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -91,7 +91,7 @@ int main(void)
 	motor_t *motor = motor_get(0);
 	motor_set_speed(0, 100);
 	apid_auto_tune_ZNmode_t auto_2;
-	apid_auto_tune_ZNmode_init(motor->pid_speed, &auto_2,300,-20000,20000, 20);
+	apid_auto_tune_ZNmode_init(motor->pid_speed, &auto_2,ZNModeLessOvershoot,300,-20000,20000, 20);
 	motor_set_speed(0, 200);
 
 	while (1)

@@ -27,7 +27,7 @@ extern "C"
     typedef struct apid_auto_tune_ZNmode
     {
 
-        float targetInputValue;
+        float target_value;
         float minOutput, maxOutput;
         ZNMode znMode;
         int cycles;
@@ -45,8 +45,8 @@ extern "C"
 
     // Constants for Ziegler-Nichols tuning mode
 
-    void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner,
-                                    float targetValue, float low_out_range, float up_out_range, int tuneCycles);
+void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner,ZNMode mode, 
+                                float targetValue, float low_out_range, float up_out_range, int tuneCycles);
 
     void setTargetInputValue(apid_auto_tune_ZNmode_t *tuner, float target);
     void setLoopInterval(apid_auto_tune_ZNmode_t *tuner, long interval);

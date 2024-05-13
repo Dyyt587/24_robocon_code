@@ -37,14 +37,14 @@ void __auto_pid_handle1(apid_t *pid, PID_TYPE cycle)
 	}
 }
 
-void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner, float targetValue, float low_out_range, float up_out_range, int tuneCycles)
+void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner,ZNMode mode, float targetValue, float low_out_range, float up_out_range, int tuneCycles)
 {
 	pid->auto_pid = tuner;
 	pid->auto_pid_handler = __auto_pid_handle1;
 
-	tuner->targetInputValue = targetValue;
+	tuner->target_value = targetValue;
 
-	tuner->znMode = ZNModeLessOvershoot;
+	tuner->znMode = mode;
 	tuner->cycles = tuneCycles;
 	tuner->microseconds = 0;
 	setOutputRange(tuner, low_out_range, up_out_range);
@@ -54,7 +54,7 @@ void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner, flo
 // Set target input for tuning
 void setTargetInputValue(apid_auto_tune_ZNmode_t *tuner, float target)
 {
-	tuner->targetInputValue = target;
+	tuner->target_value = target;
 }
 
 // Set output range
@@ -112,18 +112,18 @@ float tune_pid(apid_auto_tune_ZNmode_t *tuner, float input, unsigned long cycle)
 	tuner->min = (tuner->min < input) ? tuner->min : input;
 
 	// Output is on and input signal has risen to target
-	if (tuner->output && input > tuner->targetInputValue)
+	if (tuner->output && input > tuner->target_value)
 	{
 		// Turn output off, record current time as t1, calculate tHigh, and reset maximum
 		tuner->output = false;
 		tuner->outputValue = tuner->minOutput;
 		tuner->t1 = tuner->microseconds;
 		tuner->tHigh = tuner->t1 - tuner->t2;
-		tuner->max = tuner->targetInputValue;
+		tuner->max = tuner->target_value;
 	}
 
 	// Output is off and input signal has dropped to target
-	if (!tuner->output && input < tuner->targetInputValue)
+	if (!tuner->output && input < tuner->target_value)
 	{
 		// Turn output on, record current time as t2, calculate tLow
 		tuner->output = true;
@@ -195,7 +195,7 @@ float tune_pid(apid_auto_tune_ZNmode_t *tuner, float input, unsigned long cycle)
 		}
 
 		// Reset minimum
-		tuner->min = tuner->targetInputValue;
+		tuner->min = tuner->target_value;
 
 		// Increment cycle count
 		tuner->i++;
