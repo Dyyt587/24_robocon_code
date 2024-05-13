@@ -1957,11 +1957,6 @@
               <FileType>1</FileType>
               <FilePath>.\applications\apid_auto_tune_ZNmode.c</FilePath>
             </File>
-            <File>
-              <FileName>apid_auto_tune_Relayfeedback.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\apid_auto_tune_Relayfeedback.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
