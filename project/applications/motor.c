@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-13 00:39:00
+ * @LastEditTime: 2024-05-14 01:44:30
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -54,11 +54,60 @@ inline motor_t *motor_get(int id)
     return &motor_list[id];
 }
 
-void motor_set_pid_speed_ratio(int id,uint8_t ratio_speed, uint8_t ratio_pos)
+void motor_set_pid_speed_ratio(int id, uint8_t ratio_speed, uint8_t ratio_pos)
 {
     motor_t *motor = motor_get(id);
     motor->ratio_speed = ratio_speed;
     motor->ratio_pos = ratio_pos;
+}
+
+#define MOTOD_IS_POS_TIME(motor) (motor->time % motor->ratio_pos == 0)
+#define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->ratio_speed == 0)
+#define MOTOD_IS_TORQUE_TIME(motor) (motor->time % motor->torque_tick == 0)
+
+#define MOTOR_CURVE_HANDLE(motor)                                                    \
+    if (motor->ops->curve)                                                           \
+    {                                                                                \
+        if (motor->ops->curve->maxTimes)                                             \
+        {                                                                            \
+            if (motor->flag_run_mode == MOTOR_MODE_POS)                              \
+                motor->tar_pos = motor_planning(motor->ops->curve) * motor->ratio;   \
+            else if (motor->flag_run_mode == MOTOR_MODE_SPEED)                       \
+                motor->tar_speed = motor_planning(motor->ops->curve) * motor->ratio; \
+        }                                                                            \
+    }
+
+static void motor_behiver_pos(motor_t *motor, PID_TYPE cycle)
+{
+    apid_t *pid_pos = motor->pid_pos;
+    if (MOTOD_IS_POS_TIME(motor))
+    {
+        APID_Set_Target(pid_pos, motor->tar_pos);
+        APID_Set_Present(pid_pos, motor->cur_pos);
+        APID_Hander(pid_pos, cycle * motor->ratio_pos);
+        motor->tar_speed = APID_Get_Out(pid_pos);
+    }
+}
+static void motor_behiver_speed(motor_t *motor, PID_TYPE cycle)
+{
+    apid_t *pid_speed = motor->pid_speed;
+    if (MOTOD_IS_SPEED_TIME(motor))
+    {
+        APID_Set_Target(pid_speed, motor->tar_speed);
+        APID_Set_Present(pid_speed, motor->cur_speed);
+        APID_Hander(pid_speed, cycle * motor->ratio_speed);
+        motor->tar_torque = APID_Get_Out(pid_speed);
+    }
+}
+
+static void motor_behiver_torque(motor_t *motor, PID_TYPE cycle)
+{
+    apid_t *pid_torque = motor->pid_torque;
+
+    APID_Set_Target(pid_torque, motor->tar_torque);
+    APID_Set_Present(pid_torque, motor->cur_torque);
+    APID_Hander(pid_torque, cycle);
+    motor->acc_out = APID_Get_Out(pid_torque);
 }
 
 // 底层不支持
@@ -75,30 +124,15 @@ int motor_behiver_1(int id, uint16_t mode, void *data, void *user_data)
 
     case MOTOR_MODE_POS:
     {
-        if (motor->time % motor->ratio_pos == 0)
-        {
-            APID_Set_Target(pid_pos, motor->tar_pos);
-            APID_Set_Present(pid_pos, motor->cur_pos);
-            APID_Hander(pid_pos, cycle*motor->ratio_pos);
-            motor->tar_speed = APID_Get_Out(pid_pos);
-        }
+        motor_behiver_pos(motor, cycle);
     }
     case MOTOR_MODE_SPEED:
     {
-        if (motor->time % motor->ratio_speed == 0)
-        {
-            APID_Set_Target(pid_speed, motor->tar_speed);
-            APID_Set_Present(pid_speed, motor->cur_speed);
-            APID_Hander(pid_speed, cycle*motor->ratio_speed);
-            motor->tar_torque = APID_Get_Out(pid_speed);
-        }
+        motor_behiver_speed(motor, cycle);
     }
     case MOTOR_MODE_TORQUE:
     {
-        APID_Set_Target(pid_torque, motor->tar_torque);
-        APID_Set_Present(pid_torque, motor->cur_torque);
-        APID_Hander(pid_torque, cycle);
-        motor->acc_out = APID_Get_Out(pid_torque);
+        motor_behiver_torque(motor, cycle);
         break;
     }
     default:
@@ -122,23 +156,11 @@ int motor_behiver_2(int id, uint16_t mode, void *data, void *user_data)
 
     case MOTOR_MODE_POS:
     {
-        if (motor->time % motor->ratio_pos == 0)
-        {
-            APID_Set_Target(pid_pos, motor->tar_pos);
-            APID_Set_Present(pid_pos, motor->cur_pos);
-            APID_Hander(pid_pos, cycle*motor->ratio_pos);
-            motor->tar_speed = APID_Get_Out(pid_pos);
-        }
+        motor_behiver_pos(motor, cycle);
     }
     case MOTOR_MODE_SPEED:
     {
-        if (motor->time % motor->ratio_speed == 0)
-        {
-            APID_Set_Target(pid_speed, motor->tar_speed);
-            APID_Set_Present(pid_speed, motor->cur_speed);
-            APID_Hander(pid_speed, cycle*motor->ratio_pos);
-            motor->tar_torque = APID_Get_Out(pid_speed);
-        }
+        motor_behiver_speed(motor, cycle);
         // LOG_RAW("name%d speed t p o:%f,%f,%f\r\n", motor->name, pid_speed->parameter.target, pid_speed->parameter.present, pid_speed->parameter.out);
         ////////////////////////////////
     }
@@ -169,13 +191,7 @@ int motor_behiver_3(int id, uint16_t mode, void *data, void *user_data)
     {
     case MOTOR_MODE_POS:
     {
-        if (motor->time % motor->ratio_pos == 0)
-        {
-            APID_Set_Target(pid_pos, motor->tar_pos);
-            APID_Set_Present(pid_pos, motor->cur_pos);
-            APID_Hander(pid_pos, cycle*motor->ratio_pos);
-            motor->tar_speed = APID_Get_Out(pid_pos);
-        }
+        motor_behiver_pos(motor, cycle);
     }
     case MOTOR_MODE_SPEED:
     {
@@ -230,18 +246,14 @@ int motor_behiver_4(int id, uint16_t mode, void *data, void *user_data)
     return 0;
 }
 
-#define MOTOD_IS_POS_TIME(motor) (motor->time % motor->ratio_pos == 0)
-#define MOTOD_IS_SPEED_TIME(motor) (motor->time % motor->ratio_speed == 0)
-#define MOTOD_IS_TORQUE_TIME(motor) (motor->time % motor->torque_tick == 0)
-
 static int __motor_read_feedback(motor_t *motor, PID_TYPE cycle)
 {
 
     // 读取力矩
-    if (MOTOD_IS_TORQUE_TIME(motor))
-    {
-        motor->ops->control(motor->id, MOTOR_MODE_TORQUE, &motor->cur_torque);
-    }
+    // if (MOTOD_IS_TORQUE_TIME(motor))
+    // {
+    motor->ops->control(motor->id, MOTOR_MODE_TORQUE, &motor->cur_torque);
+
     // 读取速度
     if (MOTOD_IS_SPEED_TIME(motor))
     {
@@ -280,6 +292,19 @@ int motor_handle(int id, float cycle)
     }
     else
     {
+        // MOTOR_CURVE_HANDLE(motor);
+        if (motor->ops->curve)
+        {
+            if (motor->ops->curve->maxTimes)
+            {
+                if (motor->flag_run_mode == MOTOR_MODE_POS)
+                    motor->tar_pos = motor_planning(motor->ops->curve) * motor->ratio;
+                else if (motor->flag_run_mode == MOTOR_MODE_SPEED)
+                    motor->tar_speed = motor_planning(motor->ops->curve) * motor->ratio;
+                else if (motor->flag_run_mode == MOTOR_MODE_TORQUE)
+                    motor->tar_torque = motor_planning(motor->ops->curve) * motor->ratio;
+            }
+        }
         motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data); // 进行计算
     }
     motor->ops->driver(id, motor->flag_out_mode, (float *)&motor->acc_out, (motor->ops->user_data)); // 加载电机
@@ -465,7 +490,7 @@ void motor_shakdown(int id)
     if (motor->flag_run_mode == MOTOR_MODE_TORQUE)
     {
         //  将力矩环路pid的当前值，设定值，输出值
-        if (MOTOD_IS_TORQUE_TIME(motor))
+        if (time % 10 == 0)
             LOG_RAW("q%d :%f,%f,%f\r\n", id,
                     motor->pid_torque->parameter.target,
                     motor->pid_torque->parameter.present,
@@ -561,9 +586,9 @@ void motor_init(void)
         motor_list[i].time = 0;
 
         // TODO: 为什么要设置为1
-//        motor_list[i].ratio_pos = 10;
-//        motor_list[i].ratio_speed = 5;
-//        motor_list[i].torque_tick = 1;
+        //        motor_list[i].ratio_pos = 10;
+        //        motor_list[i].ratio_speed = 5;
+        //        motor_list[i].torque_tick = 1;
 
         motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
         motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;

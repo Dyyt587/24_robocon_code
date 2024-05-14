@@ -252,6 +252,7 @@ extern "C"
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
 #define MOTOR_DJ_M3508_ID1_CAN1_OPS           \
     {                                         \
+        .curve = 0,                           \
         .driver = motor_dj_driver,            \
         .control = motor_dj_ctr,              \
         .user_data = &dj_motors[DJ_M_CAN1_1], \

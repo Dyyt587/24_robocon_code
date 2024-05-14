@@ -20,7 +20,8 @@ extern "C"
 #include <stdint.h>
 #include <stdlib.h>
 #include "motor_dj_rm_driver.h"
-#include "motor_planning.h"
+#include "Trajectory_planning.h"
+//#include "motor_planning.h"
 
 /* Compiler Related Definitions */
 #include "rtcompiler.h"
@@ -49,15 +50,19 @@ extern "C"
         MOTOR_CONTROL_SUPPORT_SPEED,    // 速度支持
         MOTOR_CONTROL_SUPPORT_POS,      // 位置支持
     };
+
     typedef struct motor motor_t;
     typedef int (*motor_driver)(int id, uint16_t mode, float *value, void *user_data);
     typedef int (*motor_ctr)(int id, uint16_t mode, float *data);
     typedef int (*motor_behiver)(int id, uint16_t mode, void *data, void *user_data);
     typedef void (*motor_shakedown)(int id, motor_t *motor);
+
     typedef struct
     {
         motor_driver driver;
         motor_ctr control;
+        CurveObjectType* curve;
+
         void *user_data;
     } motor_ops_t;
     struct motor
@@ -67,9 +72,9 @@ extern "C"
         const char *name;
         
         long long time;
-        uint8_t ratio_pos:3;
-        uint8_t ratio_speed:3;
-        uint8_t torque_tick:2;
+        uint8_t ratio_pos:4;
+        uint8_t ratio_speed:4;
+        // uint8_t torque_tick:2;
         apid_t *pid_speed;
         apid_t *pid_pos;
         apid_t *pid_torque;
@@ -93,9 +98,9 @@ extern "C"
 
         uint8_t timeout_cnt;
 
-        motor_planning* plan;
-
         float ratio;/*减速比*/
+
+        
     };
 
     motor_t *motor_get(int id);

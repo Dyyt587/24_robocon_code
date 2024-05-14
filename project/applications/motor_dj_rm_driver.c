@@ -242,7 +242,7 @@ int motor_dj_driver(int id, uint16_t mode, float *value, void *user_data)
         // LOG_D("rang%d",(msg.id - CAN_Motor1_ID));
         if ((msg.id - CAN_Motor1_ID) >= 8) // 6020
         {
-            LOG_W("not support 6020");
+            LOG_W("id%d not support 6020",msg.id);
         }
         else if ((msg.id - CAN_Motor1_ID) >= 4) // 6020 3508 2006
         {
@@ -635,7 +635,7 @@ static void can_rx_thread1(void *parameter)
     while (1)
     {
         // motor_shakdown(0);
-        motor_shakdown(M3508_1_CAN1);
+       // motor_shakdown(M3508_1_CAN1);
         // motor_set_pos(M2006_5_CAN1,-100);
 
         rt_thread_delay(10);

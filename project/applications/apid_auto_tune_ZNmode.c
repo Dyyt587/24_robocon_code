@@ -37,7 +37,7 @@ void __auto_pid_handle1(apid_t *pid, PID_TYPE cycle)
 	}
 }
 
-void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner,ZNMode mode, float targetValue, float low_out_range, float up_out_range, int tuneCycles)
+void apid_auto_tune_ZNmode_init(apid_t *pid, apid_auto_tune_ZNmode_t *tuner, ZNMode mode, float targetValue, float low_out_range, float up_out_range, int tuneCycles)
 {
 	pid->auto_pid = tuner;
 	pid->auto_pid_handler = __auto_pid_handle1;
@@ -210,14 +210,9 @@ float tune_pid(apid_auto_tune_ZNmode_t *tuner, float input, unsigned long cycle)
 		tuner->ki = tuner->iAverage / (tuner->i - 1);
 		tuner->kd = tuner->dAverage / (tuner->i - 1);
 	}
-	if (tuner->output)
-	{
-		return tuner->outputValue;
-	}
-	else
-	{
-		return 0;
-	}
+
+	return tuner->outputValue;
+
 }
 
 // Get PID constants after tuning

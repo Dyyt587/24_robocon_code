@@ -32,10 +32,11 @@
 #include <Arduino.h>
 //GENERAL CONFIG SETTINGS
 //#include "config.h"
+extern void test_track();
 
 void setup()
 {
-  
+  test_track();
 }
 
 void loop() 
