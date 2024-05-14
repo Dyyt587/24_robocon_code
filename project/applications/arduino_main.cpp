@@ -36,7 +36,9 @@ extern void test_track();
 
 void setup()
 {
-  test_track();
+//	rt_enter_critical();
+//  test_track();
+//	rt_exit_critical();
 }
 
 void loop() 

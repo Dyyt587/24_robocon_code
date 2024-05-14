@@ -27,11 +27,11 @@ void test_track() {
 
     // Generate the trajectory within the control loop
     std::cout << "t | position" << std::endl;
-    while (otg.update(input, output) == Result::Working) {
-        std::cout << output.time << " | " << join(output.new_position) << std::endl;
-
+//    while (otg.update(input, output) == Result::Working) {
+        //std::cout << output.time << " | " << join(output.new_position) << std::endl;
+otg.update(input, output);
         output.pass_to_input(input);
-    }
+//    }
 
-    std::cout << "Trajectory duration: " << output.trajectory.get_duration() << " [s]." << std::endl;
+   // std::cout << "Trajectory duration: " << output.trajectory.get_duration() << " [s]." << std::endl;
 }
