@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-14 18:55:27
+ * @LastEditTime: 2024-05-14 19:13:17
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -53,21 +53,6 @@
 
 
 
-void motor_set_pos_plan(int id,float targetPos,float stepPos,float flexible,int maxTimes)
-{
-	motor_t* motor = motor_get(id);
-	motor->ops->curve->intervel = 2;
-	motor->ops->curve->aTimes = 0;			  // 当前时间步
-	motor->ops->curve->targetPos = targetPos;
-	motor->ops->curve->startPos = motor->cur_pos;
-	motor->ops->curve->currentPos = motor->cur_pos;
-	motor->ops->curve->maxTimes = maxTimes;
-	motor->ops->curve->stepPos = stepPos;
-	motor->ops->curve->flexible = flexible;
-	motor->ops->curve->maxTimes = maxTimes;
-	motor->ops->curve->curveMode = CURVE_TRAP;
-	motor->tar_pos = motor_planning(motor->ops->curve);
-}
 
 int main(void)
 {
@@ -154,7 +139,8 @@ int main(void)
 	// 	//LOG_D("setpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
 	// }
 
-	motor_set_pos_plan(M3508_1_CAN1, 100, 0.01f, 10.f, 0);
+	//motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
+	motor_set_pos(M3508_1_CAN1, 3.1415926*2);
 	///////////////////////////////////////////////////
 	while (1)
 	{

@@ -782,7 +782,7 @@ INIT_COMPONENT_EXPORT(motor_dj_init);
         motor_set_ratio(id, 19.20204388f);                     \
         motor_set_pid_speed_ratio(id,1,2);                     \
         APID_Set_Out_Limit(motor_get_pid_speed(id), 20000);    \
-        APID_Set_Integral_Limit(motor_get_pid_speed(id), 200); \
+        APID_Set_Integral_Limit(motor_get_pid_speed(id), 2000); \
         APID_Set_Bias_Dead_Zone(motor_get_pid_speed(id), 40);  \
         APID_Set_Bias_Limit(motor_get_pid_speed(id), 2000);    \
         APID_Set_Integral_Limit(motor_get_pid_pos(id), 200);   \
@@ -799,7 +799,7 @@ static void set_motor_passive_feedback(void)
     motor_set_ratio(M3508_1_CAN1, 19.20204388f); // TODO:大概是19，不准,100圈校准值19.20204388f
     ////////////////////////////speed///////////////////////////////
     APID_Set_Out_Limit(motor_get_pid_speed(M3508_1_CAN1), 20000);
-    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_1_CAN1), 200);
+    APID_Set_Integral_Limit(motor_get_pid_speed(M3508_1_CAN1), 2000);
     APID_Set_Bias_Dead_Zone(motor_get_pid_speed(M3508_1_CAN1), 40);
     APID_Set_Bias_Limit(motor_get_pid_speed(M3508_1_CAN1), 2000);
     // APID_Set_Target_Limit(motor_get_pid_speed(M3508_1_CAN1), 70);

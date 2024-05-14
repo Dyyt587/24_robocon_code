@@ -2236,6 +2236,11 @@
               <FileType>8</FileType>
               <FilePath>.\applications\ruckig\velocity_third_step2.cpp</FilePath>
             </File>
+            <File>
+              <FileName>motor_planning.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\motor_planning.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
