@@ -1,3 +1,11 @@
+/*
+ * @Author: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @Date: 2024-05-14 10:22:51
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2024-05-14 14:18:27
+ * @FilePath: \project\applications\Trajectory_planning.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 #include "Trajectory_planning.h"
 
 void (*pCalCurve[])(CurveObjectType *curve) = {0, CalCurveSPTA, 0};
@@ -24,23 +32,9 @@ void MotorVelocityCurve(CurveObjectType *curve)
 {
     float temp = 0;
 
-    // if (curve->targetPos > curve->PosMax)
-    // {
-    //     curve->targetPos = curve->PosMax;
-    // }
-
-    // if (curve->targetPos < curve->PosMin)
-    // {
-    //     curve->targetPos = curve->PosMin;
-    // }
-
     if ((fabs(curve->currentPos - curve->startPos) <= curve->stepPos) && (curve->maxTimes == 0))
     {
         /*自动计算最大时间长度*/
-        // if (curve->startPos < curve->PosMin)
-        // {
-        //     curve->startPos = curve->PosMin;
-        // }
         curve->maxTimes = (int)(((float)fabs(curve->targetPos - curve->startPos) / curve->stepPos) + 5) * curve->intervel;
         curve->aTimes = 0;
     }
@@ -72,13 +66,4 @@ static void CalCurveSPTA(CurveObjectType *spta)
     Pos = (spta->targetPos - spta->startPos) / Pos;
     spta->currentPos = Pos + spta->startPos;
 
-    // if (spta->currentPos > spta->PosMax)
-    // {
-    //     spta->currentPos = spta->PosMax;
-    // }
-
-    // if (spta->currentPos < spta->PosMin)
-    // {
-    //     spta->currentPos = spta->PosMin;
-    // }
 }

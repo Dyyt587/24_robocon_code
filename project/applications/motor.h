@@ -124,8 +124,10 @@ extern "C"
     int motor_start(int id);
 
     int motor_set_speed(int id, float value);
+int motor_set_relative_speed(int id, float value);
 
     int motor_set_pos(int id, float value);
+int motor_set_relative_pos(int id, float value);
 
     int motor_set_torque(int id, float value);
 
