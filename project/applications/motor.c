@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-14 15:42:11
+ * @LastEditTime: 2024-05-14 17:23:45
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -292,7 +292,6 @@ int motor_handle(int id, float cycle)
     }
     else
     {
-        // MOTOR_CURVE_HANDLE(motor);
         if (motor->ops->curve)
         {
             if (motor->ops->curve->maxTimes)
@@ -602,12 +601,7 @@ void motor_init(void)
     {
         motor_list[i].id = i;
         motor_list[i].time = 0;
-
-        // TODO: 为什么要设置为1
-        //        motor_list[i].ratio_pos = 10;
-        //        motor_list[i].ratio_speed = 5;
-        //        motor_list[i].torque_tick = 1;
-
+        
         motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
         motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;
         motor_updata_cfg(i, motor_list[i].flag_accept_level);

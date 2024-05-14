@@ -246,13 +246,15 @@ extern "C"
         MOTOR_NUM
     };
 
+#define MOTOR_OPS_CURVE_INIT() (&((CurveObjectType){.aTimes=0,\
+}))
     /**
      * @brief 电机抽象层电机操作函数定义
      */
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
 #define MOTOR_DJ_M3508_ID1_CAN1_OPS           \
     {                                         \
-        .curve = 0,                           \
+        .curve = MOTOR_OPS_CURVE_INIT(),      \
         .driver = motor_dj_driver,            \
         .control = motor_dj_ctr,              \
         .user_data = &dj_motors[DJ_M_CAN1_1], \

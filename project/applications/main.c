@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-14 16:00:08
+ * @LastEditTime: 2024-05-14 17:18:48
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -49,15 +49,26 @@
 #define THREAD_PRIORITY_CHASSIS 25
 #define THREAD_STACK_SIZE_CHASSIS 1024
 #define THREAD_TIMESLICE_CHASSIS 5
-void motor_plan_start(CurveObjectType *curve, float target, float start, float stepPos, float flexible, uint32_t max_time)
-{
-}
 
 
-void motor_plan_init(motor_t*motor,CurveObjectType *curve, float target, float start, float stepPos, float flexible, uint32_t max_time)
+
+
+void motor_set_pos_plan(int id,float targetPos,float stepPos,float flexible,int maxTimes)
 {
-	
+	motor_t* motor = motor_get(id);
+	motor->ops->curve->aTimes = 0;			  // 当前时间步
+	motor->ops->curve->targetPos = targetPos;
+	motor->ops->curve->startPos = motor->cur_pos;
+	motor->ops->curve->currentPos = motor->cur_pos;
+	motor->ops->curve->maxTimes = maxTimes;
+	motor->ops->curve->stepPos = stepPos;
+	motor->ops->curve->flexible = flexible;
+	motor->ops->curve->maxTimes = maxTimes;
+	motor->ops->curve->curveMode = CURVE_SPTA;
+	motor->tar_pos = motor_planning(motor->ops->curve);
+
 }
+
 int main(void)
 {
 	// //////////////////////////////////////////////////////////////创建红外循迹线程
@@ -121,7 +132,6 @@ int main(void)
 	curve.currentPos = motor_get_pos(M3508_1_CAN1);
 	// curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
 	curve.stepPos = 0.050f; // 位置变化的步长
-	curve.max_pos = 1000.0f;
 	// curve.PosMax = curve.max_pos;  // 最大位置限制
 	// curve.PosMin = -curve.max_pos; // 最小位置限制
 	curve.aTimes = 0;			  // 当前时间步
