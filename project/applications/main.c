@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-14 17:18:48
+ * @LastEditTime: 2024-05-14 18:55:27
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -56,6 +56,7 @@
 void motor_set_pos_plan(int id,float targetPos,float stepPos,float flexible,int maxTimes)
 {
 	motor_t* motor = motor_get(id);
+	motor->ops->curve->intervel = 2;
 	motor->ops->curve->aTimes = 0;			  // 当前时间步
 	motor->ops->curve->targetPos = targetPos;
 	motor->ops->curve->startPos = motor->cur_pos;
@@ -64,9 +65,8 @@ void motor_set_pos_plan(int id,float targetPos,float stepPos,float flexible,int 
 	motor->ops->curve->stepPos = stepPos;
 	motor->ops->curve->flexible = flexible;
 	motor->ops->curve->maxTimes = maxTimes;
-	motor->ops->curve->curveMode = CURVE_SPTA;
+	motor->ops->curve->curveMode = CURVE_TRAP;
 	motor->tar_pos = motor_planning(motor->ops->curve);
-
 }
 
 int main(void)
@@ -124,35 +124,37 @@ int main(void)
 	// 使用示例
 	motor_set_pos(0, 0);
 
-	static CurveObjectType curve;
+	// static CurveObjectType curve;
 
-	curve.targetPos = 60.f; // m
+	// curve.targetPos = 60.f; // m
 
-	curve.startPos = motor_get_pos(M3508_1_CAN1); // 初始位置
-	curve.currentPos = motor_get_pos(M3508_1_CAN1);
-	// curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
-	curve.stepPos = 0.050f; // 位置变化的步长
-	// curve.PosMax = curve.max_pos;  // 最大位置限制
-	// curve.PosMin = -curve.max_pos; // 最小位置限制
-	curve.aTimes = 0;			  // 当前时间步
-	curve.maxTimes = 0;			  // 总时间步，实际使用时需要根据实际情况计算
-	curve.curveMode = CURVE_TRAP; // 使用S位置曲线
-	curve.flexible = 4.5f;		  // S曲线的柔性因子
-	curve.intervel = 10;
+	// curve.startPos = motor_get_pos(M3508_1_CAN1); // 初始位置
+	// curve.currentPos = motor_get_pos(M3508_1_CAN1);
+	// // curve.targetPos = curve.targetPosm * 360.f/0.2198f; // 目标位置
+	// curve.stepPos = 0.03f; // 位置变化的步长
+	// // curve.PosMax = curve.max_pos;  // 最大位置限制
+	// // curve.PosMin = -curve.max_pos; // 最小位置限制
+	// curve.aTimes = 0;			  // 当前时间步
+	// curve.maxTimes = 0;			  // 总时间步，实际使用时需要根据实际情况计算
+	// curve.curveMode = CURVE_TRAP; // 使用S位置曲线
+	// curve.flexible =3.f;		  // S曲线的柔性因子
+	// curve.intervel = 2;
 
-	LOG_D("startsetpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
+	// LOG_D("startsetpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
 
-	motor_planning(&curve);
-	motor_set_pos(M3508_1_CAN1, curve.currentPos);
-	// rt_thread_mdelay(1000);
-	LOG_D("setpos curpos11:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
+	// motor_planning(&curve);
+	// motor_set_pos(M3508_1_CAN1, curve.currentPos);
+	// // rt_thread_mdelay(1000);
+	// LOG_D("setpos curpos11:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
 
-	while (curve.maxTimes)
-	{
-		rt_thread_mdelay(10);
-		motor_set_pos(M3508_1_CAN1, motor_planning(&curve));
-		LOG_D("setpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
-	}
+	// while (curve.maxTimes)
+	// {
+	// 	rt_thread_mdelay(2);
+	// 	motor_set_pos(M3508_1_CAN1, motor_planning(&curve));
+	// 	//LOG_D("setpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
+	// }
+
+	motor_set_pos_plan(M3508_1_CAN1, 100, 0.01f, 10.f, 0);
 	///////////////////////////////////////////////////
 	while (1)
 	{

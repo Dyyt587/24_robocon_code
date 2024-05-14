@@ -780,7 +780,7 @@ INIT_COMPONENT_EXPORT(motor_dj_init);
     {                                                          \
         motor_set_passive_feedback(id, 1);                     \
         motor_set_ratio(id, 19.20204388f);                     \
-        motor_set_pid_speed_ratio(id,1,4);                     \
+        motor_set_pid_speed_ratio(id,1,2);                     \
         APID_Set_Out_Limit(motor_get_pid_speed(id), 20000);    \
         APID_Set_Integral_Limit(motor_get_pid_speed(id), 200); \
         APID_Set_Bias_Dead_Zone(motor_get_pid_speed(id), 40);  \

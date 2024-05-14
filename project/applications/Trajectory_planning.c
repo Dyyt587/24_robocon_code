@@ -8,7 +8,7 @@
  */
 #include "Trajectory_planning.h"
 
-void (*pCalCurve[])(CurveObjectType *curve) = {0, CalCurveSPTA, 0};
+void (*pCalCurve[])(CurveObjectType *curve) = {0, CalCurveSPTA, CalCurveSPTA};
 
 float motor_planning(CurveObjectType *curve)
 {

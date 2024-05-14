@@ -157,66 +157,66 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>39</LineNumber>
+          <LineNumber>695</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134554884</Address>
+          <Address>66</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>applications\arduino_main.cpp</Filename>
+          <Filename>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\applications/arduino_main.cpp\39</Expression>
+          <Expression>\\rt_thread\libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c\695</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>32</LineNumber>
+          <LineNumber>69</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134253922</Address>
+          <Address>134345308</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\applications\test.cpp</Filename>
+          <Filename>applications\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\applications/test.cpp\32</Expression>
+          <Expression>\\\applications/main.c\69</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>40</LineNumber>
+          <LineNumber>58</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>134238176</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>applications\arduino_main.cpp</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>applications\Trajectory_planning.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\rt_thread\applications/Trajectory_planning.c\58</Expression>
         </Bp>
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>33</LineNumber>
+          <LineNumber>7579</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>74</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\applications\test.cpp</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\rt_thread\libraries/STM32F4xx_HAL/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c\7579</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
