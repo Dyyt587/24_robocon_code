@@ -5,7 +5,7 @@
 #include <cfloat>
 #include <cmath>
 
-
+#define M_PI 3.1415926f
 namespace ruckig {
 
 template<typename T>

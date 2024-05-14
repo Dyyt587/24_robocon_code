@@ -310,14 +310,14 @@ public:
                 const bool has_zero_limits = (inp.max_acceleration[dof] == 0.0 || inp_min_acceleration[dof] == 0.0 || inp.max_jerk[dof] == 0.0);
                 if (has_zero_limits) {
                     if constexpr (throw_error) {
-                        throw RuckigError("zero limits conflict in step 1, dof: " + std::to_string(dof) + " input: " + inp.to_string());
+                          RuckigError("zero limits conflict in step 1, dof: " + std::to_string(dof) + " input: " + inp.to_string());
                     } else {
                         return Result::ErrorZeroLimits;
                     }
 
                 } else {
                     if constexpr (throw_error) {
-                        throw RuckigError("error in step 1, dof: " + std::to_string(dof) + " input: " + inp.to_string());
+                          RuckigError("error in step 1, dof: " + std::to_string(dof) + " input: " + inp.to_string());
                     } else {
                         return Result::ErrorExecutionTimeCalculation;
                     }
@@ -349,14 +349,14 @@ public:
 
             if (has_zero_limits) {
                 if constexpr (throw_error) {
-                    throw RuckigError("zero limits conflict with other degrees of freedom in time synchronization " + std::to_string(traj.duration));
+                      RuckigError("zero limits conflict with other degrees of freedom in time synchronization " + std::to_string(traj.duration));
                 } else {
                     return Result::ErrorZeroLimits;
                 }
 
             } else {
                 if constexpr (throw_error) {
-                    throw RuckigError("error in time synchronization: " + std::to_string(traj.duration));
+                      RuckigError("error in time synchronization: " + std::to_string(traj.duration));
                 } else {
                     return Result::ErrorSynchronizationCalculation;
                 }
@@ -514,7 +514,7 @@ public:
             }
             if (!found_time_synchronization) {
                 if constexpr (throw_error) {
-                    throw RuckigError("error in step 2 in dof: " + std::to_string(dof) + " for t sync: " + std::to_string(traj.duration) + " input: " + inp.to_string());
+                      RuckigError("error in step 2 in dof: " + std::to_string(dof) + " for t sync: " + std::to_string(traj.duration) + " input: " + inp.to_string());
                 } else {
                     return Result::ErrorSynchronizationCalculation;
                 }

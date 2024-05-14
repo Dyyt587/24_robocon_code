@@ -181,7 +181,7 @@ public:
         if (!input.intermediate_positions.empty() && input.control_interface == ControlInterface::Position) {
             if (input.intermediate_positions.size() > max_number_of_waypoints) {
                 if constexpr (throw_validation_error) {
-                    throw RuckigError("The number of intermediate positions " + std::to_string(input.intermediate_positions.size()) + " exceeds the maximum number of waypoints " + std::to_string(max_number_of_waypoints) + ".");
+                      RuckigError("The number of intermediate positions " + std::to_string(input.intermediate_positions.size()) + " exceeds the maximum number of waypoints " + std::to_string(max_number_of_waypoints) + ".");
                 }
                 return false;
             }
@@ -189,7 +189,7 @@ public:
 
         if (delta_time <= 0.0 && input.duration_discretization != DurationDiscretization::Continuous) {
             if constexpr (throw_validation_error) {
-                throw RuckigError("delta time (control rate) parameter " + std::to_string(delta_time) + " should be larger than zero.");
+                  RuckigError("delta time (control rate) parameter " + std::to_string(delta_time) + " should be larger than zero.");
             }
             return false;
         }
@@ -214,11 +214,12 @@ public:
 
     //! Get the next output state (with step delta_time) along the calculated trajectory for the given input
     Result update(const InputParameter<DOFs, CustomVector>& input, OutputParameter<DOFs, CustomVector>& output) {
-        const auto start = std::chrono::steady_clock::now();
+        //const auto start = std::chrono::steady_clock::now();
+        const auto start = get_system_ms();
 
         if constexpr (DOFs == 0 && throw_error) {
             if (degrees_of_freedom != input.degrees_of_freedom || degrees_of_freedom != output.degrees_of_freedom) {
-                throw RuckigError("mismatch in degrees of freedom (vector size).");
+                  RuckigError("mismatch in degrees of freedom (vector size).");
             }
         }
 
@@ -241,9 +242,11 @@ public:
         output.time += delta_time;
         output.trajectory.at_time(output.time, output.new_position, output.new_velocity, output.new_acceleration, output.new_jerk, output.new_section);
         output.did_section_change = (output.new_section > old_section);  // Report only forward section changes
+        //const auto stop = std::chrono::steady_clock::now();
+        const auto stop = get_system_ms();
 
-        const auto stop = std::chrono::steady_clock::now();
-        output.calculation_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count() / 1000.0;
+        //output.calculation_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count() / 1000.0;
+        output.calculation_duration = (stop - start);
 
         output.pass_to_input(current_input);
 

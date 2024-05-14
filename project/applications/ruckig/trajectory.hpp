@@ -178,7 +178,7 @@ public:
     void at_time(double time, Vector<double>& new_position, Vector<double>& new_velocity, Vector<double>& new_acceleration, Vector<double>& new_jerk, size_t& new_section) const {
         if constexpr (DOFs == 0) {
             if (degrees_of_freedom != new_position.size() || degrees_of_freedom != new_velocity.size() || degrees_of_freedom != new_acceleration.size() || degrees_of_freedom != new_jerk.size()) {
-                throw RuckigError("mismatch in degrees of freedom (vector size).");
+                  RuckigError("mismatch in degrees of freedom (vector size).");
             }
         }
 
@@ -193,7 +193,7 @@ public:
     void at_time(double time, Vector<double>& new_position, Vector<double>& new_velocity, Vector<double>& new_acceleration) const {
         if constexpr (DOFs == 0) {
             if (degrees_of_freedom != new_position.size() || degrees_of_freedom != new_velocity.size() || degrees_of_freedom != new_acceleration.size()) {
-                throw RuckigError("mismatch in degrees of freedom (vector size).");
+                  RuckigError("mismatch in degrees of freedom (vector size).");
             }
         }
 
@@ -207,7 +207,7 @@ public:
     void at_time(double time, Vector<double>& new_position) const {
         if constexpr (DOFs == 0) {
             if (degrees_of_freedom != new_position.size()) {
-                throw RuckigError("mismatch in degrees of freedom (vector size).");
+                  RuckigError("mismatch in degrees of freedom (vector size).");
             }
         }
 
