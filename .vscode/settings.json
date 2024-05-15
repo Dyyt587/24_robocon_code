@@ -66,5 +66,6 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "cmake.sourceDirectory": "C:/Users/33368/Documents/GitHub/24_robocon_code/project/applications/abus"
+  "cmake.sourceDirectory": "C:/Users/33368/Documents/GitHub/24_robocon_code/project/applications/abus",
+  "cmake.configureOnOpen": false
 }

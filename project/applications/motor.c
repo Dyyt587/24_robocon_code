@@ -297,11 +297,11 @@ int motor_handle(int id, float cycle)
             if (motor->ops->curve->maxTimes)
             {
                 if (motor->flag_run_mode == MOTOR_MODE_POS)
-                    motor->tar_pos = motor_planning(motor->ops->curve) * motor->ratio;
+                    motor->tar_pos = motor_planning(motor->ops->curve) ;
                 else if (motor->flag_run_mode == MOTOR_MODE_SPEED)
-                    motor->tar_speed = motor_planning(motor->ops->curve) * motor->ratio;
+                    motor->tar_speed = motor_planning(motor->ops->curve) ;
                 else if (motor->flag_run_mode == MOTOR_MODE_TORQUE)
-                    motor->tar_torque = motor_planning(motor->ops->curve) * motor->ratio;
+                    motor->tar_torque = motor_planning(motor->ops->curve) ;
             }
         }
         motor->behaver(id, motor->flag_run_mode, &cycle, motor->ops->user_data); // 进行计算

@@ -1,37 +1,52 @@
 #include <iostream>
-#include <chrono>
+//#include <chrono>
 
-#include <ruckig/ruckig.hpp>
+//#include <ruckig/ruckig.hpp>
 
 
-using namespace ruckig;
+//using namespace ruckig;
 
-void test_track() {
-    // Create instances: the Ruckig OTG as well as input and output parameters
-    Ruckig<3> otg(0.01);  // control cycle
-    InputParameter<3> input;
-    OutputParameter<3> output;
+//void test_track() {
+//    // Create instances: the Ruckig OTG as well as input and output parameters
+//    Ruckig<3> otg(0.01);  // control cycle
+//    InputParameter<3> input;
+//    OutputParameter<3> output;
 
-    // Set input parameters
-    input.current_position = {0.0, 0.0, 0.5};
-    input.current_velocity = {0.0, -2.2, -0.5};
-    input.current_acceleration = {0.0, 2.5, -0.5};
+//    // Set input parameters
+//    input.current_position = {0.0, 0.0, 0.5};
+//    input.current_velocity = {0.0, -2.2, -0.5};
+//    input.current_acceleration = {0.0, 2.5, -0.5};
 
-    input.target_position = {5.0, -2.0, -3.5};
-    input.target_velocity = {0.0, -0.5, -2.0};
-    input.target_acceleration = {0.0, 0.0, 0.5};
+//    input.target_position = {5.0, -2.0, -3.5};
+//    input.target_velocity = {0.0, -0.5, -2.0};
+//    input.target_acceleration = {0.0, 0.0, 0.5};
 
-    input.max_velocity = {3.0, 1.0, 3};
-    input.max_acceleration = {3.0, 2.0, 1.0};
-    input.max_jerk = {4.0, 3.0, 2.0};
+//    input.max_velocity = {3.0, 1.0, 3};
+//    input.max_acceleration = {3.0, 2.0, 1.0};
+//    input.max_jerk = {4.0, 3.0, 2.0};
 
-    // Generate the trajectory within the control loop
-    std::cout << "t | position" << std::endl;
-//    while (otg.update(input, output) == Result::Working) {
-        //std::cout << output.time << " | " << join(output.new_position) << std::endl;
-otg.update(input, output);
-        output.pass_to_input(input);
-//    }
+//    // Generate the trajectory within the control loop
+//    std::cout << "t | position" << std::endl;
+////    while (otg.update(input, output) == Result::Working) {
+//        //std::cout << output.time << " | " << join(output.new_position) << std::endl;
+//otg.update(input, output);
+//        output.pass_to_input(input);
+////    }
 
-   // std::cout << "Trajectory duration: " << output.trajectory.get_duration() << " [s]." << std::endl;
+//   // std::cout << "Trajectory duration: " << output.trajectory.get_duration() << " [s]." << std::endl;
+//}
+#include "Eigen/Dense"
+
+using namespace Eigen;
+using namespace std;
+void test()
+{
+  Vector3d v(1,2,3);
+  Vector3d w(0,1,2);
+
+  cout << "Dot product: " << v.dot(w) << endl;
+  double dp = v.adjoint()*w; // automatic conversion of the inner product to a scalar
+  cout << "Dot product via a matrix product: " << dp << endl;
+  cout << "Cross product:\n" << v.cross(w) << endl;
 }
+ 

@@ -31,14 +31,16 @@
 
 #include <Arduino.h>
 //GENERAL CONFIG SETTINGS
-//#include "config.h"
+
 extern void test_track();
+extern void test();
 
 void setup()
 {
 //1 	rt_enter_critical();
 //  test_track();
 //	rt_exit_critical();
+	test();
 }
 
 void loop() 
