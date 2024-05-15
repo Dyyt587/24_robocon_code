@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>__STDC_LIMIT_MACROS, RT_USING_ARMLIBC, __perf_counter_printf__=rt_kprintf, ARDUINO_ARCH_RTTHREAD=10000, USE_HAL_DRIVER, RT_USING_LIBC, printf=rt_kprintf, __CLK_TCK=RT_TICK_PER_SECOND, STM32F427xx, __PERF_CNT_USE_RTOS__, __RTTHREAD__, ARDUINO=10819</Define>
               <Undefine></Undefine>
-              <IncludePath>rt-thread\components\libc\compilers\common\include;rt-thread\libcpu\arm\cortex-m4;applications\FasionStar;rt-thread\components\libc\posix\io\eventfd;applications\arduino_pinout;rt-thread\components\finsh;applications\statemachine;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;board\ports;libraries\HAL_Drivers\drivers\config;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\cplusplus;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\poll;board;rt-thread\components\drivers\include;applications\abus;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;packages\RTduino-latest\libraries\buildin\Wire;rt-thread\components\drivers\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;packages\CmBacktrace-v1.4.1;rt-thread\components\libc\posix\io\epoll;packages\RTduino-latest\libraries\user;packages\perf_counter-v2.2.4.1;packages\RTduino-latest\core;.;applications\chassis;rt-thread\include;libraries\HAL_Drivers;applications;packages\RTduino-latest\libraries\buildin\Servo;rt-thread\components\drivers\include;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\CubeMX_Config\Inc;rt-thread\components\drivers\include;applications\robotManager;libraries\HAL_Drivers\drivers;rt-thread\components\libc\compilers\common\extension;packages\CMSIS_5-v5.9.0\CMSIS\Core\Include;rt-thread\components\libc\posix\ipc;.\applications\Eigen;.\applications\Eigen\src;.\applications\Eigen\src\Core;.\applications\transforms3d_cpp\include\transforms3d;.\applications\transforms3d_cpp\include</IncludePath>
+              <IncludePath>rt-thread\components\libc\compilers\common\include;rt-thread\libcpu\arm\cortex-m4;applications\FasionStar;rt-thread\components\libc\posix\io\eventfd;applications\arduino_pinout;rt-thread\components\finsh;applications\statemachine;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;board\ports;libraries\HAL_Drivers\drivers\config;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\components\libc\cplusplus;rt-thread\components\drivers\include;rt-thread\components\libc\posix\io\poll;board;rt-thread\components\drivers\include;applications\abus;rt-thread\components\drivers\include;rt-thread\libcpu\arm\common;packages\RTduino-latest\libraries\buildin\Wire;rt-thread\components\drivers\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;packages\CmBacktrace-v1.4.1;rt-thread\components\libc\posix\io\epoll;packages\RTduino-latest\libraries\user;packages\perf_counter-v2.2.4.1;packages\RTduino-latest\core;.;applications\chassis;rt-thread\include;libraries\HAL_Drivers;applications;packages\RTduino-latest\libraries\buildin\Servo;rt-thread\components\drivers\include;rt-thread\components\utilities\ulog;rt-thread\components\drivers\include;board\CubeMX_Config\Inc;rt-thread\components\drivers\include;applications\robotManager;libraries\HAL_Drivers\drivers;rt-thread\components\libc\compilers\common\extension;packages\CMSIS_5-v5.9.0\CMSIS\Core\Include;rt-thread\components\libc\posix\ipc;.\applications\Eigen;.\applications\Eigen\src;.\applications\Eigen\src\Core;.\applications\transforms3d_cpp\include\transforms3d;.\applications\transforms3d_cpp\include;.\applications\abus_v3\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -556,230 +556,6 @@
               <FileName>aboard_power_switch.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\aboard_power_switch.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>abus_hash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\abus\abus_hash.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>abus_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\abus\abus_port.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>abus_topic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\abus\abus_topic.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>0</AlwaysBuild>
-                  <GenerateAssemblyFile>0</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>0</AssembleAssemblyFile>
-                  <PublicsOnly>0</PublicsOnly>
-                  <StopOnExitCode>3</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls>  -std=gnu99</MiscControls>
-                      <Define> </Define>
-                      <Undefine> </Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>afifo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\abus\afifo.c</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -2190,6 +1966,56 @@
               <FileName>example_handeye.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\applications\transforms3d_cpp\example\handeye_caul\example_handeye.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>map_move.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\applications\map_move.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>abus</GroupName>
+          <Files>
+            <File>
+              <FileName>abus_acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>abus_deamon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_deamon.c</FilePath>
+            </File>
+            <File>
+              <FileName>abus_hash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_hash.c</FilePath>
+            </File>
+            <File>
+              <FileName>abus_osal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_osal.c</FilePath>
+            </File>
+            <File>
+              <FileName>abus_topic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_topic.c</FilePath>
+            </File>
+            <File>
+              <FileName>afifo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\afifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>all_check.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\all_check.c</FilePath>
+            </File>
+            <File>
+              <FileName>cvector.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\cvector.c</FilePath>
             </File>
           </Files>
         </Group>

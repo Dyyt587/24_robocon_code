@@ -11,7 +11,13 @@
     "motor.h": "c",
     "chassis_module_omni3.h": "c",
     "xutility": "c",
-    "chassis.h": "c"
+    "chassis.h": "c",
+    "ios": "cpp",
+    "type_traits": "cpp",
+    "xstring": "cpp",
+    "dense": "cpp",
+    "abus.h": "c",
+    "abus_def.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

@@ -21,7 +21,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "abus_topic.h"
+#include "abus.h"
 
 #define INFRARED7_PIN    GET_PIN(F, 10)	//Q1
 #define INFRARED6_PIN    GET_PIN(A, 5)	//P1

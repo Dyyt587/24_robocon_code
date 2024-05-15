@@ -8,7 +8,7 @@
  */
 #include "chassis_port.h"
 #include "chassis_module_mai.h"
-#include "abus_topic.h"
+#include "abus.h"
 
 #include <rtthread.h>
 #include <rtdbg.h>
@@ -49,24 +49,24 @@ void chassis_port_handle(void *parameter)
 }
 int chassis_sub_callback(abus_topic_t *sub)
 {
-    chassis_ctrl_t ctrl;
-    uint16_t size;
-    size = afifo_out_data(sub->datafifo, (uint8_t*)&ctrl, sizeof(chassis_ctrl_t));
-    if (size!=sizeof(chassis_ctrl_t))
-    {
-        LOG_E("abus_topic_subscribe  afifo_out_data error\n");
-        return -1;
-    }
-    if (ctrl.type == 0)
-    {
-        //LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
-        chassis_set_speed(&chassis_mai, &ctrl.speed);
-    }
-    else
-    {
-        //LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
-        chassis_set_pos(&chassis_mai, &ctrl.pos);
-    }
+//    chassis_ctrl_t ctrl;
+//    uint16_t size;
+//    size = afifo_out_data(sub->fifo, (uint8_t*)&ctrl, sizeof(chassis_ctrl_t));
+//    if (size!=sizeof(chassis_ctrl_t))
+//    {
+//        LOG_E("abus_topic_subscribe  afifo_out_data error\n");
+//        return -1;
+//    }
+//    if (ctrl.type == 0)
+//    {
+//        //LOG_D("speed x:%f y:%f w:%f",ctrl.speed.x_m_s,ctrl.speed.y_m_s,ctrl.speed.z_rad_s);
+//        chassis_set_speed(&chassis_mai, &ctrl.speed);
+//    }
+//    else
+//    {
+//        //LOG_D("pos x:%f y:%f w:%f",ctrl.pos.x_m,ctrl.pos.y_m,ctrl.pos.z_rad);
+//        chassis_set_pos(&chassis_mai, &ctrl.pos);
+//    }
     return 0;
 }
 
