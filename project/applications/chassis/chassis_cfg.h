@@ -15,6 +15,11 @@
 /* 启用内置麦轮解算module */
 #define CHASSIS_MODULE_MAI
 
+#define CHASSIS_MODULE_OMNI3
+
+
+
+
 #ifdef CHASSIS_USING_MOTOR_HAL /*USE CHASSIS_USING_MOTOR_HAL */
 #include "motor.h"
 #ifdef CHASSIS_MODULE_MAI
@@ -30,7 +35,7 @@
  *       1轮 //      |     \\   0轮
  *          //       |      \\
  *                   |       
- *                   |_ _ _ _ _ _ _ _ _ > x
+ *                   |_ _ _ _ _ _ > x
  *
  *         \\                //
  *      2轮 \\              //   3轮
@@ -47,6 +52,34 @@
 #define MOTOR_MAI_ID_3 0
 #define MOTOR_MAI_ID_4 0
 #endif
+
+
+#ifdef CHASSIS_MODULE_MAI
+/**
+ *          y
+ *          ^
+ *          |
+ * b -------|------- a
+ *  \       |       /
+ *   \      |      /
+ *    \     |_____/__________>x    
+ *     \        /
+ *      \      /
+ *       \    /       
+ *        \  /
+ *         c
+ * 
+ * 
+ */
+#define MOTOR_OMNI3_ID_1 0
+#define MOTOR_OMNI3_ID_2 0
+#define MOTOR_OMNI3_ID_3 0
+
+#endif
+
+
+
+
 
 #endif
 #endif /* CHASSIS_CFG_H */

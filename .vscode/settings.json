@@ -8,7 +8,10 @@
     "rtthread.h": "c",
     "float.h": "c",
     "motor_planning.h": "c",
-    "motor.h": "c"
+    "motor.h": "c",
+    "chassis_module_omni3.h": "c",
+    "xutility": "c",
+    "chassis.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
