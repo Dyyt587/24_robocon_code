@@ -4,8 +4,7 @@
 extern "C"{
 #endif
 #include <stdint.h>
-#define POSIX 0
-#include <stdint.h>
+#define POSIX 1
 #if POSIX
 #include <pthread.h>
 #include <stdio.h>//perror
