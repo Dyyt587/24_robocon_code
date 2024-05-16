@@ -49,7 +49,7 @@ int abus_subcriber_wait_by_name(const char *topic, const char *subcriber, uint32
 int abus_subcribe(const char *topic, const char *accounter, abus_subcribe_cfg_t *cfg)
 {
     abus_subcriber_t subcriber;
-    ABUS_MEMMSET(&subcriber, sizeof(abus_subcriber_t), 0);
+    ABUS_MEMMSET(&subcriber,  0,sizeof(abus_subcriber_t));
 
     abus_topic_t *top = abus_topic_find_by_name(topic);
     abus_acc_t *acc = abus_accounter_find_by_name(accounter);
@@ -126,6 +126,7 @@ int abus_unsubcribe(const char *topic, const char *subcribe)
         return -1;
     if (sub == NULL)
         return -2;
+		return 0;
 }
 
 int abus_publish(const char *topic, void *data)
@@ -178,7 +179,7 @@ abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const cha
 {
     abus_topic_init();
     abus_topic_t *topic = ABUS_MALLOC(sizeof(abus_topic_t));
-    ABUS_MEMMSET(topic, sizeof(abus_topic_t), 0);
+    ABUS_MEMMSET(topic, 0, sizeof(abus_topic_t));
     if (topic)
     {
         topic->name = name;
@@ -256,6 +257,8 @@ uint32_t abus_get_received(abus_subcriber_t *subcriber)
 
 abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *subcriber)
 {
+	  abus_subcriber_t *sub;
+
     if (topic->sub_hash_table)
     {
         /*use hash cache*/
@@ -266,7 +269,6 @@ abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *su
     else
     {
     __THIS:
-        abus_subcriber_t *sub;
         CVECTOR_FOREACH(topic->subcribers, sub, abus_subcriber_t)
         {
             if (strcmp(sub->acc->name, subcriber) == 0)
@@ -300,6 +302,7 @@ uint32_t abus_get_received_by_name(const char *topic, const char *subcriber)
             abus_get_received(sub);
         }
     }
+		return 0;
 }
 void abus_topic_show(const char *topic)
 {

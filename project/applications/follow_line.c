@@ -12,13 +12,13 @@ int asub_callback2(abus_topic_t *sub)
 	LOG_D("sub_callback2\n");
 	return 0;
 }
-int line_dir_sub_callback(abus_topic_t *sub)
-{
-	//读取数据
-	afifo_out_data(sub->datafifo, &infrared_package.move_direction, sizeof(infrared_package.move_direction));
-	LOG_D("line_dir_sub_callback:%d\n", infrared_package.move_direction);
-	return 0;
-}
+//int line_dir_sub_callback(abus_topic_t *sub)
+//{
+//	//读取数据
+//	afifo_out_data(sub->fifo, &infrared_package.move_direction, sizeof(infrared_package.move_direction));
+//	LOG_D("line_dir_sub_callback:%d\n", infrared_package.move_direction);
+//	return 0;
+//}
 int asub_callback(abus_topic_t *sub)
 {
 	LOG_D("sub_callback\n");
@@ -80,12 +80,12 @@ void follow_line(void *parameter)
 			- infrared_package.infrared_data[3] * factor3 +
 			infrared_package.infrared_data[4] * factor3);
 
-		if(Is_Spacial_point(&infrared_package)){
-			uint8_t bool_=1;
-		abus_public(&line_spacial_point_acc, &bool_);
+//		if(Is_Spacial_point(&infrared_package)){
+//			uint8_t bool_=1;
+//		abus_public(&line_spacial_point_acc, &bool_);
 
-		}
-				abus_public(&line_error_acc, &error);
+//		}
+//				abus_public(&line_error_acc, &error);
 
 		rt_thread_mdelay(15);
 

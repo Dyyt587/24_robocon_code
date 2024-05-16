@@ -12,6 +12,7 @@ int abus_sem_init(abus_sem_t *sem, unsigned int value)
 #if POSIX
 	sem_init(&sem->sem, 1, value);
 #endif
+	return 0;
 }
 
 int abus_sem_close(abus_sem_t *sem)

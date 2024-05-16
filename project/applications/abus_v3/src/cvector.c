@@ -140,7 +140,7 @@ citerator cvector_end(const cvector cv)
 	return (char *)cv->cv_pdata + (cv->cv_size * cv->cv_len);
 }
 
-inline static void cvmemove_foreward(const cvector cv, void *from, void *to)
+ static void cvmemove_foreward(const cvector cv, void *from, void *to)
 {
 	size_t size = cv->cv_size;
 	char *p;
@@ -149,7 +149,7 @@ inline static void cvmemove_foreward(const cvector cv, void *from, void *to)
 	return;
 }
 
-inline static void cvmemove_backward(const cvector cv, void *from, void *to)
+ static void cvmemove_backward(const cvector cv, void *from, void *to)
 {
 	memcpy(from, (char *)from + cv->cv_size, (char *)to - (char *)from);
 	return;

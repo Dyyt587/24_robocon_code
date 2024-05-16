@@ -3,6 +3,7 @@
 #define _ABUS_DEF_H_
 
 #include <stdint.h>
+#include "afifo.h"
 // 链表结点
     typedef struct LNode
     {

@@ -40,7 +40,7 @@ void setup()
 //1 	rt_enter_critical();
 //  test_track();
 //	rt_exit_critical();
-	test();
+	//test();
 }
 
 void loop() 

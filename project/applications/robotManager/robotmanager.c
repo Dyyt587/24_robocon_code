@@ -393,7 +393,7 @@ void rbmg_handle(void *parameter)
 //            LOG_D("action completion");
 //        }
         rt_thread_mdelay(50);
-    //}
+    }
 }
 
 int rbmg_init(void)
