@@ -26,6 +26,7 @@ extern "C"
 #include "afifo.h"
 #include "stdbool.h"
 #include "abus_def.h"
+#include "abus_deamon.h"
 
 #define MaxSize 10
 #define NullKey 0

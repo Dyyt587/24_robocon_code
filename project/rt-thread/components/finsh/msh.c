@@ -280,7 +280,7 @@ static int _msh_exec_cmd(char *cmd, rt_size_t length, int *retp)
     if (cmd0_size == 0)
         return -RT_ERROR;
 
-    cmd_func = msh_get_cmd(cmd, cmd0_size);
+    cmd_func =    (cmd, cmd0_size);
     if (cmd_func == RT_NULL)
         return -RT_ERROR;
 

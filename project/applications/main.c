@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-15 09:59:09
+ * @LastEditTime: 2024-05-17 16:43:48
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -25,6 +25,9 @@
 #endif /* RT_USING_NANO */
 
 #include "ulog.h"
+#include "abus.h"
+#include "abus_deamon.h"
+
 // #include "Emm_V5.h"
 #include "follow_line.h"
 // #include "drv_stepper_motor.h"
@@ -51,7 +54,22 @@
 #define THREAD_TIMESLICE_CHASSIS 5
 
 
+typedef struct
+{
+	int cnt;
+} test_data_t;
 
+abus_filter filter1;
+abus_filter filter2;
+abus_filter filter3;
+int abus_subcribe_cb1(abus_subcriber_t *subcriber, void *data)
+{
+	test_data_t *data1 = (test_data_t *)data;
+	printf("sub %s data cnt %d\n", subcriber->acc->name, data1->cnt);
+	return 0;
+}
+
+test_data_t test_data1;
 
 
 int main(void)
@@ -140,10 +158,89 @@ int main(void)
 	// }
 
 	motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
+
+
+
+
+
+	// 创建一个用户
+	abus_acc_t *acc1 = abus_accounter_create("acc1", &filter1);
+	abus_acc_t *acc2 = abus_accounter_create("acc2", &filter2);
+	abus_acc_t *acc3 = abus_accounter_create("acc3", &filter3);
+	// 创建话题
+	abus_topic_cfg cfg = {
+		.hash_table_size = 16,
+		.topic_data_size = sizeof(test_data_t),
+	};
+	abus_topic_t *topic1 = abus_topic_create("topic1", &cfg, "just a desc");
+	abus_topic_t *topic2 = abus_topic_create("topic2", &cfg, "just a desc2");
+	printf("sub start\n");
+	abus_subcribe_cfg_t cfg_sub = {
+		.fifo = NULL,
+		.filter = &filter1,
+		.cb = abus_subcribe_cb1,
+		.is_async = 0,
+		.sem = NULL,
+	};
+
+	// abus_subcribe("topic1", "acc1", &cfg_sub);
+	abus_subcribe("topic1", "acc2", &cfg_sub);
+	abus_subcribe("topic1", "acc3", &cfg_sub);
+	abus_subcribe("topicnull", "acc1", &cfg_sub);
+
+	test_data1.cnt = 10;
+	abus_publish("topic1", &test_data1);
+
+	printf("Hello CMake.\n");
+
+	ABUS_TOPIC_CREATE("topicmicro", test_data_t, 16);
+
+	// ABUS_SUB("acc1", "topic1", 0, abus_subcribe_cb1, NULL);
+
+	ABUS_SUB_FORCE("accnull", "topic1", 0, abus_subcribe_cb1, NULL, NULL);
+	printf("Hello CMake.\n");
+	ABUS_SUB("acc1", "topicmicro", 0, abus_subcribe_cb1, NULL);
+	ABUS_SUB("acc2", "topicmicro", 0, abus_subcribe_cb1, NULL);
+	abus_publish("topicmicro", &test_data1);
+	abus_publish("topicmicro", &test_data1);
+
+	abus_topic_show("topic1");
+
+	abus_sem_t sem1;
+	abus_subcribe_cfg_t cfg_sub1 = {
+		.fifo = NULL,
+		.filter = &filter1,
+		.cb = NULL,
+		.is_async = 1,
+		.sem = &sem1,
+	};
+
+	abus_subcribe("topic1", "acc1", &cfg_sub1);
+	abus_topic_show("topic1");
+
+	abus_publish("topic1", &test_data1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//abus_deamon_start();
 	//motor_set_pos(M3508_1_CAN1, 3.1415926*2);
 	///////////////////////////////////////////////////
 	while (1)
 	{
+			//abus_publish("topic1", &test_data1);
+
 		// motor_set_pos(	M3508_1_CAN1, 100);
 		rt_pin_write(LED0_PIN, PIN_HIGH);
 		rt_thread_mdelay(500);

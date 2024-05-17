@@ -415,6 +415,24 @@ int motor_set_pos(int id, float value)
     return M_EOK;
 }
 /**
+ * @brief 设置电机的位置
+ *
+ * @param id 电机id
+ * @param value 位置值，单位rad
+ * @return int 获取状态
+ */
+int motor_set_relative_pos(int id, float value)
+{
+    motor_t *motor = motor_get(id);
+    MOTOR_ASSERT(motor);
+
+    motor->flag_run_mode = MOTOR_MODE_POS;
+    motor->tar_pos += value * motor->ratio;
+
+    return M_EOK;
+}
+
+/**
  * @brief 设置电机的力矩
  *
  * @param id    电机id
