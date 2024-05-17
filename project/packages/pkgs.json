@@ -10,6 +10,11 @@
   "name": "RT_VSNPRINTF_FULL"
  }, 
  {
+  "path": "/packages/system/aUnity", 
+  "ver": "latest", 
+  "name": "AUNITY"
+ }, 
+ {
   "path": "/packages/system/CMSIS/CMSIS_5", 
   "ver": "v5.9.0", 
   "name": "CMSIS_5"
@@ -23,6 +28,11 @@
   "path": "/packages/system/perf_counter", 
   "ver": "v2.2.4.1", 
   "name": "PERF_COUNTER"
+ }, 
+ {
+  "path": "/packages/signalprocess/APID", 
+  "ver": "latest", 
+  "name": "APID"
  }, 
  {
   "path": "/packages/arduino/RTduino", 

@@ -224,6 +224,8 @@
 #define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
 #define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
 #define PKG_USING_RT_VSNPRINTF_FULL_LATEST_VERSION
+#define PKG_USING_AUNITY
+#define PKG_USING_AUNITY_LATEST_VERSION
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
 
@@ -258,6 +260,8 @@
 
 /* Signal Processing and Control Algorithm Packages */
 
+#define PKG_USING_APID
+#define PKG_USING_APID_LATEST_VERSION
 
 /* miscellaneous packages */
 
