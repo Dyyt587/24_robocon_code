@@ -63,6 +63,7 @@
         uint16_t hash_table_size;
         uint16_t topic_data_size;
     } abus_topic_cfg;
+    typedef void (*abus_type_show_fun)(void *data);
     typedef struct abusTopic
     {
         const char *name;
@@ -71,6 +72,8 @@
         hashTable *sub_hash_table; // 可选的hash快速索引
         abus_topic_cfg cfg;
         const char *desc; // 可选的订阅结构体字符串
+        const char* token;//可选的用于可视化数据的数字解析名牌
+        abus_type_show_fun show;
     } abus_topic_t;
 
 #endif

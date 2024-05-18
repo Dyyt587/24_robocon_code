@@ -11,6 +11,14 @@
 static hashTable *topics_Table;
 static uint8_t is_init = 0;
 
+void abus_topic_set_show(const char *topic, abus_type_show_fun show)
+{
+    abus_topic_t *top = abus_topic_find_by_name(topic);
+    if (top)
+    {
+        top->show = show;
+    }
+}
 static int abus_cb_async_notify(abus_subcriber_t *subcriber, void *data)
 {
     if (subcriber->sem)
@@ -49,7 +57,7 @@ int abus_subcriber_wait_by_name(const char *topic, const char *subcriber, uint32
 int abus_subcribe(const char *topic, const char *accounter, abus_subcribe_cfg_t *cfg)
 {
     abus_subcriber_t subcriber;
-    ABUS_MEMMSET(&subcriber,  0,sizeof(abus_subcriber_t));
+    ABUS_MEMMSET(&subcriber, 0, sizeof(abus_subcriber_t));
 
     abus_topic_t *top = abus_topic_find_by_name(topic);
     abus_acc_t *acc = abus_accounter_find_by_name(accounter);
@@ -126,7 +134,7 @@ int abus_unsubcribe(const char *topic, const char *subcribe)
         return -1;
     if (sub == NULL)
         return -2;
-		return 0;
+    return 0;
 }
 
 int abus_publish(const char *topic, void *data)
@@ -257,7 +265,7 @@ uint32_t abus_get_received(abus_subcriber_t *subcriber)
 
 abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *subcriber)
 {
-	  abus_subcriber_t *sub;
+    abus_subcriber_t *sub;
 
     if (topic->sub_hash_table)
     {
@@ -302,7 +310,7 @@ uint32_t abus_get_received_by_name(const char *topic, const char *subcriber)
             abus_get_received(sub);
         }
     }
-		return 0;
+    return 0;
 }
 void abus_topic_show(const char *topic)
 {

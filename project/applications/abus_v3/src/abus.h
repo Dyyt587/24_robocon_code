@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-05-15 22:20:48
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-15 22:54:58
+ * @LastEditTime: 2024-05-17 21:27:00
  * @FilePath: \24_robocon_code\project\applications\abus_v3\src\abus.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -94,6 +94,8 @@ extern "C"
     void DisplayHashTable(hashTable *H);
 
     abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
+    abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
+    void abus_topic_set_show(const char *topic,abus_type_show_fun show);
     void abus_topic_destroy(abus_topic_t *topic);
     abus_topic_t *abus_topic_find_by_name(const char *name);
     abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *subcriber);
