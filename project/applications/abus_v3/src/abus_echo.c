@@ -25,6 +25,7 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <posix/string.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdarg.h>
@@ -86,11 +87,11 @@ int find_any_substring(const char *str, int format, ...)
         {
             break;
         }
-        // printf("in '%s'find '%s' \n", str,substring);
+        // ABUS_HASH_PRINTF("in '%s'find '%s' \n", str,substring);
         if (strstr(str, substring))
         {
             va_end(args);
-            // printf("in '%s'found '%s' \n", str,substring);
+            // ABUS_HASH_PRINTF("in '%s'found '%s' \n", str,substring);
             return 1;
         }
     }
@@ -107,61 +108,61 @@ void printf_data(char *str, uint8_t **buf)
     if (find_any_substring(str, 2, "int32_t ", "int "))
     {
         bitArray.i32 = *(int32_t *)(*buf);
-        printf("%18s\t%d\n", str, bitArray.i32);
+        ABUS_HASH_PRINTF("%18s\t%d\n", str, bitArray.i32);
         TTOFFSET((*buf), int32_t);
     }
     else if (find_any_substring(str, 2, "int16_t ", "short"))
     {
         bitArray.i16 = *(int16_t *)(*buf);
-        printf("%18s\t%d\n", str, bitArray.u16);
+        ABUS_HASH_PRINTF("%18s\t%d\n", str, bitArray.u16);
         TTOFFSET((*buf), int16_t);
     }
     else if (find_any_substring(str, 2, "int8_t ", "char"))
     {
         bitArray.i8 = *(int8_t *)(*buf);
-        printf("%18s\t%d\n", str, bitArray.u8);
+        ABUS_HASH_PRINTF("%18s\t%d\n", str, bitArray.u8);
         TTOFFSET((*buf), int8_t);
     }
     else if (find_any_substring(str, 2, "uint64_t ", "unsigned long long"))
     {
         bitArray.u64 = *(uint64_t *)(*buf);
-        printf("%18s\t%u\n", str, bitArray.u64);
+        ABUS_HASH_PRINTF("%18s\t%llu\n", str, bitArray.u64);
         TTOFFSET((*buf), uint64_t);
     }
     else if (find_any_substring(str, 2, "int64_t ", "long long"))
     {
         bitArray.i64 = *(int64_t *)(*buf);
-        printf("%18s\t%u\n", str, bitArray.u64);
+        ABUS_HASH_PRINTF("%18s\t%llu\n", str, bitArray.u64);
         TTOFFSET((*buf), int64_t);
     }
     else if (find_any_substring(str, 2, "uint32_t ", "unsigned int", "int"))
     {
         bitArray.u32 = *(uint32_t *)(*buf);
-        printf("%18s\t%u\n", str, bitArray.u32);
+        ABUS_HASH_PRINTF("%18s\t%u\n", str, bitArray.u32);
         TTOFFSET((*buf), uint32_t);
     }
     else if (find_any_substring(str, 2, "uint16_t ", "unsigned short", "short"))
     {
         bitArray.u16 = *(uint16_t *)(*buf);
-        printf("%18s\t%u\n", str, bitArray.u16);
+        ABUS_HASH_PRINTF("%18s\t%u\n", str, bitArray.u16);
         TTOFFSET((*buf), uint16_t);
     }
     else if (find_any_substring(str, 2, "uint8_t", "unsigned char"))
     {
         bitArray.u8 = *(uint8_t *)(*buf);
-        printf("%18s\t%u\n", str, bitArray.u8);
+        ABUS_HASH_PRINTF("%18s\t%u\n", str, bitArray.u8);
         TTOFFSET((*buf), uint8_t);
     }
     else if (find_any_substring(str, 2, "float", "f32"))
     {
         bitArray.f32 = *(float *)(*buf);
-        printf("%18s\t%f\n", str, bitArray.f32);
+        ABUS_HASH_PRINTF("%18s\t%f\n", str, bitArray.f32);
         TTOFFSET((*buf), float);
     }
     else if (find_any_substring(str, 2, "double", "f64"))
     {
         bitArray.f64 = *(double *)(*buf);
-        printf("%18s\t%f\n", str, bitArray.f64);
+        ABUS_HASH_PRINTF("%18s\t%f\n", str, bitArray.f64);
         TTOFFSET((*buf), double);
     }
 }
@@ -188,7 +189,7 @@ void abus_echo_data_by_token(const char *str, void *buf)
     char *end = find_struct_end(str_copy); // 找到 '}' 开始的位置
     // uint8_t **buf_ptr = &buf;
     replace_char_in_place(end, ';', ':');
-    printf("%s\n", end);
+    ABUS_HASH_PRINTF("%s\n", end);
     *(--(end)) = '\0';
 
     token = strtok_r(str_copy, ";", &last); // 开始分割
@@ -196,7 +197,7 @@ void abus_echo_data_by_token(const char *str, void *buf)
     for (; token != NULL; token = strtok_r(NULL, ";", &last))
     {
         skip_whitespace(&token);
-        // printf("%s\n", token); // 打印分割后的字符串
+        // ABUS_HASH_PRINTF("%s\n", token); // 打印分割后的字符串
         printf_data(token, (uint8_t **)&buf);
     }
 
@@ -204,7 +205,7 @@ void abus_echo_data_by_token(const char *str, void *buf)
 }
 
 
-int main()
+int abus_echo_test()
 {
     test_data_t test_data = {
         .b = 255,
@@ -218,7 +219,7 @@ int main()
         .j = 10.456,
         .k = 1.5455678901,
     };
-    printf("%s\n",test_data_t_name);
+    ABUS_HASH_PRINTF("%s\n",test_data_t_name);
     abus_echo_data_by_token(test_data_t_name,&test_data);
 
     

@@ -221,7 +221,8 @@ int main(void)
 	abus_publish("topic1", &test_data1);
 
 
-
+extern int abus_echo_test();
+ abus_echo_test();
 
 
 
