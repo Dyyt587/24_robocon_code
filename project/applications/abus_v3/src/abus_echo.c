@@ -1,16 +1,16 @@
 
 /**
  * @brief 使用字符实现订阅数据的自动匹配
- * 
- *  
- * 
- *  
+ *
+ *
+ *
+ *
  *  c --字符
  *  s --字符串
  *  d --整形
  *  f --float
  *  lf --double
- *  
+ *
  *  s16 --最长16个字符
  *  d32 --int  d16 --short d8 --char
  *  ud --无符号整形
@@ -45,8 +45,8 @@ ABUS_DATA_TYPE_CREATE(
     int64_t i;
 
     float j;
-//    double k;
-, test_data_t);
+    //    double k;
+    , test_data_t);
 #pragma pack()
 
 // 函数用于找到 '{' 并返回其后面的部分
@@ -64,10 +64,10 @@ char *find_struct_end(char *str)
 
 void skip_whitespace(char **ptr)
 {
-//    while (**ptr && isspace((unsigned char)**ptr))
-//    {
-//        (*ptr)++;
-//    }
+    //    while (**ptr && isspace((unsigned char)**ptr))
+    //    {
+    //        (*ptr)++;
+    //    }
 }
 
 // 函数定义
@@ -102,7 +102,7 @@ int find_any_substring(const char *str, int format, ...)
     return 0;
 }
 
-void printf_data(char *str, uint8_t **buf)__attribute__((optnone))
+void printf_data(char *str, uint8_t **buf) __attribute__((optnone))
 {
     BitArray bitArray;
 
@@ -204,7 +204,14 @@ void abus_echo_data_by_token(const char *str, void *buf)
 
     free(str_copy); // 释放副本字符串的内存
 }
+void abus_type_show_fun(abus_topic_t *topic, void *data)
+{
+    if(topic->token){
+        
+    }else{
 
+    }
+}
 
 int abus_echo_test()
 {
@@ -218,11 +225,10 @@ int abus_echo_test()
         .h = 8,
         .i = 9999,
         .j = 10.456,
-//        .k = 1.5455678901,
+        //        .k = 1.5455678901,
     };
-    ABUS_HASH_PRINTF("%s\n",test_data_t_name);
-    abus_echo_data_by_token(test_data_t_name,&test_data);
+    ABUS_HASH_PRINTF("%s\n", test_data_t_name);
+    abus_echo_data_by_token(test_data_t_name, &test_data);
 
-    
     return 0;
 }
