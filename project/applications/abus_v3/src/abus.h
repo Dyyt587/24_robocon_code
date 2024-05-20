@@ -95,8 +95,12 @@ extern "C"
 
     abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
     abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
-    void abus_topic_set_show(const char *topic,abus_type_show_fun show);
+
     void abus_topic_destroy(abus_topic_t *topic);
+
+    void abus_topic_set_show(abus_topic_t *topic,abus_type_show_fun show,const char* token);
+    void abus_topic_set_show_by_name(const char *topic,abus_type_show_fun show,const char* token);
+
     abus_topic_t *abus_topic_find_by_name(const char *name);
     abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *subcriber);
 

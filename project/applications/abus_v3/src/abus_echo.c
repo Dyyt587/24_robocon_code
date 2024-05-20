@@ -35,17 +35,17 @@
 
 #pragma pack(1)
 ABUS_DATA_TYPE_CREATE(
+    uint64_t e;
     uint8_t b;
     uint16_t c;
     uint32_t d;
-    uint64_t e;
     int8_t f;
     int16_t g;
     int32_t h;
     int64_t i;
 
     float j;
-    double k;
+//    double k;
 , test_data_t);
 #pragma pack()
 
@@ -64,15 +64,16 @@ char *find_struct_end(char *str)
 
 void skip_whitespace(char **ptr)
 {
-    while (**ptr && isspace((unsigned char)**ptr))
-    {
-        (*ptr)++;
-    }
+//    while (**ptr && isspace((unsigned char)**ptr))
+//    {
+//        (*ptr)++;
+//    }
 }
 
 // 函数定义
 int find_any_substring(const char *str, int format, ...)
 {
+
     va_list args;
     const char *substring;
 
@@ -101,7 +102,7 @@ int find_any_substring(const char *str, int format, ...)
     return 0;
 }
 
-void printf_data(char *str, uint8_t **buf)
+void printf_data(char *str, uint8_t **buf)__attribute__((optnone))
 {
     BitArray bitArray;
 
@@ -217,7 +218,7 @@ int abus_echo_test()
         .h = 8,
         .i = 9999,
         .j = 10.456,
-        .k = 1.5455678901,
+//        .k = 1.5455678901,
     };
     ABUS_HASH_PRINTF("%s\n",test_data_t_name);
     abus_echo_data_by_token(test_data_t_name,&test_data);
