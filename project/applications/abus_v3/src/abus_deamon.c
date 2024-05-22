@@ -19,7 +19,6 @@ void* abus_deamon_entry(void* arg)
     {
         printf("abus_agent_data_t size is %zd\n",sizeof(abus_agent_data_t));
         abus_os_delay(1);
-        // abus_osal_sleep(1000);
     }
 }
 void abus_deamon_start(void)

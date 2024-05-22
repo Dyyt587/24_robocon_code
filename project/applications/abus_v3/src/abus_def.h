@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include "afifo.h"
+ struct abusTopic;
 // 链表结点
     typedef struct LNode
     {
@@ -63,7 +64,7 @@
         uint16_t hash_table_size;
         uint16_t topic_data_size;
     } abus_topic_cfg;
-    typedef void (*abus_type_show_fun)(abus_topic_t*topic,void *data);
+    typedef void (*abus_type_show_fun)(const char* token,void *data);
     typedef struct abusTopic
     {
         const char *name;

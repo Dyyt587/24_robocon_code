@@ -64,10 +64,10 @@ char *find_struct_end(char *str)
 
 void skip_whitespace(char **ptr)
 {
-    //    while (**ptr && isspace((unsigned char)**ptr))
-    //    {
-    //        (*ptr)++;
-    //    }
+    while (**ptr && isspace((unsigned char)**ptr))
+    {
+        (*ptr)++;
+    }
 }
 
 // 函数定义
@@ -204,15 +204,32 @@ void abus_echo_data_by_token(const char *str, void *buf)
 
     free(str_copy); // 释放副本字符串的内存
 }
-void abus_type_show_fun(abus_topic_t *topic, void *data)
+void abus_type_show_fun_1(abus_topic_t *topic, void *data)
 {
-    if(topic->token){
-        
-    }else{
-
+    if (topic->token)
+    {
+    }
+    else
+    {
     }
 }
-
+void abus_echo_by_name(const char *topic, int rate) // 创建一个订阅者，按照发布次数来打印数据
+{
+    abus_topic_t *top = abus_topic_find_by_name(topic);
+    abus_echo(top, rate);
+}
+void abus_echo(abus_topic_t *topic, int rate)
+{
+    if (topic)
+    {
+        topic->show = abus_echo_data_by_token;
+    }
+    else
+    {
+        while (1)
+            ;
+    }
+}
 int abus_echo_test()
 {
     test_data_t test_data = {
@@ -227,7 +244,7 @@ int abus_echo_test()
         .j = 10.456,
         //        .k = 1.5455678901,
     };
-    ABUS_HASH_PRINTF("%s\n", test_data_t_name);
+    // ABUS_HASH_PRINTF("%s\n", test_data_t_name);
     abus_echo_data_by_token(test_data_t_name, &test_data);
 
     return 0;

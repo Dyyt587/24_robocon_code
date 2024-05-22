@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-05-17 16:29:06
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-18 16:41:11
+ * @LastEditTime: 2024-05-22 19:14:09
  * @FilePath: \project\applications\abus_v3\src\abus_echo.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -34,7 +34,7 @@ typedef union
 #define TTOFFSET(src, offsetof) src += sizeof(offsetof);
 
 #define ABUS_DATA_TYPE_CREATE(__type_data__,__struct_name__)  \
-    typedef struct{ __type_data__ } __struct_name__; const char* __struct_name__##_name = TOSTR(typedef struct{ __type_data__ }__struct_name__;);
+    typedef struct{ __type_data__ } __struct_name__; static const char* __struct_name__##_name = TOSTR(typedef struct{ __type_data__ }__struct_name__;);
 
 #define ABUS_ECHO_EXPORT(__TOPIC__,__struct_name__)  __TOPIC__.token = __struct_name__##_name;
 

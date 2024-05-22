@@ -53,8 +53,8 @@ void follow_line(void *parameter)
 	infrared_package.move_direction = front;
 
 	chassis_ctrl_t ctrl;
-	ctrl.type = 1;
-	ctrl.pos.z_rad = 400;
+//	ctrl.type = 1;
+//	ctrl.pos.z_rad = 400;
 	rt_thread_mdelay(1000);
 	while (1)
 	{

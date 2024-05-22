@@ -11,7 +11,7 @@
 static hashTable *topics_Table;
 static uint8_t is_init = 0;
 
-void abus_topic_set_show(const char *topic, abus_type_show_fun show)
+void abus_topic_set_show_by_name(const char *topic, abus_type_show_fun show,const char* token)
 {
     abus_topic_t *top = abus_topic_find_by_name(topic);
     if (top)
@@ -63,7 +63,7 @@ int abus_subcribe(const char *topic, const char *accounter, abus_subcribe_cfg_t 
     abus_acc_t *acc = abus_accounter_find_by_name(accounter);
     if (topic == NULL)
     {
-        ABUS_HASH_PRINTF("topic is null\n");
+        ABUS_HASH_PRINTF("topic name is null\n");
         return -1;
     }
     if (accounter == NULL)
@@ -73,7 +73,8 @@ int abus_subcribe(const char *topic, const char *accounter, abus_subcribe_cfg_t 
     }
     if (top == NULL)
     {
-        ABUS_HASH_PRINTF("topic is null\n");
+			        ABUS_HASH_PRINTF("[abus sub]topic(%s) is null\n",topic);
+
         return -3;
     }
     subcriber.acc = acc;
@@ -173,6 +174,8 @@ void abus_topic_init(void)
     if (is_init == 0)
     {
         is_init = 1;
+				ABUS_HASH_PRINTF("Init topics hash table\n");
+	
         topics_Table = HashTableInit(TOPIC_TABLE_SIZE);
     }
 }
@@ -195,6 +198,7 @@ abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const cha
         topic->desc = desc;
         if (cfg->hash_table_size)
         {
+					  ABUS_HASH_PRINTF("Init sub hash table\n");
             topic->sub_hash_table = HashTableInit(cfg->hash_table_size);
         }
         else

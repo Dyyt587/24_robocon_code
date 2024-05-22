@@ -1,4 +1,4 @@
-﻿/*
+/*
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-05-15 22:20:48
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
@@ -118,6 +118,9 @@ extern "C"
 
     void abus_topic_show(const char *topic);
     void abus_acc_show(const char *acc);
+		
+		void abus_echo_by_name(const char *topic,int rate);//创建一个订阅者，按照发布次数来打印数据
+		void abus_echo(abus_topic_t *topic,int rate);
 
     /**
      * @brief 从订阅者独立缓冲区获取数据
