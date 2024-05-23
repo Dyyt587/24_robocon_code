@@ -414,6 +414,11 @@
               <FileType>1</FileType>
               <FilePath>applications\abus_v3\src\abus_hash.c</FilePath>
             </File>
+            <File>
+              <FileName>abus_port_rtthread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\abus_v3\src\abus_port_rtthread.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
