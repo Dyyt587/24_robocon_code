@@ -71,7 +71,7 @@ int abus_subcribe_cb1(abus_subcriber_t *subcriber, void *data)
 }
 int abus_subcribe_cb2(abus_subcriber_t *subcriber, void *data)
 {
-	LOG_D("test\r\n");
+	//LOG_D("test\r\n");
 	return 0;
 }
 

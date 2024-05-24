@@ -2,16 +2,16 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-15 11:28:27
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-04-23 17:42:52
+ * @LastEditTime: 2024-05-23 22:31:57
  * @FilePath: \abus-v3\abus_v3\abus_topic.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "abus.h"
-#define TOPIC_TABLE_SIZE 16
+
 static hashTable *topics_Table;
 static uint8_t is_init = 0;
 
-void abus_topic_set_show_by_name(const char *topic, abus_type_show_fun show,const char* token)
+void abus_topic_set_show_by_name(const char *topic, abus_type_show_fun show, const char *token)
 {
     abus_topic_t *top = abus_topic_find_by_name(topic);
     if (top)
@@ -73,7 +73,7 @@ int abus_subcribe(const char *topic, const char *accounter, abus_subcribe_cfg_t 
     }
     if (top == NULL)
     {
-			        ABUS_HASH_PRINTF("[abus sub]topic(%s) is null\n",topic);
+        ABUS_HASH_PRINTF("[abus sub]topic(%s) is null\n", topic);
 
         return -3;
     }
@@ -174,8 +174,8 @@ void abus_topic_init(void)
     if (is_init == 0)
     {
         is_init = 1;
-				ABUS_HASH_PRINTF("Init topics hash table\n");
-	
+        ABUS_HASH_PRINTF("Init topics hash table\n");
+
         topics_Table = HashTableInit(TOPIC_TABLE_SIZE);
     }
 }
@@ -198,7 +198,7 @@ abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const cha
         topic->desc = desc;
         if (cfg->hash_table_size)
         {
-					  ABUS_HASH_PRINTF("Init sub hash table\n");
+            ABUS_HASH_PRINTF("Init sub hash table\n");
             topic->sub_hash_table = HashTableInit(cfg->hash_table_size);
         }
         else
@@ -316,6 +316,7 @@ uint32_t abus_get_received_by_name(const char *topic, const char *subcriber)
     }
     return 0;
 }
+
 void abus_topic_show(const char *topic)
 {
     abus_topic_t *top = abus_topic_find_by_name(topic);
@@ -326,11 +327,25 @@ void abus_topic_show(const char *topic)
         ABUS_HASH_PRINTF("subcribers: \tname\tfifo\trx_cnt\n");
         CVECTOR_FOREACH(top->subcribers, sub, abus_subcriber_t)
         {
-            ABUS_HASH_PRINTF("\t\t\%s\t%d\t%d\n", sub->acc->name, (uint32_t)(sub->fifo ? sub->fifo->size : -1), sub->state.rx_cnt);
+            ABUS_HASH_PRINTF("\t\t\t%s\t%d\t%d\n", sub->acc->name, (uint32_t)(sub->fifo ? sub->fifo->size : -1), sub->state.rx_cnt);
         }
     }
     else
     {
         ABUS_HASH_PRINTF("%s is not found", topic);
     }
+}
+static void printKeyValuePair(const char *key, void *data, void *userdata)
+{
+    (void)userdata; // unused parameter
+    
+    ABUS_HASH_PRINTF("%16s\t%8p\n", key, data);
+}
+
+void abus_topic_show_all(void)
+{
+    ABUS_HASH_PRINTF("Key\t\t\tData\n");
+    //DisplayHashTable(topics_Table);
+    HashTableIterate(topics_Table, printKeyValuePair, NULL);
+
 }

@@ -30,7 +30,7 @@ int abus_subcribe_cb22(abus_subcriber_t *subcriber, void *data)
         speed.x_m_s = ctrl->x;
         speed.y_m_s = ctrl->y;
         speed.z_rad_s = ctrl->w;
-        LOG_D("sub speed x y w:%f,%f,%f", speed.x_m_s, speed.y_m_s, speed.z_rad_s);
+//        LOG_D("sub speed x y w:%f,%f,%f", speed.x_m_s, speed.y_m_s, speed.z_rad_s);
 
         chassis_set_speed(&chassis_mai, &speed);
     }
@@ -40,7 +40,7 @@ int abus_subcribe_cb22(abus_subcriber_t *subcriber, void *data)
         pos.x_m = ctrl->x;
         pos.y_m = ctrl->y;
         pos.z_rad = ctrl->w;
-        LOG_D("sub pos x y w:%f,%f,%f", pos.x_m, pos.y_m, pos.z_rad);
+//        LOG_D("sub pos x y w:%f,%f,%f", pos.x_m, pos.y_m, pos.z_rad);
 
         chassis_set_pos(&chassis_mai, &pos);
     }

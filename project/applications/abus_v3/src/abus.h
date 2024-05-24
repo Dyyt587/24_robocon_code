@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-05-15 22:20:48
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-20 11:08:59
+ * @LastEditTime: 2024-05-24 17:01:49
  * @FilePath: \24_robocon_code\project\applications\abus_v3\src\abus.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -34,13 +34,17 @@ extern "C"
 #define ABUS_MALLOC malloc
 #define ABUS_MEMMSET memset
 #define ABUS_FREE free
+
+#define ACCOUNTERS_TABLE_SIZE 32
+#define TOPIC_TABLE_SIZE 16
+
+
 #define ABUS_ASSSERT(x)                      \
     while (!(x))                             \
     {                                        \
         ABUS_HASH_PRINTF("assert failed\n"); \
     }
 
-    
 #define ABUS_TOPIC_CREATE(__topic, __dat_type, __hashSize)                    \
     {                                                                         \
         abus_topic_cfg ABUS_TOPIC_CGF##__dat_type = {                         \
@@ -92,16 +96,15 @@ extern "C"
     void HashTableRemove(hashTable *H, const char *key);
     void *HashTableSearch(hashTable *H, const char *key);
     void DisplayHashTable(hashTable *H);
-
-    
+    void HashTableIterate(hashTable *H, HashIterCallback callback, void *userdata);
 
     abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
     abus_topic_t *abus_topic_create(const char *name, abus_topic_cfg *cfg, const char *desc);
 
     void abus_topic_destroy(abus_topic_t *topic);
 
-    void abus_topic_set_show(abus_topic_t *topic,abus_type_show_fun show,const char* token);
-    void abus_topic_set_show_by_name(const char *topic,abus_type_show_fun show,const char* token);
+    void abus_topic_set_show(abus_topic_t *topic, abus_type_show_fun show, const char *token);
+    void abus_topic_set_show_by_name(const char *topic, abus_type_show_fun show, const char *token);
 
     abus_topic_t *abus_topic_find_by_name(const char *name);
     abus_subcriber_t *abus_subcribe_find_by_name(abus_topic_t *topic, const char *subcriber);
@@ -117,10 +120,13 @@ extern "C"
     int abus_publish_to(const char *topic, void *data, const char *subcriber);
 
     void abus_topic_show(const char *topic);
+    void abus_topic_show_all(void);
+
     void abus_acc_show(const char *acc);
-		
-		void abus_echo_by_name(const char *topic,int rate);//创建一个订阅者，按照发布次数来打印数据
-		void abus_echo(abus_topic_t *topic,int rate);
+    void abus_acc_show_all(void);
+
+    void abus_echo_by_name(const char *topic, int rate); // 创建一个订阅者，按照发布次数来打印数据
+    void abus_echo(abus_topic_t *topic, int rate);
 
     /**
      * @brief 从订阅者独立缓冲区获取数据

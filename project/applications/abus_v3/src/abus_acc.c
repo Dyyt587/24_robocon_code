@@ -1,5 +1,4 @@
 #include "abus.h"
-#define ACCOUNTERS_TABLE_SIZE 32
 static hashTable *accounters_Table;
 static uint8_t is_init = 0;
 void abus_acc_init(void)
@@ -52,4 +51,15 @@ void abus_acc_show(const char* acc)
     else {
         ABUS_HASH_PRINTF("%s is not found", acc);
     }
+}
+static void  printKeyValuePair(const char *key, void *data, void *userdata)
+{
+    (void)userdata; // unused parameter
+    
+    ABUS_HASH_PRINTF("%16s\t%8p\n", key, data);
+}
+void abus_acc_show_all(void)
+{
+        ABUS_HASH_PRINTF("Key\t\t\tData\n");
+    HashTableIterate(accounters_Table, printKeyValuePair, NULL);
 }

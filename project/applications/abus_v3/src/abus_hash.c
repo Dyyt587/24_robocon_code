@@ -2,13 +2,33 @@
 
 #include <math.h>
 
+// 定义回调函数类型
+
+// 遍历哈希表并调用回调函数
+void HashTableIterate(hashTable *H, HashIterCallback callback, void *userdata)
+{
+    int i;
+    for (i = 0; i < H->list_size; i++)
+    {
+        ABUS_HASH_PRINTF("list[%d]\n", i);
+        LNode *node = &H->list[i];
+        while (node->name != (const char *)NullKey && strcmp(node->name,"heap")!=0)
+        {
+            callback(node->name, node->data, userdata);
+            node = node->next;
+        }
+    }
+}
 // 初始化哈希表
 hashTable *HashTableInit(int size)
 {
     hashTable *H = 0;
     H = (hashTable *)ABUS_MALLOC(sizeof(hashTable));
+    ABUS_MEMMSET(H, 0, sizeof(hashTable));
     // 分配多个链表头结点空间
     H->list = (LNode *)ABUS_MALLOC((MaxSize > size ? MaxSize : size) * sizeof(LNode));
+    ABUS_MEMMSET(H->list, 0, sizeof((MaxSize > size ? MaxSize : size) * sizeof(LNode)));
+
     if (H == NULL)
         return NULL;
     H->list_size = (MaxSize > size ? MaxSize : size);
@@ -108,6 +128,8 @@ void HashTableInsert(hashTable *H, const char *key, void *data)
         // 创建新结点
         LNode *s;
         s = (LNode *)ABUS_MALLOC(sizeof(LNode));
+        ABUS_MEMMSET(s, 0, sizeof(LNode));
+ 
         s->name = key;
         s->data = data;
         // 头插法插入
