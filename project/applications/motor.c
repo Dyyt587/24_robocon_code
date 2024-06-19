@@ -2,7 +2,7 @@
  * @Author: Dyyt587 805207319@qq.com
  * @Date: 2024-03-03 15:24:57
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-14 17:23:45
+ * @LastEditTime: 2024-06-19 19:57:13
  * @FilePath: \project\applications\motor.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -615,15 +615,20 @@ void motor_set_ratio(int id, float ratio)
 }
 void motor_init(void)
 {
-    for (int i = 0; i < MOTOR_NUM; ++i)
-    {
-        motor_list[i].id = i;
-        motor_list[i].time = 0;
-        
-        motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
-        motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;
-        motor_updata_cfg(i, motor_list[i].flag_accept_level);
+    static uint8_t is_init=0;
+    if(is_init==0){
+        is_init=1;
+        for (int i = 0; i < MOTOR_NUM; ++i)
+        {
+            motor_list[i].id = i;
+            motor_list[i].time = 0;
+
+            motor_list[i].flag_run_mode = MOTOR_MODE_IDEL;
+            motor_list[i].flag_out_mode = MOTOR_MODE_IDEL;
+            motor_updata_cfg(i, motor_list[i].flag_accept_level);
+        }
     }
+
 }
 
 enum

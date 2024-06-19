@@ -20,7 +20,6 @@ extern "C"
 #include "motor_def.h"
 #include <stdint.h>
 #include <stdlib.h>
-#include "motor_dj_rm_driver.h"
 #include "Trajectory_planning.h"
 //#include "motor_planning.h"
 

@@ -1818,6 +1818,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\flow\main_flow.c</FilePath>
             </File>
+            <File>
+              <FileName>motor_emm_v5_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\motor_emm_v5_driver.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

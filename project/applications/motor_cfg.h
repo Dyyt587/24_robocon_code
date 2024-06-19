@@ -15,6 +15,8 @@
 extern "C"
 {
 #endif
+#include "motor_emm_v5_driver_cfg.h"
+#include "motor_dj_rm_driver_cfg.h"
 
 #ifndef NULL
 #define NULL 0
@@ -30,13 +32,18 @@ extern "C"
 #define MOTOR_INIT_OPS_PID_SPEED(index, __ops, __level, _speed_pid, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), _speed_pid, _pos_pid)
 
 #define MOTOR_ID_GET_OFFSET(index,start) ((index) - (start)-1)
-	
+
+#define MOTOR_OPS_CURVE_INIT() (&((CurveObjectType){.aTimes=0,\
+}))
+
 	#define MOTOR_DJ_MOTOR 1
+        #define MOTOR_EMM_V5_MOTOR 1
     /**
      * @brief 配置电机是否启用的宏，如果启用则定义，否则注释
      *
      */
-	#if MOTOR_DJ_MOTOR
+    
+#if MOTOR_DJ_MOTOR
      #define MOTOR_DJ_M3508_ID1_CAN1
     // #define MOTOR_DJ_M3508_ID2_CAN1
     // #define MOTOR_DJ_M3508_ID3_CAN1
@@ -94,6 +101,16 @@ extern "C"
      * 配置项目结束
      */
 #endif
+#if MOTOR_EMM_V5_MOTOR
+     #define MOTOR_EMMV5_ID1_SERIAL1
+//      #define MOTOR_EMMV5_ID2_SERIAL1
+//      #define MOTOR_EMMV5_ID3_SERIAL1
+//      #define MOTOR_EMMV5_ID4_SERIAL1
+//      #define MOTOR_EMMV5_ID5_SERIAL1
+//      #define MOTOR_EMMV5_ID6_SERIAL1
+
+#endif
+
     /**
      * @brief 电机抽象层电机id索引表
      */
@@ -250,404 +267,32 @@ extern "C"
         M6020_8_CAN2,
 #endif
 #endif
+
+#if MOTOR_EMM_V5_MOTOR
+#ifdef MOTOR_EMMV5_ID1_SERIAL1
+    MSP_1_SERIAL1,
+#endif
+#ifdef MOTOR_EMMV5_ID2_SERIAL1
+    MSP_2_SERIAL1,
+#endif
+#ifdef MOTOR_EMMV5_ID3_SERIAL1
+    MSP_3_SERIAL1,
+#endif
+#ifdef MOTOR_EMMV5_ID4_SERIAL1
+    MSP_4_SERIAL1,
+#endif
+#ifdef MOTOR_EMMV5_ID5_SERIAL1
+    MSP_5_SERIAL1,
+#endif
+#ifdef MOTOR_EMMV5_ID6_SERIAL1
+    MSP_6_SERIAL1,
+#endif
+#endif
+
         MOTOR_NUM
     };
 
-#define MOTOR_OPS_CURVE_INIT() (&((CurveObjectType){.aTimes=0,\
-}))
-    /**
-     * @brief 电机抽象层电机操作函数定义
-     */
-#ifdef MOTOR_DJ_M3508_ID1_CAN1
-#define MOTOR_DJ_M3508_ID1_CAN1_OPS           \
-    {                                         \
-        .curve = MOTOR_OPS_CURVE_INIT(),      \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_1], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID2_CAN1
-#define MOTOR_DJ_M3508_ID2_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_2], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID3_CAN1
-#define MOTOR_DJ_M3508_ID3_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_3], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN1
 
-#define MOTOR_DJ_M3508_ID4_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_4], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID5_CAN1
-#define MOTOR_DJ_M3508_ID5_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_5], \
-    }
-#endif
-
-#ifdef MOTOR_DJ_M3508_ID6_CAN1
-#define MOTOR_DJ_M3508_ID6_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_6], \
-    }
-
-#endif
-#ifdef MOTOR_DJ_M3508_ID7_CAN1
-#define MOTOR_DJ_M3508_ID7_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID8_CAN1
-#define MOTOR_DJ_M3508_ID8_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_8], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID1_CAN2
-#define MOTOR_DJ_M3508_ID1_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_1], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID2_CAN2
-#define MOTOR_DJ_M3508_ID2_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_2], \
-    }
-#endif
-
-#ifdef MOTOR_DJ_M3508_ID3_CAN2
-#define MOTOR_DJ_M3508_ID3_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_3], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID4_CAN2
-#define MOTOR_DJ_M3508_ID4_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_4], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID5_CAN2
-#define MOTOR_DJ_M3508_ID5_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_5], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID6_CAN2
-#define MOTOR_DJ_M3508_ID6_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_6], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID7_CAN2
-#define MOTOR_DJ_M3508_ID7_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M3508_ID8_CAN2
-#define MOTOR_DJ_M3508_ID8_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_8], \
-    }
-#endif
-
-#ifdef MOTOR_DJ_M2006_ID1_CAN1
-#define MOTOR_DJ_M2006_ID1_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_1], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID2_CAN1
-#define MOTOR_DJ_M2006_ID2_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_2], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID3_CAN1
-#define MOTOR_DJ_M2006_ID3_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_3], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID4_CAN1
-#define MOTOR_DJ_M2006_ID4_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_4], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID5_CAN1
-#define MOTOR_DJ_M2006_ID5_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_5], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID6_CAN1
-#define MOTOR_DJ_M2006_ID6_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_6], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID7_CAN1
-#define MOTOR_DJ_M2006_ID7_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID8_CAN1
-#define MOTOR_DJ_M2006_ID8_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_8], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID1_CAN2
-#define MOTOR_DJ_M2006_ID1_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_1], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID2_CAN2
-#define MOTOR_DJ_M2006_ID2_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_2], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID3_CAN2
-#define MOTOR_DJ_M2006_ID3_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_3], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID4_CAN2
-#define MOTOR_DJ_M2006_ID4_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_4], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID5_CAN2
-#define MOTOR_DJ_M2006_ID5_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_5], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID6_CAN2
-#define MOTOR_DJ_M2006_ID6_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_6], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID7_CAN2
-#define MOTOR_DJ_M2006_ID7_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M2006_ID8_CAN2
-#define MOTOR_DJ_M2006_ID8_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_8], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID1_CAN1
-#define MOTOR_DJ_M6020_ID1_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_5], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID2_CAN1
-#define MOTOR_DJ_M6020_ID2_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_6], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID3_CAN1
-#define MOTOR_DJ_M6020_ID3_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID4_CAN1
-#define MOTOR_DJ_M6020_ID4_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_8], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID5_CAN1
-#define MOTOR_DJ_M6020_ID5_CAN1_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN1_9], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID6_CAN1
-#define MOTOR_DJ_M6020_ID6_CAN1_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN1_10], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID7_CAN1
-#define MOTOR_DJ_M6020_ID7_CAN1_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN1_11], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID8_CAN1
-#define MOTOR_DJ_M6020_ID8_CAN1_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN1_12], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID1_CAN2
-#define MOTOR_DJ_M6020_ID1_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_5], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID2_CAN2
-#define MOTOR_DJ_M6020_ID2_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_6], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID3_CAN2
-#define MOTOR_DJ_M6020_ID3_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_7], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID4_CAN2
-#define MOTOR_DJ_M6020_ID4_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_8], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID5_CAN2
-#define MOTOR_DJ_M6020_ID5_CAN2_OPS           \
-    {                                         \
-        .driver = motor_dj_driver,            \
-        .control = motor_dj_ctr,              \
-        .user_data = &dj_motors[DJ_M_CAN2_9], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID6_CAN2
-#define MOTOR_DJ_M6020_ID6_CAN2_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN2_10], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID7_CAN2
-#define MOTOR_DJ_M6020_ID7_CAN2_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN2_11], \
-    }
-#endif
-#ifdef MOTOR_DJ_M6020_ID8_CAN2
-#define MOTOR_DJ_M6020_ID8_CAN2_OPS            \
-    {                                          \
-        .driver = motor_dj_driver,             \
-        .control = motor_dj_ctr,               \
-        .user_data = &dj_motors[DJ_M_CAN2_12], \
-    }
-#endif
 #ifdef __cplusplus
 }
 #endif

@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-06-19 17:16:21
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-06-19 17:17:58
+ * @LastEditTime: 2024-06-19 20:17:44
  * @FilePath: \project\applications\motor_def.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,6 +14,7 @@ extern "C"{
 
 #include <stdint.h>
 #include "Trajectory_planning.h"
+#include "apid.h"
 
 #define MOTOR_USING_AUTO_INIT   /* 自动初始化 */
 #define MOTOR_DEBUGING_AUTO_INIT  
@@ -26,6 +27,11 @@ extern "C"{
         MOTOR_MODE_POS = 3U,    /* 位置 rad */
         MOTOR_MODE_VOLTAGE,     /* 电压 mv 毫伏 */
         MOTOR_MODE_TEMP,        /* 温度 °C */
+
+        MOTOR_MODE_ACC,        /* 加速度 */
+        MOTOR_MODE_DAC,        /* 减速度 */
+        MOTOR_MODE_MAX_V,      /* 最大速度，通常用于位置模式限制速度 */
+
 
         MOTOR_MODE_SAFETY_STOP,  /* 紧急关闭 */
         MOTOR_MODE_SAFETY_START, /* 安全启动 */

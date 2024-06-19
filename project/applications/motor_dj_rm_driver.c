@@ -40,8 +40,12 @@ extern motor_t motor_list[MOTOR_NUM];
 #define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
                                                      .id = __id,         \
                                                      .can_id = __can_id, \
-                                                     .motor = &motor_list[__id],\
 }
+// #define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
+//                                                      .can_id = __can_id, \
+//                                                      .motor = &motor_list[__id],\
+// }
+
 
 motor_measure_t dj_motors[DJ_M_NUM] = {
 #ifdef MOTOR_DJ_M3508_ID1_CAN1

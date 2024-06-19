@@ -1,4 +1,6 @@
 #include "motor_cfg.h"
+#include "motor_dj_rm_driver_cfg.h"
+#include "motor_emm_v5_driver_cfg.h"
 #include "motor.h"
 #include "apid.h"
 
@@ -245,4 +247,9 @@ motor_t motor_list[MOTOR_NUM] =
 
 #endif
 
+#ifdef MOTOR_EMMV5_ID1_SERIAL1_OPS
+        MOTOR_INIT_OPS_PID_ALL(MSP_1_SERIAL1, MOTOR_EMMV5_ID1_SERIAL1_OPS, MOTOR_CONTROL_SUPPORT_POS,\
+        0,0,0),
+ 
+#endif
 }; // 电机列表
