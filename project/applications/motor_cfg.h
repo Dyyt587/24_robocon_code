@@ -29,10 +29,14 @@ extern "C"
 #define MOTOR_INIT_OPS_PID_POS(index, __ops, __level, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), (NULL), _pos_pid)
 #define MOTOR_INIT_OPS_PID_SPEED(index, __ops, __level, _speed_pid, _pos_pid) MOTOR_INIT_OPS_PID_ALL(index, __ops, __level, (NULL), _speed_pid, _pos_pid)
 
+#define MOTOR_ID_GET_OFFSET(index,start) ((index) - (start)-1)
+	
+	#define MOTOR_DJ_MOTOR 1
     /**
      * @brief 配置电机是否启用的宏，如果启用则定义，否则注释
      *
      */
+	#if MOTOR_DJ_MOTOR
      #define MOTOR_DJ_M3508_ID1_CAN1
     // #define MOTOR_DJ_M3508_ID2_CAN1
     // #define MOTOR_DJ_M3508_ID3_CAN1
@@ -89,12 +93,14 @@ extern "C"
     /**
      * 配置项目结束
      */
-
+#endif
     /**
      * @brief 电机抽象层电机id索引表
      */
     enum
     {
+#if MOTOR_DJ_MOTOR
+			
 #ifdef MOTOR_DJ_M3508_ID1_CAN1
         M3508_1_CAN1,
 #endif
@@ -242,6 +248,7 @@ extern "C"
 #endif
 #ifdef MOTOR_DJ_M6020_ID8_CAN2
         M6020_8_CAN2,
+#endif
 #endif
         MOTOR_NUM
     };

@@ -36,10 +36,11 @@ static struct rt_semaphore rx_sem; /* 用于接收消息的信号量 */
 static rt_device_t can_dev;        /* CAN 设备句柄 */
 static struct rt_ringbuffer *dj_m_ringfifo;
 static rt_timer_t tmr1 = RT_NULL;
-
+extern motor_t motor_list[MOTOR_NUM];
 #define DJ_MOTOR_MOTOR_ID(index, __id, __can_id) [index] = {             \
                                                      .id = __id,         \
                                                      .can_id = __can_id, \
+                                                     .motor = &motor_list[__id],\
 }
 
 motor_measure_t dj_motors[DJ_M_NUM] = {
