@@ -1,8 +1,11 @@
 #include "motor_cfg.h"
-#include "motor_dj_rm_driver_cfg.h"
-#include "motor_emm_v5_driver_cfg.h"
 #include "motor.h"
 #include "apid.h"
+
+
+#include "motor_dj_rm_driver_cfg.h"
+#include "motor_emm_v5_driver_cfg.h"
+
 
 motor_t motor_list[MOTOR_NUM] =
     {

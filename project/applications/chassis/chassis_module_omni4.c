@@ -1,26 +1,26 @@
-#include "chassis_module_omni3.h"
+#include "chassis_module_omni4.h"
 #include "math.h"
 
-#define DBG_TAG "Chassis.omni3"
+#define DBG_TAG "Chassis.omni4"
 #define DBG_LVL DBG_DBG
 #include <ulog.h>
 
 #ifdef CHASSIS_MODULE_MAI
-int module_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd);
+int module_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd);
 #ifdef CHASSIS_USING_MOTOR_HAL
-static int driver_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd);
+static int driver_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd);
 #endif
 
-chassis_omni3_data_t omni3_data;
+chassis_omni4_data_t omni4_data;
 
-chassis_ops_t ops_omni3 = {
-    .module = module_omni3,
+chassis_ops_t ops_omni4 = {
+    .module = module_omni4,
 #ifdef CHASSIS_USING_MOTOR_HAL
-    .driver = driver_omni3,
+    .driver = driver_omni4,
 #else
     .driver = NULL,
 #endif
-    .date = &omni3_data};
+    .date = &omni4_data};
 
 #define GEN3 (1.73205)
 #undef M_PI
@@ -34,11 +34,11 @@ chassis_ops_t ops_omni3 = {
 #define W2M_POS(wheel_pos)    M2W_SPEED(wheel_pos)            //电机速度到底盘速度的转换
 
 
-int module_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
+int module_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {
     if (output != NULL)
     {
-        chassis_omni3_data_t *data = (chassis_omni3_data_t *)output;
+        chassis_omni4_data_t *data = (chassis_omni4_data_t *)output;
         data->type = require_cmd;
         switch (require_cmd)
         {
@@ -62,7 +62,7 @@ int module_omni3(struct chassis *chassis, const void *output, const void *input,
     }
     if (input != NULL)
     {
-        chassis_omni3_data_t *data = (chassis_omni3_data_t *)input;
+        chassis_omni4_data_t *data = (chassis_omni4_data_t *)input;
         switch (require_cmd)
         {
         case CHASSIS_SPEED:
@@ -88,27 +88,29 @@ int module_omni3(struct chassis *chassis, const void *output, const void *input,
     return 0;
 }
 #ifdef CHASSIS_USING_MOTOR_HAL
-static int driver_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
+static int driver_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {
     if (input != NULL)
     {
         // 读取电机数据输出
-        chassis_omni3_data_t *data = (chassis_omni3_data_t *)input;
+        chassis_omni4_data_t *data = (chassis_omni4_data_t *)input;
         switch (require_cmd)
         {
         case CHASSIS_SPEED:
             // 速度控制
             // LOG_D("speed get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            data->motora = motor_get_speed(MOTOR_OMNI3_ID_1);
-            data->motorb = motor_get_speed(MOTOR_OMNI3_ID_2);
-            data->motorc = motor_get_speed(MOTOR_OMNI3_ID_3);
+            data->motora = motor_get_speed(MOTOR_OMNI4_ID_1);
+            data->motorb = motor_get_speed(MOTOR_OMNI4_ID_2);
+            data->motorc = motor_get_speed(MOTOR_OMNI4_ID_3);
+            data->motord = motor_get_speed(MOTOR_OMNI4_ID_4);
             break;
         case CHASSIS_POS:
             // 位置控制
             // LOG_D("pos get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-             data->motora = motor_get_pos(MOTOR_OMNI3_ID_1);
-             data->motorb = motor_get_pos(MOTOR_OMNI3_ID_2);
-             data->motorc = motor_get_pos(MOTOR_OMNI3_ID_3);
+             data->motora = motor_get_pos(MOTOR_OMNI4_ID_1);
+             data->motorb = motor_get_pos(MOTOR_OMNI4_ID_2);
+             data->motorc = motor_get_pos(MOTOR_OMNI4_ID_3);
+             data->motord = motor_get_pos(MOTOR_OMNI4_ID_4);
             break;
         default:
             break;
@@ -117,7 +119,7 @@ static int driver_omni3(struct chassis *chassis, const void *output, const void 
     if (output != NULL)
     {
         // 写入电机数据
-        chassis_omni3_data_t *data = (chassis_omni3_data_t *)output;
+        chassis_omni4_data_t *data = (chassis_omni4_data_t *)output;
         switch (require_cmd)
         {
         case CHASSIS_SPEED:
@@ -126,6 +128,7 @@ static int driver_omni3(struct chassis *chassis, const void *output, const void 
             motor_set_speed(MOTOR_MAI_ID_1, data->motora);
             motor_set_speed(MOTOR_MAI_ID_2, data->motorb);
             motor_set_speed(MOTOR_MAI_ID_3, data->motorc);
+            motor_set_speed(MOTOR_MAI_ID_4, data->motord);
             break;
         case CHASSIS_POS:
             // 位置控制
@@ -133,6 +136,7 @@ static int driver_omni3(struct chassis *chassis, const void *output, const void 
             motor_set_pos(MOTOR_MAI_ID_1, data->motora);
             motor_set_pos(MOTOR_MAI_ID_2, data->motorb);
             motor_set_pos(MOTOR_MAI_ID_3, data->motorc);
+            motor_set_pos(MOTOR_MAI_ID_4, data->motord);
             break;
         default:
             break;

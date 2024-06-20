@@ -62,8 +62,9 @@ extern "C"
 		uint16_t stepper_motor_current; /* 读取相电流 */
 	} stepper_motor_t;
 
-	extern int motor_vel;
-	extern int gap_time;
+#define STEPPER_MOTOR_NUM 11
+extern stepper_motor_t stepper_motor[STEPPER_MOTOR_NUM];
+
 	/**********************************************************
 	*** 注意：每个函数的参数的具体说明，请查阅下方的函数的注释说明
 	**********************************************************/

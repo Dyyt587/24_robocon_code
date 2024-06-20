@@ -5,6 +5,7 @@
 #define DBG_LVL DBG_LOG
 #include "motor.h"
 #include "motor_emm_v5_driver.h"
+#include "motor_emm_v5_driver_cfg.h"
 #include "math.h"
 
 #ifndef ABS
@@ -14,7 +15,6 @@ rt_mutex_t mutex_step = RT_NULL; // 互斥锁
 rt_sem_t emm_rx_sem = RT_NULL;
 int Emm_rx_size = 0;
 uint8_t Emm_rx_buf[64] = {0};
-#define STEPPER_MOTOR_NUM 11
 
 rt_device_t Emm_serial1 = RT_NULL;
 
@@ -22,57 +22,29 @@ rt_device_t Emm_serial1 = RT_NULL;
                                               .serial = &_serial,      \
                                               .stepper_motor_id = _id, \
 }
-#define STEPPER_MOTOR_ID1_SERIAL1
-#define STEPPER_MOTOR_ID2_SERIAL1
-#define STEPPER_MOTOR_ID3_SERIAL1
-#define STEPPER_MOTOR_ID4_SERIAL1
-#define STEPPER_MOTOR_ID5_SERIAL1
-#define STEPPER_MOTOR_ID6_SERIAL1
 
-enum
-{
-#ifdef STEPPER_MOTOR_ID1_SERIAL1
-    SP_M_ID1_SERIAL1,
-#endif
-#ifdef STEPPER_MOTOR_ID2_SERIAL1
-    SP_M_ID2_SERIAL1,
-#endif
-#ifdef STEPPER_MOTOR_ID3_SERIAL1
-    SP_M_ID3_SERIAL1,
-#endif
-#ifdef STEPPER_MOTOR_ID4_SERIAL1
-    SP_M_ID4_SERIAL1,
-#endif
-#ifdef STEPPER_MOTOR_ID5_SERIAL1
-    SP_M_ID5_SERIAL1,
-#endif
-#ifdef STEPPER_MOTOR_ID6_SERIAL1
-    SP_M_ID6_SERIAL1,
-#endif
-};
 stepper_motor_t stepper_motor[STEPPER_MOTOR_NUM] =
-{
-#ifdef STEPPER_MOTOR_ID1_SERIAL1
-    STEPPER_INIT(SP_M_ID1_SERIAL1, Emm_serial1, 1),
+    {
+#ifdef MOTOR_EMMV5_ID1_SERIAL1
+        STEPPER_INIT(SP_M_ID1_SERIAL1, Emm_serial1, 1),
 #endif
-#ifdef STEPPER_MOTOR_ID2_SERIAL1
-    STEPPER_INIT(SP_M_ID2_SERIAL1, Emm_serial1, 2),
+#ifdef MOTOR_EMMV5_ID2_SERIAL1
+        STEPPER_INIT(SP_M_ID2_SERIAL1, Emm_serial1, 2),
 #endif
-#ifdef STEPPER_MOTOR_ID3_SERIAL1
-    STEPPER_INIT(SP_M_ID3_SERIAL1, Emm_serial1, 3),
+#ifdef MOTOR_EMMV5_ID3_SERIAL1
+        STEPPER_INIT(SP_M_ID3_SERIAL1, Emm_serial1, 3),
 #endif
-#ifdef STEPPER_MOTOR_ID4_SERIAL1
-    STEPPER_INIT(SP_M_ID4_SERIAL1, Emm_serial1, 4),
+#ifdef MOTOR_EMMV5_ID4_SERIAL1
+        STEPPER_INIT(SP_M_ID4_SERIAL1, Emm_serial1, 4),
 #endif
-#ifdef STEPPER_MOTOR_ID5_SERIAL1
-    STEPPER_INIT(SP_M_ID5_SERIAL1, Emm_serial1, 5),
+#ifdef MOTOR_EMMV5_ID5_SERIAL1
+        STEPPER_INIT(SP_M_ID5_SERIAL1, Emm_serial1, 5),
 #endif
-#ifdef STEPPER_MOTOR_ID6_SERIAL1
-    STEPPER_INIT(SP_M_ID6_SERIAL1, Emm_serial1, 6),
+#ifdef MOTOR_EMMV5_ID6_SERIAL1
+        STEPPER_INIT(SP_M_ID6_SERIAL1, Emm_serial1, 6),
 #endif
 
 };
-
 
 int motor_emm_v5_driver(int id, uint16_t mode, float *value, void *user_data)
 {
@@ -81,14 +53,19 @@ int motor_emm_v5_driver(int id, uint16_t mode, float *value, void *user_data)
     stepper_motor_t *__motor = (stepper_motor_t *)motor->ops->user_data;
     int16_t tmpout = *value;
     int time = 0;
-    LOG_D("id:%d mode:%d",id,mode);
-
+    LOG_D("id:%d mode:%d", id, mode);
+    int acc =100;
+    int max_v =1000;
     switch (mode)
     {
     case MOTOR_MODE_TORQUE:
         break;
     case MOTOR_MODE_SPEED:
+        Emm_V5_Vel_Control( __motor, 1,tmpout, acc, false);
+        break;
     case MOTOR_MODE_POS:
+        Emm_V5_Pos_Control(__motor, 1, max_v, acc, tmpout, true, false);
+        break;
     default:
         LOG_E("invlide motor mode");
         break;
@@ -112,41 +89,41 @@ int motor_emm_v5_ctr(int id, uint16_t cmd, float *arg)
     {
 
     case MOTOR_MODE_SAFETY_STOP:
-//        motor_stop(id);
+        Emm_V5_En_Control(__motor, false, false);
         break;
-    case MOTOR_MODE_SAFETY_START:  
-//        motor_start(id);
-
+    case MOTOR_MODE_SAFETY_START:
+        Emm_V5_En_Control(__motor, true, false);
         break;
     case MOTOR_MODE_TORQUE:
         /*返回力矩/电流值*/
-        // *arg = __motor->real_current;
+        *arg = __motor->stepper_motor_current;
         break;
     case MOTOR_MODE_SPEED:
         // /*返回速度值r/min rpm*/
-        // *arg = __motor->speed_rpm;
+        *arg = __motor->stepper_motor_speed;
         break;
     case MOTOR_MODE_POS:
         // /*返回位置 rad*/
-        //*arg = (float)__motor->total_angle * 0.0007669f;
+        *arg = (float)__motor->stepper_motor_angle;
         break;
     case MOTOR_MODE_TEMP:
         // /*返回温度*/
-        *arg = 42.f;
+        *arg = 0.f;
         break;
+    case MOTOR_MODE_ACC: /* 加速度 */
 
+        break;
+    case MOTOR_MODE_DAC: /* 减速度 */
+
+        break;
+    case MOTOR_MODE_MAX_V: /* 最大速度，通常用于位置模式限制速度 */
+
+        break;
     default:
         break;
     }
     return 0;
 }
-
-
-
-
-
-
-
 
 int motor_acc = 0xff;
 int motor_vel = 5000;
@@ -690,13 +667,13 @@ void drv_emm_v5_entry(void *t)
         return;
     }
 
-    #define Origin_vel 180
-    #define timeout 30000
-    // 这里的堵转速度直接给最大值 就不用管这个参数了
-    #define sl_vel 500
-    // 用大电流 小时间来60
-    #define sl_ma 200
-    #define sl_ms 10
+#define Origin_vel 180
+#define timeout 30000
+// 这里的堵转速度直接给最大值 就不用管这个参数了
+#define sl_vel 500
+// 用大电流 小时间来60
+#define sl_ma 200
+#define sl_ms 10
     // 回零调参 电机有存储的 没必要每次都重新设置
     /*
      * @param    addr  ：电机地址
@@ -732,7 +709,6 @@ void drv_emm_v5_entry(void *t)
     // corexy.x=0;
     // corexy.y=0;
 
-    
     while (1)
     {
 
@@ -755,8 +731,8 @@ void drv_emm_v5_entry(void *t)
 
         static int time = 0;
 
-//        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
-//        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
+        //        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
+        //        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
         rt_thread_mdelay(10); // 150有点震
     }
 }

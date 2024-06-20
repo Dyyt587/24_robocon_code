@@ -1823,6 +1823,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\motor_emm_v5_driver.c</FilePath>
             </File>
+            <File>
+              <FileName>chassis_module_omni4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\chassis\chassis_module_omni4.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

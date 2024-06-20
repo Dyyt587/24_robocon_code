@@ -9,6 +9,7 @@
 #ifndef MOTOR_DJ_RM_DRIVER_CFG_H
 #define MOTOR_DJ_RM_DRIVER_CFG_H
 #include "motor_dj_rm_driver.h"
+#include "motor_cfg.h"
 
 #ifdef __cplusplus
 extern "C"{
