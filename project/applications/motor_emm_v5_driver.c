@@ -7,16 +7,22 @@
 #include "motor_emm_v5_driver.h"
 #include "motor_emm_v5_driver_cfg.h"
 #include "math.h"
+#include "rtconfig.h"
+#include "board.h"
 
 #ifndef ABS
 #define ABS(x) ((x) > 0 ? (x) : -(x))
 #endif
+    #define EMM_SERIAL  "uart8"
+
 rt_mutex_t mutex_step = RT_NULL; // 互斥锁
 rt_sem_t emm_rx_sem = RT_NULL;
 int Emm_rx_size = 0;
 uint8_t Emm_rx_buf[64] = {0};
 
 rt_device_t Emm_serial1 = RT_NULL;
+stepper_motor_t motor1;
+stepper_motor_t motor2;
 
 #define STEPPER_INIT(index, _serial, _id) [index] = {                  \
                                               .serial = &_serial,      \
@@ -125,8 +131,8 @@ int motor_emm_v5_ctr(int id, uint16_t cmd, float *arg)
     return 0;
 }
 
-int motor_acc = 0xff;
-int motor_vel = 5000;
+int motor_acc = 225;
+int motor_vel = 50;
 // #define motor_acc 0xff
 // #define motor_vel 150
 // v=0.1 m/s
@@ -218,7 +224,7 @@ void emm_wait_for_ack(stepper_motor_t *motor, uint8_t cmd)
             rt_err_t ret = rt_sem_take(emm_rx_sem, 100);
             if (ret != RT_EOK)
             {
-                // LOG_E("emm_wait_for_ack timeout");
+                LOG_E("emm_wait_for_ack timeout");
                 rt_mutex_release(mutex_step);
                 return;
             }
@@ -653,7 +659,7 @@ void drv_emm_v5_entry(void *t)
 {
     // rt_thread_mdelay(2000); //等待步进上电
     /* 查找系统中的串口设备 */
-    Emm_serial1 = rt_device_find("uart8");
+    Emm_serial1 = rt_device_find(EMM_SERIAL);
     if (Emm_serial1 == RT_NULL)
         return;
     char ch = 0;
@@ -661,6 +667,21 @@ void drv_emm_v5_entry(void *t)
     emm_rx_sem = rt_sem_create("emm_rx_sem", 0, RT_IPC_FLAG_FIFO);
     /* 以阻塞接收及轮询发送模式打开串口设备 */
     rt_device_open(Emm_serial1, RT_DEVICE_FLAG_RX_NON_BLOCKING | RT_DEVICE_FLAG_TX_BLOCKING);
+		struct serial_configure config = {
+		BAUD_RATE_115200,						/* 115200 bits/s */
+		DATA_BITS_8,				/* 8 databits */
+		STOP_BITS_1,				/* 1 stopbit */
+		PARITY_NONE,				/* No parity  */
+		BIT_ORDER_LSB,				/* LSB first sent */
+		NRZ_NORMAL,					/* Normal mode */
+		BSP_UART7_RX_BUFSIZE,		/* rxBuf size */
+		BSP_UART7_TX_BUFSIZE,		/* txBuf size */
+		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
+		0};
+	if (RT_EOK != rt_device_control(Emm_serial1, RT_DEVICE_CTRL_CONFIG, &config))
+	{
+		rt_kprintf("change %s(emmv5) failed!\n", Emm_serial1->parent.name);
+	}
     if (rt_device_set_rx_indicate(Emm_serial1, emm_uart_rx_ind) != RT_EOK)
     {
         LOG_E("uart1 set rx indicate failed");
@@ -692,8 +713,16 @@ void drv_emm_v5_entry(void *t)
     // Emm_V5_Origin_Modify_Params(&right_stepper, 1, 2, 0, Origin_vel, timeout, sl_vel, sl_ma, sl_ms, 0);//参数4是方向 倒数第三个参数是电流值    这是控制小臂的电机（多一个件的一边）  第四个参数 方向0 是控制往上抬
 
     // rt_thread_mdelay(100); //设置参数之后需要延时！！！！！！！！！延时等待闭环步进参数设置完成（写入flash）
+motor1.stepper_motor_id=1;
+motor2.stepper_motor_id=2;
 
-    // Emm_V5_En_Control(&right_stepper, 0, 0);//一个一个回零
+motor1.serial = &Emm_serial1;
+motor2.serial = &Emm_serial1;
+    Emm_V5_En_Control(&motor1, 1, 0);//一个一个回零
+    Emm_V5_En_Control(&motor2, 1, 0);//一个一个回零
+		
+		
+
     // Emm_V5_Origin_Trigger_Return(&left_stepper, 2, 0);
     // rt_thread_mdelay(5000);
 
@@ -708,9 +737,18 @@ void drv_emm_v5_entry(void *t)
     // Emm_V5_En_Control(&right_stepper, 1, 0);
     // corexy.x=0;
     // corexy.y=0;
-
+//    Emm_V5_En_Control(&motor1, 0, 0);//一个一个回零
+//    Emm_V5_En_Control(&motor2, 0, 0);//一个一个回零
+//		
     while (1)
     {
+//		Emm_V5_Vel_Control(&motor1,0,500,100,0);
+//		Emm_V5_Vel_Control(&motor2,0,100,100,0);
+//			
+			
+			        					Emm_V5_Pos_Control(&motor1, 1, motor_vel, motor_acc, 3200*3*2, 1, 0);
+
+			        					Emm_V5_Pos_Control(&motor2, 0, motor_vel, motor_acc, 3200*3*2, 1, 0);
 
         //			if(left_stepper_pulse>=0) //对电机来说 默认逆时针为正
         //			{
@@ -731,8 +769,9 @@ void drv_emm_v5_entry(void *t)
 
         static int time = 0;
 
-        //        Emm_V5_Read_Sys_Params(&left_stepper, S_CPOS);
-        //        Emm_V5_Read_Sys_Params(&right_stepper, S_CPOS);
+//                Emm_V5_Read_Sys_Params(&motor1, S_CPOS);
+//                Emm_V5_Read_Sys_Params(&motor2, S_CPOS);
+//								LOG_D("dw%f",motor1.stepper_motor_angle);
         rt_thread_mdelay(10); // 150有点震
     }
 }

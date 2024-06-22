@@ -11,7 +11,7 @@
 static rt_device_t serial;
 struct rt_semaphore flow_sem1;
 	uint8_t buf_flow;
-#define FLOW_UART_NAME       "uart8"      /* 串口设备名称 */
+#define FLOW_UART_NAME       "uart0"      /* 串口设备名称 */
 
 void flow_protool_handle(uint8_t ch);
 
@@ -43,7 +43,7 @@ rt_err_t flow_uart_rx_ind(rt_device_t dev, rt_size_t size)
 		0};
 	if (RT_EOK != rt_device_control(serial, RT_DEVICE_CTRL_CONFIG, &config))
 	{
-		rt_kprintf("change %s(imu) failed!\n", serial->parent.name);
+		rt_kprintf("change %s(flow) failed!\n", serial->parent.name);
 	}
 		rt_sem_init(&flow_sem1, "imu_sem", 0, RT_IPC_FLAG_FIFO);
 

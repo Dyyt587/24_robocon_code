@@ -2,7 +2,7 @@
  * @Author: Dyyt587 67887002+Dyyt587@users.noreply.github.com
  * @Date: 2024-04-12 10:14:08
  * @LastEditors: Dyyt587 67887002+Dyyt587@users.noreply.github.com
- * @LastEditTime: 2024-05-22 22:24:25
+ * @LastEditTime: 2024-06-21 17:31:04
  * @FilePath: \project\applications\main.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -163,69 +163,69 @@ int main(void)
 	// 	//LOG_D("setpos curpos:%f,%f", curve.currentPos, motor_get_pos(M3508_1_CAN1));
 	// }
 
-	motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
+	// motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
 
 
-	// 创建话题
-	abus_topic_cfg cfg = {
-		.hash_table_size = 16,
-		.topic_data_size = sizeof(test_data_t),
-	};
-	abus_topic_t *topic1 = abus_topic_create("topic1", &cfg, "just a desc");
-	abus_topic_t *topic2 = abus_topic_create("topic2", &cfg, "just a desc2");
+	// // 创建话题
+	// abus_topic_cfg cfg = {
+	// 	.hash_table_size = 16,
+	// 	.topic_data_size = sizeof(test_data_t),
+	// };
+	// abus_topic_t *topic1 = abus_topic_create("topic1", &cfg, "just a desc");
+	// abus_topic_t *topic2 = abus_topic_create("topic2", &cfg, "just a desc2");
 
 
-	// 创建一个用户
-	abus_acc_t *acc1 = abus_accounter_create("acc1", &filter1);
-	abus_acc_t *acc2 = abus_accounter_create("acc2", &filter2);
-	abus_acc_t *acc3 = abus_accounter_create("acc3", &filter3);
+	// // 创建一个用户
+	// abus_acc_t *acc1 = abus_accounter_create("acc1", &filter1);
+	// abus_acc_t *acc2 = abus_accounter_create("acc2", &filter2);
+	// abus_acc_t *acc3 = abus_accounter_create("acc3", &filter3);
 
-	printf("sub start\n");
-	abus_subcribe_cfg_t cfg_sub = {
-		.fifo = NULL,
-		.filter = &filter1,
-		.cb = abus_subcribe_cb1,
-		.is_async = 0,
-		.sem = NULL,
-	};
+	// printf("sub start\n");
+	// abus_subcribe_cfg_t cfg_sub = {
+	// 	.fifo = NULL,
+	// 	.filter = &filter1,
+	// 	.cb = abus_subcribe_cb1,
+	// 	.is_async = 0,
+	// 	.sem = NULL,
+	// };
 
+	// // abus_subcribe("topic1", "acc1", &cfg_sub);
+	// abus_subcribe("topic2", "acc2", &cfg_sub);
+	// abus_subcribe("topic2", "acc3", &cfg_sub);
+	// abus_subcribe("topicnull", "acc1", &cfg_sub);
 	// abus_subcribe("topic1", "acc1", &cfg_sub);
-	abus_subcribe("topic2", "acc2", &cfg_sub);
-	abus_subcribe("topic2", "acc3", &cfg_sub);
-	abus_subcribe("topicnull", "acc1", &cfg_sub);
-	abus_subcribe("topic1", "acc1", &cfg_sub);
 
-	test_data1.cnt = 10;
-	abus_publish("topic1", &test_data1);
+	// test_data1.cnt = 10;
+	// abus_publish("topic1", &test_data1);
 
-	printf("Hello CMake.\n");
+	// printf("Hello CMake.\n");
 
-	ABUS_TOPIC_CREATE("topicmicro", test_data_t, 16);
+	// ABUS_TOPIC_CREATE("topicmicro", test_data_t, 16);
 
-	// ABUS_SUB("acc1", "topic1", 0, abus_subcribe_cb1, NULL);
+	// // ABUS_SUB("acc1", "topic1", 0, abus_subcribe_cb1, NULL);
 
-	ABUS_SUB_FORCE("accnull", "topic1", 0, abus_subcribe_cb1, NULL, NULL);
-	printf("Hello CMake.\n");
-	ABUS_SUB("acc1", "topicmicro", 0, abus_subcribe_cb1, NULL);
-	ABUS_SUB("acc2", "topicmicro", 0, abus_subcribe_cb1, NULL);
-	abus_publish("topicmicro", &test_data1);
-	abus_publish("topicmicro", &test_data1);
+	// ABUS_SUB_FORCE("accnull", "topic1", 0, abus_subcribe_cb1, NULL, NULL);
+	// printf("Hello CMake.\n");
+	// ABUS_SUB("acc1", "topicmicro", 0, abus_subcribe_cb1, NULL);
+	// ABUS_SUB("acc2", "topicmicro", 0, abus_subcribe_cb1, NULL);
+	// abus_publish("topicmicro", &test_data1);
+	// abus_publish("topicmicro", &test_data1);
 
-	abus_topic_show("topic1");
+	// abus_topic_show("topic1");
 
-	abus_sem_t sem1;
-	abus_subcribe_cfg_t cfg_sub1 = {
-		.fifo = NULL,
-		.filter = &filter1,
-		.cb = NULL,
-		.is_async = 1,
-		.sem = &sem1,
-	};
+	// abus_sem_t sem1;
+	// abus_subcribe_cfg_t cfg_sub1 = {
+	// 	.fifo = NULL,
+	// 	.filter = &filter1,
+	// 	.cb = NULL,
+	// 	.is_async = 1,
+	// 	.sem = &sem1,
+	// };
 
-	abus_subcribe("topic1", "acc1", &cfg_sub1);
-	abus_topic_show("topic1");
+	// abus_subcribe("topic1", "acc1", &cfg_sub1);
+	// abus_topic_show("topic1");
 
-	abus_publish("topic1", &test_data1);
+	// abus_publish("topic1", &test_data1);
 
 
 //extern int abus_echo_test();
@@ -234,16 +234,16 @@ int main(void)
 
 
 
-	abus_subcribe_cfg_t cfg_sub2 = {
-		.fifo = NULL,
-		.filter = &filter1,
-		.cb = abus_subcribe_cb2,
-		.is_async = 0,
-		.sem = &sem1,
-	};
+	// abus_subcribe_cfg_t cfg_sub2 = {
+	// 	.fifo = NULL,
+	// 	.filter = &filter1,
+	// 	.cb = abus_subcribe_cb2,
+	// 	.is_async = 0,
+	// 	.sem = &sem1,
+	// };
 
-	abus_subcribe("chassis_state", "acc2", &cfg_sub2);
-	abus_topic_show("chassis_state");
+	// abus_subcribe("chassis_state", "acc2", &cfg_sub2);
+	// abus_topic_show("chassis_state");
 
 
 
@@ -258,7 +258,7 @@ int main(void)
 	///////////////////////////////////////////////////
 	while (1)
 	{
-		abus_publish("chassis_ctrl", &ctrl);
+		//abus_publish("chassis_ctrl", &ctrl);
 		// motor_set_pos(	M3508_1_CAN1, 100);
 		rt_pin_write(LED0_PIN, PIN_HIGH);
 		rt_thread_mdelay(500);

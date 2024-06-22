@@ -125,7 +125,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=75,104,525,661,0)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=1411,0,1669,588,0)(1012=-1,-1,-1,-1,0)</Name>
+          <Name>(1010=75,104,525,661,0)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=1278,0,1536,588,0)(1012=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -159,7 +159,7 @@
           <Type>0</Type>
           <LineNumber>19</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134282620</Address>
+          <Address>134283828</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -175,7 +175,7 @@
           <Type>0</Type>
           <LineNumber>15</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134255634</Address>
+          <Address>134256582</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -189,18 +189,18 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>15</LineNumber>
+          <LineNumber>745</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134255662</Address>
+          <Address>134296874</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>applications\abus_v3\src\abus_hash.c</Filename>
+          <Filename>.\applications\motor_emm_v5_driver.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\rt_thread\applications/abus_v3/src/abus_hash.c\15</Expression>
+          <Expression>\\rt_thread\applications/motor_emm_v5_driver.c\745</Expression>
         </Bp>
         <Bp>
           <Number>3</Number>

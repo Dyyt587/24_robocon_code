@@ -21,7 +21,7 @@ static rt_size_t rec_size;
 struct rt_semaphore fdi_sem1;
 	uint8_t buf_fdi;
 
-#define FDI_UART_NAME       "uart7"      /* 串口设备名称 */
+#define FDI_UART_NAME       "uart0"      /* 串口设备名称 */
 
 static void imu_handle(void*params);
 static inline int FDILink_Receive(FDILink_Status_t* FDILink, uint8_t value);

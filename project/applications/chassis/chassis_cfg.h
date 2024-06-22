@@ -99,7 +99,7 @@
 #define MOTOR_OMNI4_ID_1 0
 #define MOTOR_OMNI4_ID_2 0
 #define MOTOR_OMNI4_ID_3 0
-#define MOTOR_OMNI4_ID_3 0
+#define MOTOR_OMNI4_ID_4 0
 
 #endif
 
