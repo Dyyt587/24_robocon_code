@@ -2,13 +2,13 @@
 #include <math.h>
 
 
-locate overall_position;//È«¾Ö¶¨Î»µÄ½á¹¹Ìå×ø±ê
-Transform chassis_trans;//×ø±ê±ä»»µÄĞı×ª¾ØÕó
+locate overall_position;//å…¨å±€å®šä½çš„ç»“æ„ä½“åæ ‡
+Transform chassis_trans;//åæ ‡å˜æ¢çš„æ—‹è½¬çŸ©é˜µ
+
+float map_x=0,map_y=0;
 
 
-
-
-// ¼ÆËã×ø±ê±ä»»½á¹û
+// è®¡ç®—åæ ‡å˜æ¢ç»“æœ
 locate transformPoint(chassis_t *chassis)
 {
 	locate pos;
@@ -17,14 +17,14 @@ locate transformPoint(chassis_t *chassis)
 	return pos;
 }
 
-// ½«µØÍ¼×ø±êÏµÖĞµÄµã×ª»»Îª³µÌå×ø±êÏµÖĞµÄµã
+// å°†åœ°å›¾åæ ‡ç³»ä¸­çš„ç‚¹è½¬æ¢ä¸ºè½¦ä½“åæ ‡ç³»ä¸­çš„ç‚¹
 chassis_pos_t inverseTransformPoint(locate *p, Transform t) {
     chassis_pos_t result;
-    // ¼ÆËãĞı×ª¾ØÕóµÄ×ªÖÃ£¨¼´Äæ¾ØÕó£©
+    // è®¡ç®—æ—‹è½¬çŸ©é˜µçš„è½¬ç½®ï¼ˆå³é€†çŸ©é˜µï¼‰
     float cosTheta = cos(t.theta);
     float sinTheta = sin(t.theta);
 
-    // ÏÈÆ½ÒÆ»ØÔ­µã£¬È»ºóÓ¦ÓÃÄæĞı×ª
+    // å…ˆå¹³ç§»å›åŸç‚¹ï¼Œç„¶ååº”ç”¨é€†æ—‹è½¬
     float x = p->tar_x - t.tx;
     float y = p->tar_y - t.ty;
 
@@ -35,7 +35,7 @@ chassis_pos_t inverseTransformPoint(locate *p, Transform t) {
 }
 
 
-//´Ó³µÌå×ø±êµ½È«¾Ö×ø±êµÄ×ª»»(µÃµ½µ±Ç°È«¾Ö×ø±ê)
+//ä»è½¦ä½“åæ ‡åˆ°å…¨å±€åæ ‡çš„è½¬æ¢(å¾—åˆ°å½“å‰å…¨å±€åæ ‡)
 void get_locatePos(chassis_t *chassis)
 {
 	overall_position=transformPoint(chassis);
@@ -43,7 +43,7 @@ void get_locatePos(chassis_t *chassis)
 }
 
 
-//»ñÈ¡ÍÓÂİÒÇ½Ç¶ÈÎ´Ğ´
+//è·å–é™€èºä»ªè§’åº¦æœªå†™
 void get_Angle(float an)
 {
 	chassis_trans.theta=an-chassis_trans.start;
@@ -52,7 +52,7 @@ void get_Angle(float an)
 
 
 
-//ÉèÖÃµØÍ¼×ø±êÏµÏÂµÄÄ¿±êÎ»ÖÃ
+//è®¾ç½®åœ°å›¾åæ ‡ç³»ä¸‹çš„ç›®æ ‡ä½ç½®
 void set_TargetPos(float x,float y,locate *dat,chassis_t *chassis)
 {
 	dat->tar_x=x;
@@ -71,10 +71,10 @@ void locateInint(float x,float y)
 extern chassis_t chassis_mai;
 
 
-//Ïß³ÌÈë¿Ú
+//çº¿ç¨‹å…¥å£
 /**
-¹¦ÄÜ£º
-»ñÈ¡È«¾ÖÎ»ÖÃ£¬È«¾Ö×ø±êÏµ
+åŠŸèƒ½ï¼š
+è·å–å…¨å±€ä½ç½®ï¼Œå…¨å±€åæ ‡ç³»
 **/
 void locate_entry(void *parameter)
 {
@@ -83,22 +83,23 @@ void locate_entry(void *parameter)
     {
 				get_Angle(-M_PI / 4.0f);
 				LOG_D("position:%f,%f",chassis_mai.target.pos.x_m,chassis_mai.target.pos.y_m);
-				set_TargetPos(6.0f,6.0f,&overall_position,&chassis_mai);
-				rt_thread_mdelay(100);
+				set_TargetPos(map_x,map_y,&overall_position,&chassis_mai);
+			
+				rt_thread_mdelay(2);
     }
 }
-//³õÊ¼»¯Ïß³Ì
+//åˆå§‹åŒ–çº¿ç¨‹
 int locate_init(void)
 {
 	rt_thread_t locate = RT_NULL;
-	/* ´´½¨Ïß³Ì£¬ Ãû³ÆÊÇ thread_test£¬ Èë¿ÚÊÇ thread_entry*/
+	/* åˆ›å»ºçº¿ç¨‹ï¼Œ åç§°æ˜¯ thread_testï¼Œ å…¥å£æ˜¯ thread_entry*/
 	locate = rt_thread_create("locate",
 									   locate_entry, RT_NULL,
 									   4096, 
-										 9,
+										 4,
                       1);
 
-	/* Ïß³Ì´´½¨³É¹¦£¬ÔòÆô¶¯Ïß³Ì */
+	/* çº¿ç¨‹åˆ›å»ºæˆåŠŸï¼Œåˆ™å¯åŠ¨çº¿ç¨‹ */
 	if (locate != RT_NULL)
 	{
 		rt_thread_startup(locate);
