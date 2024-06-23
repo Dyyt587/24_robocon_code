@@ -41,6 +41,7 @@ enum
 #ifdef MOTOR_EMMV5_ID6_SERIAL1
     SP_M_ID6_SERIAL1,
 #endif
+	SP_M_NUM,
 };
 
 

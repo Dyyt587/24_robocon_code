@@ -35,7 +35,7 @@ extern "C"
 }))
 
 	#define MOTOR_DJ_MOTOR 1
-        #define MOTOR_EMM_V5_MOTOR 1
+        #define MOTOR_EMM_V5_MOTOR 0
     /**
      * @brief 配置电机是否启用的宏，如果启用则定义，否则注释
      *
@@ -43,9 +43,9 @@ extern "C"
     
 #if MOTOR_DJ_MOTOR
      #define MOTOR_DJ_M3508_ID1_CAN1
-    // #define MOTOR_DJ_M3508_ID2_CAN1
-    // #define MOTOR_DJ_M3508_ID3_CAN1
-    // #define MOTOR_DJ_M3508_ID4_CAN1
+     #define MOTOR_DJ_M3508_ID2_CAN1
+     #define MOTOR_DJ_M3508_ID3_CAN1
+     #define MOTOR_DJ_M3508_ID4_CAN1
     // #define MOTOR_DJ_M3508_ID5_CAN1
     // #define MOTOR_DJ_M3508_ID6_CAN1
     // #define MOTOR_DJ_M3508_ID7_CAN1

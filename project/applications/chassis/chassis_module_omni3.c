@@ -125,16 +125,16 @@ static int driver_omni3(struct chassis *chassis, const void *output, const void 
         case CHASSIS_SPEED:
             // 速度控制
             //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_speed(MOTOR_MAI_ID_1, data->motora);
-            motor_set_speed(MOTOR_MAI_ID_2, data->motorb);
-            motor_set_speed(MOTOR_MAI_ID_3, data->motorc);
+            motor_set_speed(MOTOR_OMNI3_ID_1, data->motora);
+            motor_set_speed(MOTOR_OMNI3_ID_2, data->motorb);
+            motor_set_speed(MOTOR_OMNI3_ID_3, data->motorc);
             break;
         case CHASSIS_POS:
             // 位置控制
             // LOG_D("pos set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_pos(MOTOR_MAI_ID_1, data->motora);
-            motor_set_pos(MOTOR_MAI_ID_2, data->motorb);
-            motor_set_pos(MOTOR_MAI_ID_3, data->motorc);
+            motor_set_pos(MOTOR_OMNI3_ID_1, data->motora);
+            motor_set_pos(MOTOR_OMNI3_ID_2, data->motorb);
+            motor_set_pos(MOTOR_OMNI3_ID_3, data->motorc);
             break;
         default:
             break;

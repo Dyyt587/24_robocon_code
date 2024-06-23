@@ -43,15 +43,15 @@
  *                              b轴
  */
 /* 用户配置使用的电机id */
-//#define MOTOR_MAI_ID_1 M2006_1_CAN1
-//#define MOTOR_MAI_ID_2 M2006_2_CAN1
-//#define MOTOR_MAI_ID_3 M2006_3_CAN1
-//#define MOTOR_MAI_ID_4 M2006_4_CAN1
+#define MOTOR_MAI_ID_1 M3508_1_CAN1
+#define MOTOR_MAI_ID_2 M3508_2_CAN1
+#define MOTOR_MAI_ID_3 M3508_3_CAN1
+#define MOTOR_MAI_ID_4 M3508_4_CAN1
 
-#define MOTOR_MAI_ID_1 0
-#define MOTOR_MAI_ID_2 0
-#define MOTOR_MAI_ID_3 0
-#define MOTOR_MAI_ID_4 0
+//#define MOTOR_MAI_ID_1 0
+//#define MOTOR_MAI_ID_2 0
+//#define MOTOR_MAI_ID_3 0
+//#define MOTOR_MAI_ID_4 0
 #endif
 
 
@@ -96,10 +96,10 @@
  * 
  * 
  */
-#define MOTOR_OMNI4_ID_1 0
-#define MOTOR_OMNI4_ID_2 0
-#define MOTOR_OMNI4_ID_3 0
-#define MOTOR_OMNI4_ID_4 0
+#define MOTOR_OMNI4_ID_1 M3508_3_CAN1
+#define MOTOR_OMNI4_ID_2 M3508_2_CAN1
+#define MOTOR_OMNI4_ID_3 M3508_1_CAN1
+#define MOTOR_OMNI4_ID_4 M3508_4_CAN1
 
 #endif
 

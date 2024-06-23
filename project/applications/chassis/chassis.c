@@ -39,7 +39,6 @@ int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data)
 const chassis_pos_t *chassis_get_pos(chassis_t *chassis)
 {
     /* 返回当前位置 */
-
     return &chassis->present.pos;
 }
 void chassis_pos_clean(chassis_t *chassis)

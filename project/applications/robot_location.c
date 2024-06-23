@@ -39,7 +39,7 @@ chassis_pos_t inverseTransformPoint(locate *p, Transform t) {
 void get_locatePos(chassis_t *chassis)
 {
 	overall_position=transformPoint(chassis);
-	LOG_D("position:%f,%f",overall_position.co_x,overall_position.co_y);
+	//LOG_D("position:%f,%f",overall_position.co_x,overall_position.co_y);
 }
 
 
@@ -82,9 +82,10 @@ void locate_entry(void *parameter)
     while (1)
     {
 				get_Angle(-M_PI / 4.0f);
-				LOG_D("position:%f,%f",chassis_mai.target.pos.x_m,chassis_mai.target.pos.y_m);
 				set_TargetPos(map_x,map_y,&overall_position,&chassis_mai);
-			
+				//LOG_D("position:%f,%f",chassis_mai.target.pos.x_m,chassis_mai.target.pos.y_m);
+
+			//chassis_set_pos(&chassis_mai, );
 				rt_thread_mdelay(2);
     }
 }

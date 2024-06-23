@@ -46,19 +46,19 @@ int module_omni4(struct chassis *chassis, const void *output, const void *input,
         {
         case CHASSIS_SPEED:
             // 速度控制
-            data->motora =  W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motora = -W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
             data->motorb =  W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
             data->motorc =  W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
-            data->motord =  W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motord = -W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
 
 				break;
         case CHASSIS_POS:
             // 位置控制
 
-            data->motora =  W2M_POS(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motora = -W2M_POS(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
             data->motorb =  W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
             data->motorc =  W2M_POS(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
-            data->motord =  W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motord = -W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
 
             break;
         default:
@@ -72,15 +72,15 @@ int module_omni4(struct chassis *chassis, const void *output, const void *input,
         {
         case CHASSIS_SPEED:
             // 速度控制
-            chassis->present.speed.x_m_s = chassis->offset.speed.x_m_s + (GEN3*M2W_SPEED((data->motora - data->motorb))) / 3 ;
-            chassis->present.speed.y_m_s = chassis->offset.speed.y_m_s + M2W_SPEED((data->motora + data->motorb - 2*data->motorc)) / 3;
-            chassis->present.speed.z_rad_s = chassis->offset.speed.z_rad_s + M2W_SPEED((data->motora + data->motorb + data->motorc)) / (3*L);
+            chassis->present.speed.x_m_s = chassis->offset.speed.x_m_s + (GEN3*M2W_SPEED((-data->motora - data->motorb))) / 3 ;
+            chassis->present.speed.y_m_s = chassis->offset.speed.y_m_s + M2W_SPEED((-data->motora + data->motorb - 2*data->motorc)) / 3;
+            chassis->present.speed.z_rad_s = chassis->offset.speed.z_rad_s + M2W_SPEED((-data->motora + data->motorb + data->motorc)) / (3*L);
             break;
         case CHASSIS_POS:
             // 位置控制
-            chassis->present.pos.x_m = chassis->offset.speed.x_m_s + (GEN3*M2W_POS((data->motora - data->motorb))) / 3 ;
-            chassis->present.pos.y_m = chassis->offset.speed.y_m_s + M2W_POS((data->motora + data->motorb - 2*data->motorc)) / 3;
-            chassis->present.pos.z_rad = chassis->offset.speed.z_rad_s + M2W_POS((data->motora + data->motorb + data->motorc)) / (3*L);
+            chassis->present.pos.x_m = chassis->offset.speed.x_m_s + (GEN3*M2W_POS((-data->motora - data->motorb))) / 3 ;
+            chassis->present.pos.y_m = chassis->offset.speed.y_m_s + M2W_POS((-data->motora + data->motorb - 2*data->motorc)) / 3;
+            chassis->present.pos.z_rad = chassis->offset.speed.z_rad_s + M2W_POS((-data->motora + data->motorb + data->motorc)) / (3*L);
             //LOG_D("xm:%f,ym:%f,zrad:%f", chassis->present.pos.x_m, chassis->present.pos.y_m, chassis->present.pos.z_rad);
 
             break;
@@ -130,19 +130,19 @@ static int driver_omni4(struct chassis *chassis, const void *output, const void 
         {
         case CHASSIS_SPEED:
             // 速度控制
-            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_speed(MOTOR_MAI_ID_1, data->motora);
-            motor_set_speed(MOTOR_MAI_ID_2, data->motorb);
-            motor_set_speed(MOTOR_MAI_ID_3, data->motorc);
-            motor_set_speed(MOTOR_MAI_ID_4, data->motord);
+            //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motora, data->motorb, data->motorc, data->motord);
+            motor_set_speed(MOTOR_OMNI4_ID_1, data->motora);
+            motor_set_speed(MOTOR_OMNI4_ID_2, data->motorb);
+            motor_set_speed(MOTOR_OMNI4_ID_3, data->motorc);
+            motor_set_speed(MOTOR_OMNI4_ID_4, data->motord);
             break;
         case CHASSIS_POS:
             // 位置控制
             // LOG_D("pos set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_pos(MOTOR_MAI_ID_1, data->motora);
-            motor_set_pos(MOTOR_MAI_ID_2, data->motorb);
-            motor_set_pos(MOTOR_MAI_ID_3, data->motorc);
-            motor_set_pos(MOTOR_MAI_ID_4, data->motord);
+            motor_set_pos(MOTOR_OMNI4_ID_1, data->motora);
+            motor_set_pos(MOTOR_OMNI4_ID_2, data->motorb);
+            motor_set_pos(MOTOR_OMNI4_ID_3, data->motorc);
+            motor_set_pos(MOTOR_OMNI4_ID_4, data->motord);
             break;
         default:
             break;
