@@ -33,6 +33,10 @@ chassis_ops_t ops_omni3 = {
 #define W2M_SPEED(wheel_speed)    (((wheel_speed)*60)/(2*M_PI*R))             //电机速度到底盘速度的转换
 #define W2M_POS(wheel_pos)    M2W_SPEED(wheel_pos)            //电机速度到底盘速度的转换
 
+		
+//发送pos：X,Y,位置		
+//speed:XY
+//W:RAD/S
 
 int module_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {
@@ -47,14 +51,12 @@ int module_omni3(struct chassis *chassis, const void *output, const void *input,
             data->motora = W2M_SPEED(-0.5*((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) - GEN3*(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s))+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
             data->motorb = W2M_SPEED(-0.5*((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + GEN3*(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s))+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
             data->motorc = W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) + L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
-
 				break;
         case CHASSIS_POS:
             // 位置控制
             data->motora = W2M_POS(-0.5*((chassis->target.pos.x_m + chassis->offset.pos.x_m) - GEN3*(chassis->target.pos.y_m + chassis->offset.pos.y_m))+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
             data->motorb = W2M_POS(-0.5*((chassis->target.pos.x_m + chassis->offset.pos.x_m) + GEN3*(chassis->target.pos.y_m + chassis->offset.pos.y_m))+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
             data->motorc = W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) + L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
-
             break;
         default:
             break;
@@ -77,7 +79,6 @@ int module_omni3(struct chassis *chassis, const void *output, const void *input,
             chassis->present.pos.y_m = chassis->offset.speed.y_m_s + M2W_POS((data->motora + data->motorb - 2*data->motorc)) / 3;
             chassis->present.pos.z_rad = chassis->offset.speed.z_rad_s + M2W_POS((data->motora + data->motorb + data->motorc)) / (3*L);
             //LOG_D("xm:%f,ym:%f,zrad:%f", chassis->present.pos.x_m, chassis->present.pos.y_m, chassis->present.pos.z_rad);
-
             break;
         default:
 
@@ -87,6 +88,7 @@ int module_omni3(struct chassis *chassis, const void *output, const void *input,
     }
     return 0;
 }
+
 #ifdef CHASSIS_USING_MOTOR_HAL
 static int driver_omni3(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {

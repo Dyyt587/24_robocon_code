@@ -45,6 +45,11 @@
   "name": "APID"
  }, 
  {
+  "path": "/packages/misc/upacker", 
+  "ver": "latest", 
+  "name": "UPACKER"
+ }, 
+ {
   "path": "/packages/arduino/RTduino", 
   "ver": "latest", 
   "name": "RTDUINO"

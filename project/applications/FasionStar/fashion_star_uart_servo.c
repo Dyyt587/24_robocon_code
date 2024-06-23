@@ -250,7 +250,7 @@ int FSUS_Init(void)
 
 	return 0;
 }
-INIT_COMPONENT_EXPORT(FSUS_Init);
+//INIT_COMPONENT_EXPORT(FSUS_Init);
 
 // 计算Package的校验和
 uint8_t FSUS_CalcChecksum(PackageTypeDef *pkg)

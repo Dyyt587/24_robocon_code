@@ -23,17 +23,19 @@ chassis_ops_t ops_omni4 = {
     .date = &omni4_data};
 
 #define GEN3 (1.73205)
+#define GEN2 (1.414)
 #undef M_PI
 #define M_PI 3.141592653589793238462643383279502884
 #define L 1.71  //车外接圆半径
 #define R 0.5 //车轮半径
-#define M2W_SPEED(motor_speed)    (2*M_PI*R*(motor_speed)/60)             //电机速度到底盘速度的转换
-#define M2W_POS(motor_pos)    M2W_SPEED(motor_pos)            //电机速度到底盘速度的转换
+#define M2W_SPEED(motor_speed)    (2*M_PI*R*(motor_speed)/60/GEN2)             //电机速度到底盘速度的转换
+#define M2W_POS(motor_pos)    M2W_SPEED(motor_pos)            //电机位置到底盘位置的转换
 
-#define W2M_SPEED(wheel_speed)    (((wheel_speed)*60)/(2*M_PI*R))             //电机速度到底盘速度的转换
-#define W2M_POS(wheel_pos)    M2W_SPEED(wheel_pos)            //电机速度到底盘速度的转换
+#define W2M_SPEED(wheel_speed)    (((wheel_speed*GEN2)*60)/(2*M_PI*R))             //底盘速度到电机速度的转换
+#define W2M_POS(wheel_pos)    M2W_SPEED(wheel_pos)            //底盘位置到电机位置的转换
 
 
+//四轮全向轮解析
 int module_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {
     if (output != NULL)
@@ -44,19 +46,19 @@ int module_omni4(struct chassis *chassis, const void *output, const void *input,
         {
         case CHASSIS_SPEED:
             // 速度控制
-            data->motora = W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
-            data->motorb = W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
-            data->motorc = W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
-            data->motord = W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motora =  W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motorb =  W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motorc =  W2M_SPEED(-(chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)- L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
+            data->motord =  W2M_SPEED((chassis->target.speed.x_m_s + chassis->offset.speed.x_m_s) +(chassis->target.speed.y_m_s + chassis->offset.speed.y_m_s)+ L*(chassis->target.speed.z_rad_s+chassis->offset.speed.z_rad_s));
 
 				break;
         case CHASSIS_POS:
             // 位置控制
 
-            data->motora = W2M_SPEED(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
-            data->motorb = W2M_SPEED((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
-            data->motorc = W2M_SPEED(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
-            data->motord = W2M_SPEED((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motora =  W2M_POS(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motorb =  W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motorc =  W2M_POS(-(chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)- L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
+            data->motord =  W2M_POS((chassis->target.pos.x_m + chassis->offset.pos.x_m) +(chassis->target.pos.y_m + chassis->offset.pos.y_m)+ L*(chassis->target.pos.z_rad+chassis->offset.pos.z_rad));
 
             break;
         default:
@@ -90,6 +92,7 @@ int module_omni4(struct chassis *chassis, const void *output, const void *input,
     }
     return 0;
 }
+
 #ifdef CHASSIS_USING_MOTOR_HAL
 static int driver_omni4(struct chassis *chassis, const void *output, const void *input, chassis_status require_cmd)
 {

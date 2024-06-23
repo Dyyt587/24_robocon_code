@@ -136,14 +136,6 @@ void test1_entry(void *parameter)
     {
         while (rt_device_read(uart, 0, &ch, 1) != 1)
         {
-            //					if(SSize>512)LOG_W("%d",SSize);
-
-            //				if(!=1)
-            //				{
-            //					//LOG_E("error");
-            //				}
-            // rt_thread_mdelay(100);
-
             rt_sem_take(sem_visual, RT_WAITING_FOREVER);
         }
         cvhandle(ch);
@@ -167,6 +159,6 @@ int test1_init(void)
     return 0;
 }
 
-INIT_APP_EXPORT(test1_init); // 自动初始化
+//INIT_APP_EXPORT(test1_init); // 自动初始化
 
-// INIT_DEVICE_EXPORT(visual_uart_init);
+

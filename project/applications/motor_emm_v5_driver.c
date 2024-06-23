@@ -796,4 +796,4 @@ int emm_v5_init(void)
     }
     return 0;
 }
-INIT_COMPONENT_EXPORT(emm_v5_init);
+//INIT_COMPONENT_EXPORT(emm_v5_init);

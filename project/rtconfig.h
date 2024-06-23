@@ -234,11 +234,11 @@
 #define PKG_VSNPRINTF_MAX_INTEGRAL_DIGITS_FOR_DECIMAL 9
 #define PKG_VSNPRINTF_LOG10_TAYLOR_TERMS 4
 #define PKG_USING_RT_VSNPRINTF_FULL_LATEST_VERSION
-#define PKG_USING_AUNITY
-#define PKG_USING_AUNITY_LATEST_VERSION
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
 
+#define PKG_USING_AUNITY
+#define PKG_USING_AUNITY_LATEST_VERSION
 
 /* CMSIS: ARM Cortex-M Microcontroller Software Interface Standard */
 
@@ -282,6 +282,8 @@
 
 /* entertainment: terminal games and other interesting software packages */
 
+#define PKG_USING_UPACKER
+#define PKG_USING_UPACKER_LATEST_VERSION
 
 /* Arduino libraries */
 
