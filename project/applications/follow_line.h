@@ -43,8 +43,6 @@ enum direction{
 
 typedef struct infrared
 {
-	rt_uint8_t infrared_data[8];
-
 	uint8_t is_spacial_point_flag;
 	enum direction move_direction;
 }infrared;
@@ -52,11 +50,7 @@ typedef struct infrared
 
 void follow_line(void *parameter);
 
-void Infrared_Init(void);
-void GET_Infrared_Data(infrared* infrared_package);
-void Print_Infrared_Data(infrared* infrared_package);
 
-uint8_t Is_Spacial_point(infrared* infrared_package);
 
 #ifdef __cplusplus
 }

@@ -12,13 +12,7 @@ int asub_callback2(abus_topic_t *sub)
 	LOG_D("sub_callback2\n");
 	return 0;
 }
-//int line_dir_sub_callback(abus_topic_t *sub)
-//{
-//	//读取数据
-//	afifo_out_data(sub->fifo, &infrared_package.move_direction, sizeof(infrared_package.move_direction));
-//	LOG_D("line_dir_sub_callback:%d\n", infrared_package.move_direction);
-//	return 0;
-//}
+
 int asub_callback(abus_topic_t *sub)
 {
 	LOG_D("sub_callback\n");
@@ -46,6 +40,57 @@ int follow_line_init(void)
 	return 0;
 }
 INIT_COMPONENT_EXPORT(follow_line_init);
+
+//在其他线程中进行扫描，得到状态(根据不同的识别巡线)，这个里面需要有一个球筐的判断，进行球的放
+void line_car(void)
+{
+	switch(infrared_package.move_direction)
+	{
+		case front:
+		{
+			
+			break;
+		}
+		case left:
+		{
+			
+			break;
+		}
+		case right:
+		{
+			
+			break;
+		}
+		case rotate:
+		{
+			
+			break;
+		}
+	}
+}
+
+//找球的逻辑（需要一个零点坐标系，根据激光测距传感器来获取零点坐标系）
+void back_zero()
+{
+	uint8_t state=0;
+	switch(state)//找球，抓球，然后回归零点
+	{
+		case 1:
+		{
+			
+			break;
+		}
+		case 2:
+		{
+			
+			break;
+		}
+		
+		
+	}
+	
+}
+
 
 void follow_line(void *parameter)
 {
