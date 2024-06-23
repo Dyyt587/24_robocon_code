@@ -8,6 +8,7 @@
  */
 #include "chassis_port.h"
 #include "chassis_module_mai.h"
+#include "chassis_module_omni4.h"
 #include "abus.h"
 #include "abus_echo.h"
 
@@ -78,7 +79,7 @@ void chassis_port_handle(void *parameter)
         chassis_state.speed_x = chassis_mai.present.speed.x_m_s;
         chassis_state.speed_y = chassis_mai.present.speed.y_m_s;
 
-        abus_publish("chassis_state", &chassis_state);
+        //abus_publish("chassis_state", &chassis_state);
 				//abus_topic_show("chassis_state");
 
         rt_thread_mdelay(50);
@@ -87,9 +88,10 @@ void chassis_port_handle(void *parameter)
 
 int chassis_port_init(void)
 {
-#if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
-    chassis_init(&chassis_mai, &ops_mai);
-#endif
+//#if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
+//    chassis_init(&chassis_mai, &ops_mai);
+//#endif
+    chassis_init(&chassis_mai, &ops_omni4);
 
     // 创建话题
     abus_topic_cfg cfg = {
