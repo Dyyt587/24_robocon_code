@@ -13,41 +13,26 @@
 #include "drv_visual.h"
 #include "bus_sbus.h"
 
-#define PWM_DEV_NAME "pwm4" /* PWM设备名称 */
-#define PWM_DEV_CHANNEL 1   /* PWM通道 */
-
-struct rt_device_pwm *pwm_dev; /* PWM设备句柄 */
-
-static rt_uint32_t period = 20000000; /* 周期为20ms，单位为纳秒ns */
-static rt_uint32_t pulse = 500000;    /* PWM脉冲宽度值 */
-
-//extern abus_acc_t rbmg_error_acc;         // 接收error
-//extern abus_accounter_t rbmg_dir_acc;           // 发布dir
-//extern abus_accounter_t rbmg_special_point_acc; // 接收special point
-//extern abus_accounter_t rbmg_chassis_acc;       // 发布chassis ctrl
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
 static float line_error = 0;
 static chassis_ctrl_t ctrl;
 
-enum
+
+
+//有两种模式，一种是上三区的，一种是没上三区的
+uint8_t chassis_mode=0;//默认没上三区
+
+
+typedef enum line
 {
     END = 0U,
     FORWARD,
-    RIGHT,
-    BACKWARD,
-    LEFT,
-    ROTATION,
+    ROTATIONL,//左自旋
+		ROTATIONR,//右自旋
+}carline;
 
-};
-
-enum
-{
-    RED,
-    BLUE,
-    YELLOW,
-};
 
 rt_uint8_t color_type;
 
@@ -57,106 +42,107 @@ rt_uint8_t color_type;
 1 2 3
 */
 
-uint8_t action_type;
-uint8_t now_dir = 1;  // 当前方向
-uint8_t next_dir = 1; // 下一个方向
 
-uint8_t take_cnt = 1;
-uint8_t red_cnt;
-uint8_t blue_cnt;
-uint8_t yellow_cnt;
 
-#define HALF_CAR_WIDTH 0.09f
-
-void setAngle(float angle)
+//相对运动函数,这个函数应该是阻塞的,形参一，底盘结构体(映射到chassis_mai)，形参二，相对运动的距离
+void chassis_relative_move(chassis_t*chassis,chassis_pos_t*relative_pos)
 {
-    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 500000 + angle * 7407);
+	
 }
 
-//void action_relative_movement_car(float _x_m, float _y_m, float _w_rad)
-//{
-//    extern chassis_t chassis_mai;
-//    const chassis_pos_t *nowpos = chassis_get_pos(&chassis_mai);
-//    // 打印电机位置
-//    // 发布底盘控制速度，前进
-//    ctrl.type = 1;
-//    ctrl.pos.x_m = nowpos->x_m + _x_m;
-//    ctrl.pos.y_m = nowpos->y_m + _y_m;
-//    ctrl.pos.z_rad = nowpos->z_rad + _w_rad;
-//    abus_public(&rbmg_chassis_acc, &ctrl);
-//    // LOG_D("begin relative action %f %f %f", _x_m, _y_m, _w_rad);
-//    // LOG_D("action begin now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
-//    int counter = 0;
-//    while (1)
-//    {
-//        // LOG_D("action begin timeout now:%f %f %f ",nowpos->x_m, nowpos->y_m, nowpos->z_rad);
-//        if ((fabs(nowpos->y_m - ctrl.pos.y_m) < 0.01f) && (fabs(nowpos->x_m - ctrl.pos.x_m) < 0.01f) && (fabs(nowpos->z_rad - ctrl.pos.z_rad) < 0.1f))
-//        {
-//            chassis_pos_clean(&chassis_mai);
-//            LOG_D("action over");
-//            break;
-//        }
-//        ctrl.type = 1;
-//        abus_public(&rbmg_chassis_acc, &ctrl);
-//        // LOG_D("[action]pos x:%f y:%f z:%f delta_x_m:%f delta_y_m:%f delta_w_rad:%f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, _x_m, _y_m, _w_rad);
-//        rt_thread_mdelay(50);
-//        counter++;
-//        if (counter > 1000)
-//        {
-//            LOG_W("action error timeout now:%f %f %f target:%f %f %f", nowpos->x_m, nowpos->y_m, nowpos->z_rad, ctrl.pos.x_m, ctrl.pos.y_m, ctrl.pos.z_rad);
-//            break;
-//        }
-//    }
-//}
 
-///**
-// * @brief 巡线使用的callback,注意要支持禁用操作
-// *
-// * @param sub
-// * @return int
-// */
-//int rbmg_error_callback(abus_topic_t *sub)
-//{
-//// #define KK 1.1f // 1.3
-//#define KK 0.9f // 1.3
-//// #define SPEED 0.25
-//#define SPEED 0.25
-//    if (rbmg_mode == LINE_MODE)
-//    {
-//        // 巡线模式下的处理
-//        afifo_out_data(sub->datafifo, (uint8_t *)&line_error, sizeof(float));
-//        // 发布控制到底盘
-//        ctrl.type = 0;
-//        chassis_dir = 0;
-//        switch (chassis_dir)
-//        {
-//        case 0: // 前
-//            ctrl.speed.x_m_s = 0;
-//            ctrl.speed.y_m_s = SPEED;
-//            ctrl.speed.z_rad_s = line_error * KK;
-//            break;
-//        case 1: // 右边
-//            ctrl.speed.x_m_s = SPEED;
-//            ctrl.speed.y_m_s = 0;
-//            ctrl.speed.z_rad_s = line_error * KK;
-//            break;
-//        case 2: // 后边
-//            ctrl.speed.x_m_s = 0;
-//            ctrl.speed.y_m_s = -SPEED;
-//            ctrl.speed.z_rad_s = line_error * KK;
-//            break;
-//        case 3: // 左边
-//            ctrl.speed.x_m_s = -SPEED;
-//            ctrl.speed.y_m_s = 0;
-//            ctrl.speed.z_rad_s = line_error * KK;
-//            break;
-//        }
-//        //        LOG_D("line mode");
-//        abus_public(&rbmg_chassis_acc, &ctrl);
-//    }
 
-//    return 0;
-//}
+carline chassisState=ROTATIONL;
+//根据红区与蓝区调用不同函数
+void RedMoveHandle(chassis_t*chassis,chassis_pos_t*relative_pos)
+{
+	if(chassis_mode==0)//未上三区
+	{
+		switch(chassisState)
+		{
+			//第一步，从出发点自旋转
+			case ROTATIONL:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				chassisState=FORWARD;
+				break;
+			}
+			//第二步，直走运动距离
+			case FORWARD:
+			{
+				
+				//
+				rt_thread_mdelay(1000);
+				//加识别判断
+				break;
+			}
+			case ROTATIONR:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				//可能也加识别判断（包括定位轮）
+				break;
+			}
+			case END:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				break;
+			}
+		}
+	}
+	else if(chassis_mode==1)//上三区之后的逻辑
+	{
+		
+	}
+}
+
+//根据红区与蓝区调用不同函数
+void BlueMoveHandle(chassis_t*chassis,chassis_pos_t*relative_pos)
+{
+	if(chassis_mode==0)//未上三区
+	{
+		switch(chassisState)
+		{
+			//第一步，从出发点自旋转
+			case ROTATIONL:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				chassisState=FORWARD;
+				break;
+			}
+			//第二步，直走运动距离
+			case FORWARD:
+			{
+				
+				//
+				rt_thread_mdelay(1000);
+				//加识别判断
+				break;
+			}
+			case ROTATIONR:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				//可能也加识别判断（包括定位轮）
+				break;
+			}
+			case END:
+			{
+				
+				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
+				break;
+			}
+		}
+	}
+	else if(chassis_mode==1)//上三区之后的逻辑
+	{
+		
+	}
+}
+
 
 int rbmg_dir_callback(abus_topic_t *sub)
 {
@@ -165,13 +151,7 @@ int rbmg_dir_callback(abus_topic_t *sub)
 }
 int rbmg_special_point_callback(abus_topic_t *sub)
 {
-    // 接收特殊点
-
-    /**
-     * @brief 对于特殊点的处理，询问寻路器，切换然后执行动作组最后动作组交回执行权
-     * 注意不在回调中执行回调仅仅切换rbmg_mode,可以发送信号量
-     *
-     */
+    
     if (rbmg_mode != CAB_MODE)
     {
         rbmg_mode = ACTION_MODE;
@@ -185,232 +165,98 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
     // 接收底盘控制数据
     return 0;
 }
-//void action_pick(void)
-//{
-//    power_on(SWITCH_24V_1);
 
 
-//    motor_set_speed(M2006_5_CAN1, 20); // 下
-//    rt_thread_mdelay(2000);
 
-//    while (1)
-//    {
-//        static float last_speed = 0;
-//        float speed = motor_get_speed(M2006_5_CAN1);
-//        LOG_D("pick speed %f lastspeed %f", speed, last_speed);
-
-//        if (last_speed - speed > 2 || fabs(speed) < 0.001)
-//        {
-//            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)-360);
-//            return;
-//        }
-//        last_speed = speed;
-//        rt_thread_mdelay(20);
-//    }
-//}
-
-//void action_up(void)
-//{
-
-//    motor_set_speed(M2006_5_CAN1, -30);
-//    rt_thread_mdelay(2000);
-
-//    while (1)
-//    {
-//        static float last_speed = 0;
-//        float speed = motor_get_speed(M2006_5_CAN1);
-//        LOG_D("up speed %f lastspeed %f", speed, last_speed);
-
-//        if (last_speed - speed < -2 || fabs(speed) < 0.001)
-//        {
-//            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1)+360);
-//            return;
-//        }
-//        last_speed = speed;
-//        rt_thread_mdelay(20);
-//    }
-//}
-                    extern cvdat aball;
+extern cvdat aball;
 
 void rbmg_handle(void *parameter)
 {
-    // rbmg_mode = ACTION_MODE;
-    // action_front_car(0.107f);
+    extern chassis_t chassis_mai;
+		chassis_speed_t speed;
+		static uint8_t mode=0;
+	
+						rt_thread_mdelay(1000);
+					
+					speed.y_m_s=1.4f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.0f;
+					chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(14000);
+
+					speed.y_m_s=0.0f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.7f;
+					chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(1800);
+	
+					speed.y_m_s=1.4f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.0f;
+					chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(10500);
+					
+					
+					speed.y_m_s=0.0f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.7f;
+					chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(1800);
+					
+					speed.y_m_s=1.4f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.0f;
+					chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(10500);
+				
+//					speed.y_m_s=0.0f;
+//					speed.x_m_s=0.0f;
+//					speed.z_rad_s=0.5f;
+//					chassis_set_speed(&chassis_mai,&speed);
+//					rt_thread_mdelay(1000);
+	
+						speed.y_m_s=0.0f;
+					speed.x_m_s=0.0f;
+					speed.z_rad_s=0.0f;
+					chassis_set_speed(&chassis_mai,&speed);
+					LOG_D("stop");
+					rt_thread_mdelay(1000);
+	
     while (1)
-    {
-        // LOG_D("rbmg he
+    {			
+								rt_thread_mdelay(1);
 
-//        // 接到处理数据的消息
-//        const rc_info_t *rc = dbus_get_info();
-//        if (rbmg_mode == CAB_MODE)
-//        {
-
-//            /*
-//                校准模式，也可以用来简单测试
-
-//            */
-
-//            //             action_relative_movement_car( 0.6f,0, 0);
-//            // //
-//            // //            action_relative_movement_car( -0.6f,0, 0);
-//            // motor_set_pos(M2006_5_CAN1, -100);
-
-//            // motor_set_speed(M2006_1_CAN1, -100);
-//            //            action_relative_movement_car( 0.6f,0, 0);
-//            //
-//            //            action_relative_movement_car( -0.6f,0, 0);
-////            motor_set_speed(M2006_5_CAN1, -50);
-
-//            // motor_set_speed(M2006_1_CAN1, -100);
-
-//            // action_relative_movement_car( 0.f,0.1f, 0);
-//            //					rt_thread_mdelay(1000);
-//            //
-
-//            // action_relative_movement_car( 0,0.5f, 0);
-//            //            while(1){
-//            //            motor_set_pos(M2006_5_CAN1,-600);
-//            //						                    rt_thread_mdelay(1500);
-//            //
-//            //
-//            //            motor_set_pos(M2006_5_CAN1,-300);
-//            //						                    rt_thread_mdelay(1000);
-//            //							rt_thread_mdelay(1000);
-//            //            motor_set_pos(M2006_5_CAN1,-600);
-//            //														rt_thread_mdelay(1000);
-
-//            //            }
-//            // rbmg_mode = LINE_MODE;
-//            // motor_set_speed(M2006_5_CAN1, -1500);
-//            // rt_thread_mdelay(6000);
-
-//            LOG_D("cab mode wait lifting ready");
-////            action_up();
-//            LOG_D("lifting is ready");
-//            while (1)
-//            {
-
-//                LOG_D("cab mode");
-//                if (rbmg_mode != CAB_MODE)
-//                {
-
-//                    break;
-//                }
-
-//                while (1)
-//                {
-
-
-//                    rt_thread_mdelay(50);
-
-//									wait1();
-
-//                        // 停车
-////                        ctrl.type = 1;
-////                        ctrl.pos.x_m = 0;
-////                        ctrl.pos.y_m = 0;
-////                        abus_public(&rbmg_chassis_acc, &ctrl);
-//											
-//												action_relative_movement_car(0,0,0);
-//												
-//												setAngle(125.0f);//放下吸盘
-//												rt_thread_mdelay(1000);
-////                        action_pick();
-//                        rt_thread_mdelay(2000);
-//												
-//												
-//												
-////                        action_up();
-//											
-//					              // motor_set_pos(M2006_5_CAN1, 0);
-//												//setAngle(12.0f);//放下吸盘
-//												//action_relative_movement_car(0,0,3.14);
-//												 ctrl.type = 1;
-//                        ctrl.pos.x_m = 0.1;
-//                        ctrl.pos.y_m = 1;
-//                        abus_public(&rbmg_chassis_acc, &ctrl);
-//												
-//                        while(1){
-////                            motor_set_pos(M2006_5_CAN1, motor_get_pos(M2006_5_CAN1));
-//                            rt_thread_mdelay(1000);
-//                            LOG_D("action_over");
-//                        }
-
-//                    ctrl.type = 0;
-//                    ctrl.speed.x_m_s = -(aball.posX - 0.5) * 2.f;
-//                    ctrl.speed.y_m_s = (aball.posY - 0.5) * 2.f;
-
-//                    if (ctrl.speed.x_m_s > 0.12)
-//                        ctrl.speed.x_m_s = 0.12;
-//                    if (ctrl.speed.x_m_s < -0.12)
-//                        ctrl.speed.x_m_s = -0.12;
-
-//                    if (ctrl.speed.y_m_s > 0.12)
-//                        ctrl.speed.y_m_s = 0.12;
-//                    if (ctrl.speed.y_m_s < -0.12)
-//                        ctrl.speed.y_m_s = -0.12;
-
-//                    //									  ctrl.speed.x_m_s = 0.2;
-//                    //                    ctrl.speed.y_m_s = 0;
-
-//                    LOG_D("ballxy carxy:%f,%f,%f,%f,", aball.posX, aball.posY, ctrl.speed.x_m_s, ctrl.speed.y_m_s);
-//                    ctrl.speed.z_rad_s = 0;
-//                    abus_public(&rbmg_chassis_acc, &ctrl);
-
-//                    
-
-//                rt_thread_mdelay(500);
-//            }}
-//        }
-//        else if (rbmg_mode == LINE_MODE)
-//        {
-//            // 巡线都在回调中处理
-//            // LOG_D("line mode");
-//        }
-//        else if (rbmg_mode == ACTION_MODE)
-//        {
-//            // 动作模式下的处理
-//            // 完成动作后切换回巡线模式
-//            LOG_D("action start");
-//            // action_relative_movement_car(0, 0.135f, 0);
-//            // action_relative_movement_car(0, 0, 3.14f/2.0f);
-
-//            /* 更新寻路器*/
-//            now_dir = next_dir;
-//            //            next_dir = Path_get_next_dir(this_table);
-//            LOG_D("now dir %d next dir %d", now_dir, next_dir);
-//            // 判断当前是否寻路完成进行切换或者特殊action
-//            // if (now_dir == 0)
-//            //     while (1)
-//            //     {
-//            //         LOG_D("finder end");
-//            //         rt_thread_mdelay(500);
-//            //     }
-
-//            // 转弯或特殊action
-//            //   turn_actions(now_dir, next_dir);
-//            rbmg_mode = LINE_MODE;
-//            LOG_D("action completion");
-//        }
-        rt_thread_mdelay(50);
+//			if(mode==0)
+//			{
+//					speed.y_m_s=0.5f;
+//					speed.x_m_s=0.0f;
+//					speed.z_rad_s=0.0f;
+//					chassis_set_speed(&chassis_mai,&speed);
+//					rt_thread_mdelay(1000);
+//				
+//					speed.y_m_s=0.0f;
+//					speed.x_m_s=0.0f;
+//					speed.z_rad_s=0.6f;
+//					chassis_set_speed(&chassis_mai,&speed);
+//					rt_thread_mdelay(1000);
+//				LOG_D("1mode:%d",mode);
+//					mode=1;
+//			}
+//			else 
+//			{
+//				LOG_D("2mode:%d",mode);
+//					speed.y_m_s=0.0f;
+//					speed.x_m_s=0.0f;
+//					speed.z_rad_s=0.0f;
+//					chassis_set_speed(&chassis_mai,&speed);
+//					rt_thread_mdelay(1000);
+//			}
+			
     }
 }
 
 int rbmg_init(void)
 {
-    /* step 1.1、查找 PWM 设备 */
-    pwm_dev = (struct rt_device_pwm *)rt_device_find(PWM_DEV_NAME);
-    if (pwm_dev == RT_NULL)
-    {
-        rt_kprintf("pwm sample run failed! can't find %s device!\n", PWM_DEV_NAME);
-        return RT_ERROR;
-    }
-
-    /* step 1.2、设置 PWM 周期和脉冲宽度默认值 */
-    rt_pwm_set(pwm_dev, PWM_DEV_CHANNEL, period, 1900000); // 20ms，初始化0度
-    /* step 1.3、使能 PWM 设备的输出通道 */
-    rt_pwm_enable(pwm_dev, PWM_DEV_CHANNEL);
-
     rt_thread_t tid_rbmg = RT_NULL;
 
     /* 创建线程， 名称是 thread_test， 入口是 thread_entry*/

@@ -54,7 +54,7 @@ void chassis_port_handle(void *parameter)
 {
     // int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data);
     // int chassis_set_pos(chassis_t *chassis, chassis_pos_t *data);
-    chassis_speed.x_m_s = 0.5;
+    chassis_speed.x_m_s = 0.0;
     chassis_speed.y_m_s = 0;
     // chassis_speed.z_rad_s = 10;
 
@@ -81,8 +81,8 @@ void chassis_port_handle(void *parameter)
 
         //abus_publish("chassis_state", &chassis_state);
 				//abus_topic_show("chassis_state");
-	LOG_D("chassis_pos x y z:%f %f %f",chassis_mai.present.pos.x_m,chassis_mai.present.pos.y_m,chassis_mai.present.pos.z_rad);
-
+//	LOG_D("chassis_pos x y z:%f %f %f",chassis_mai.present.pos.x_m,chassis_mai.present.pos.y_m,chassis_mai.present.pos.z_rad);
+//		LOG_D("chassis_speed x y z:%f %f %f",chassis_mai.target.speed.x_m_s,chassis_mai.target.speed.y_m_s,chassis_mai.target.speed.z_rad_s);
         rt_thread_mdelay(50);
     }
 }

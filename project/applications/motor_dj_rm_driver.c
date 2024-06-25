@@ -640,7 +640,7 @@ static void can_rx_thread1(void *parameter)
     while (1)
     {
         // motor_shakdown(0);
-       // motor_shakdown(M3508_1_CAN1);
+       motor_shakdown(M3508_1_CAN1);
         // motor_set_pos(M2006_5_CAN1,-100);
 
         rt_thread_delay(10);
