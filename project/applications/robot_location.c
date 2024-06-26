@@ -106,6 +106,65 @@
 //		rt_thread_startup(locate);
 //	}
 
+<<<<<<< Updated upstream
 //	return 0;
 //}
 //INIT_COMPONENT_EXPORT(locate_init);
+=======
+
+//设置地图坐标系下的目标位置
+void set_TargetPos(float x,float y,locate *dat,chassis_t *chassis)
+{
+	dat->tar_x=x;
+	dat->tar_y=y;
+	chassis->target.pos=inverseTransformPoint(dat,chassis_trans);
+}
+
+
+void locateInint(float x,float y)
+{
+	chassis_trans.tx=x;
+	chassis_trans.ty=y;
+	chassis_trans.start=0;
+}
+
+extern chassis_t chassis_mai;
+
+
+//线程入口
+/**
+功能：
+获取全局位置，全局坐标系
+**/
+void locate_entry(void *parameter)
+{
+		locateInint(0.0f,0.0f);
+    while (1)
+    {
+				get_Angle(-M_PI / 4.0f);
+				LOG_D("position:%f,%f",chassis_mai.target.pos.x_m,chassis_mai.target.pos.y_m);
+				set_TargetPos(6.0f,6.0f,&overall_position,&chassis_mai);
+				rt_thread_mdelay(2);
+    }
+}
+//初始化线程
+int locate_init(void)
+{
+	rt_thread_t locate = RT_NULL;
+	/* 创建线程， 名称是 thread_test， 入口是 thread_entry*/
+	locate = rt_thread_create("locate",
+									   locate_entry, RT_NULL,
+									   4096, 
+										 9,
+                      1);
+
+	/* 线程创建成功，则启动线程 */
+	if (locate != RT_NULL)
+	{
+		rt_thread_startup(locate);
+	}
+
+	return 0;
+}
+INIT_COMPONENT_EXPORT(locate_init);
+>>>>>>> Stashed changes
