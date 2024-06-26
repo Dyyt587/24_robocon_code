@@ -177,12 +177,58 @@ void rbmg_handle(void *parameter)
 		static uint8_t mode=0;
 	
 						rt_thread_mdelay(1000);
+////					
+////					speed.y_m_s=1.4f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.0f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(14000);
+
+////					speed.y_m_s=0.0f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.7f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(1800);
+////	
+////					speed.y_m_s=1.4f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.0f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(10500);
+////					
+////					
+////					speed.y_m_s=0.0f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.7f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(1800);
 //					
+////					speed.y_m_s=1.4f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.0f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(9500);
+////				
+////					speed.y_m_s=0.0f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.7f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(1800);
+////	
+////	speed.y_m_s=1.4f;
+////					speed.x_m_s=0.0f;
+////					speed.z_rad_s=0.0f;
+////					chassis_set_speed(&chassis_mai,&speed);
+////					rt_thread_mdelay(9500);
+////				
+
+
+
 //					speed.y_m_s=1.4f;
 //					speed.x_m_s=0.0f;
 //					speed.z_rad_s=0.0f;
 //					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(14000);
+//					rt_thread_mdelay(9000);
 
 //					speed.y_m_s=0.0f;
 //					speed.x_m_s=0.0f;
@@ -194,62 +240,19 @@ void rbmg_handle(void *parameter)
 //					speed.x_m_s=0.0f;
 //					speed.z_rad_s=0.0f;
 //					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(10500);
-//					
-//					
-//					speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.7f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1800);
-					
-//					speed.y_m_s=1.4f;
+//					rt_thread_mdelay(9500);
+//						speed.y_m_s=0.0f;
 //					speed.x_m_s=0.0f;
 //					speed.z_rad_s=0.0f;
 //					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(9500);
-//				
-//					speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.7f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1800);
+//					LOG_D("stop");
+//					rt_thread_mdelay(1000);
 //	
-//	speed.y_m_s=1.4f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(9500);
-//				
-
-
-
-					speed.y_m_s=1.4f;
-					speed.x_m_s=0.0f;
-					speed.z_rad_s=0.0f;
-					chassis_set_speed(&chassis_mai,&speed);
-					rt_thread_mdelay(9000);
-
-					speed.y_m_s=0.0f;
-					speed.x_m_s=0.0f;
-					speed.z_rad_s=0.7f;
-					chassis_set_speed(&chassis_mai,&speed);
-					rt_thread_mdelay(1800);
-	
-					speed.y_m_s=1.4f;
-					speed.x_m_s=0.0f;
-					speed.z_rad_s=0.0f;
-					chassis_set_speed(&chassis_mai,&speed);
-					rt_thread_mdelay(9500);
-						speed.y_m_s=0.0f;
-					speed.x_m_s=0.0f;
-					speed.z_rad_s=0.0f;
-					chassis_set_speed(&chassis_mai,&speed);
-					LOG_D("stop");
-					rt_thread_mdelay(1000);
-	
     while (1)
     {			
+			
+			
+			
 								rt_thread_mdelay(1);
 
 //			if(mode==0)
