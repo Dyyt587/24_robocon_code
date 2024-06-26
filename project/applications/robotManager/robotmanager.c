@@ -253,6 +253,16 @@ void rbmg_handle(void *parameter)
 			
 			
 			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 								rt_thread_mdelay(1);
 
 //			if(mode==0)

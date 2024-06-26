@@ -58,12 +58,12 @@ void chassis_port_handle(void *parameter)
     chassis_speed.y_m_s = 0;
     // chassis_speed.z_rad_s = 10;
 
-    chassis_pos.x_m = 0.2;
+    chassis_pos.x_m = 0.0;
     chassis_pos.y_m = 0;
     chassis_pos.z_rad = 0;
-     chassis_set_speed(&chassis_mai, &chassis_speed);
+     //chassis_set_speed(&chassis_mai, &chassis_speed);
 
-    //chassis_set_pos(&chassis_mai, &chassis_pos);
+    chassis_set_pos(&chassis_mai, &chassis_pos);
 
     while (1)
     {
@@ -89,10 +89,10 @@ void chassis_port_handle(void *parameter)
 
 int chassis_port_init(void)
 {
-//#if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
-//    chassis_init(&chassis_mai, &ops_mai);
-//#endif
-    chassis_init(&chassis_mai, &ops_omni4);
+#if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
+    chassis_init(&chassis_mai, &ops_mai);
+#endif
+//    chassis_init(&chassis_mai, &ops_omni4);
 
     // 创建话题
     abus_topic_cfg cfg = {
