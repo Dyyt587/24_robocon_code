@@ -12,7 +12,7 @@
 #include "aboard_power_switch.h"
 #include "drv_visual.h"
 #include "bus_sbus.h"
-
+#include "intel_ros.h"
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
@@ -165,41 +165,94 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
     // 接收底盘控制数据
     return 0;
 }
+extern float posx,posy;
+
+extern char id_tap[20];
+extern float posx,posy;
+float kp_line=0.01f;
+extern chassis_t chassis_mai;
+chassis_speed_t speed;
+static uint8_t mode=0;
+chassis_pos_t pos;
+extern visual_date_t tmp;
+
+
+//转向
+void turn_action(uint8_t mode)
+{
+	while(1)
+	{
+		if(posy>5.0f)//转向
+		{
+			if(mode==0)
+			{
+				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/2.0f;
+				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+				chassis_set_pos(&chassis_mai,&pos);
+				rt_thread_mdelay(50);
+			}
+			else if(mode==1)
+			{
+				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/2.0f;
+				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+				chassis_set_pos(&chassis_mai,&pos);
+				rt_thread_mdelay(50);
+			}
+		}
+		else 
+		{
+			break;
+		}
+	}
+}
 
 
 
+//巡线
+void findline(void)
+{
+	while(1)
+	{
+		if(strcmp(tmp.id_tap,(char *)"line")==0&&posy<4.0f)
+		{
+				speed.x_m_s = 0.0f;
+				speed.y_m_s = 0.1f;
+				speed.z_rad_s =-kp_line*(tmp.x  -320.f) ;
+				chassis_set_speed(&chassis_mai,&speed);
+				rt_thread_mdelay(50);
+		}
+		else
+		{
+			break;
+		}
+	}
+}
 
-
-extern cvdat aball;
+//ops行走第二段
+void goops_action(void)
+{
+	while(1)
+	{
+		if(posy>4.0f&&posy<=5.0f)
+		{
+				speed.x_m_s = 0.0f;
+				speed.y_m_s = 0.1f;
+				chassis_set_speed(&chassis_mai,&speed);
+				rt_thread_mdelay(50);
+		}
+		else
+		{
+			break;
+		}
+	}
+}
 
 void rbmg_handle(void *parameter)
 {
-	
-		extern float line_t;
-		extern char id_tap[20];
-		extern float posx,posy;
-		float kp_line=0.02f;
-    extern chassis_t chassis_mai;
-		chassis_speed_t speed;
-		static uint8_t mode=0;
-		chassis_pos_t pos;
-	
 		rt_thread_mdelay(2000);
 		
-		while(strcmp(id_tap,(char *)"line")==0)
-		{
-			speed.x_m_s = 0.0f;
-			speed.y_m_s = 0.2f;
-			speed.z_rad_s =kp_line*(line_t-90.0f) ;
-			chassis_set_speed(&chassis_mai,&speed);
-					rt_thread_mdelay(50);
-
-		}
-		if(posx<4.0f)//第一段
-		{
-				
-		}
-		rt_thread_mdelay(15000);
 
 		
     while (1)

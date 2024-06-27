@@ -18,19 +18,26 @@ static rt_sem_t sem_ros;
 
 ros_data ros2;
 
-upacker_inst msg_packer;//ÊµÀı
+upacker_inst msg_packer;//ÊµÃ€Ã½
 extern chassis_t chassis_mai;
 rt_size_t ros_size;
 
 float line_t=0.0f;
-char id_tap[20];
+
+
+
+visual_date_t tmp;
+visual_date_t Line;
+visual_date_t T_Line;
+visual_date_t Center_Line;
+
 
 xxdate da;
 xxdate dd;
-/***²âÊÔ´úÂë******/
+/***Â²âŠ”Â´ÃºÂ«******/
 uart_data Dat;
 /**
-  * @brief  ÏûÏ¢½âÎö»Øµ÷
+  * @brief  Ï»Ï¢Â½â¶Â»ØµÃ·
   * @note   
   * @param  *d: 
   * @param  size: 
@@ -38,9 +45,9 @@ uart_data Dat;
   */
 static void handle_callback(uint8_t *d, uint16_t size)
 {
-	sscanf((char *)d,"%s %f\r\n",id_tap,&line_t);
-//	LOG_D("data:%s",d);
-	LOG_D("jiexi: %s %f",id_tap,line_t);
+    sscanf((char *)d,"%s %f %f %f\r\n",tmp.id_tap,&tmp.x,&tmp.y,&tmp.k);
+//    LOG_D("data:%s",d);
+    LOG_D("jiexi: %s %f %f %f",tmp.id_tap,tmp.x,tmp.y,tmp.k);
 }
 
 
@@ -48,26 +55,26 @@ static void handle_callback(uint8_t *d, uint16_t size)
 static void uart_send(uint8_t *d, uint16_t size)
 {
 //   ros2.pos_x=chassis_mai.present.pos.x_m;
-//	 ros2.pos_y=chassis_mai.present.pos.y_m;
-//	 ros2.speed_x=chassis_mai.present.speed.x_m_s;
-//	 ros2.speed_y=chassis_mai.present.speed.y_m_s;
-//	 ros2.z_rad=chassis_mai.present.speed.z_rad_s;
-	 rt_device_write(ros_uart,0,d,size);
+//     ros2.pos_y=chassis_mai.present.pos.y_m;
+//     ros2.speed_x=chassis_mai.present.speed.x_m_s;
+//     ros2.speed_y=chassis_mai.present.speed.y_m_s;
+//     ros2.z_rad=chassis_mai.present.speed.z_rad_s;
+     rt_device_write(ros_uart,0,d,size);
 }
 
-////·¢ËÍcmd1Êı¾İ
+////Â·Â¢Ëcmd1Ê½Â¾İ
 //void send_cmd1(){
 //    uint8_t buff[10];
-//		buff[0] = 0x40;
+//        buff[0] = 0x40;
 //    buff[1] = 55;
 //    upacker_pack(&msg_packer, (uint8_t *)buff, 2);
 //}     
 
-//ÊÍ·ÅĞÅºÅÁ¿
+//ÊÂ·ÅÅºÅÂ¿
 rt_err_t ros_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
-		ros_size=size;
-		
+        ros_size=size;
+        
     rt_sem_release(sem_ros);
     return RT_EOK;
 }
@@ -97,97 +104,97 @@ int ros_uart_init(void)
         LOG_E("ros_uart7 set rx indicate failed");
         return -1;
     }
-		
+        
     return 0;
 }
 
 static char rx_buffer[100];
-////µÃµ½¸Ã»º³åÇø
+////ÂµÃµÂ½Â¸Ã»ÂºÂ³å‡¸
 //void get_buff(uint8_t ch)
 //{
-//	if(ch!=NULL)
-//	{
-//		rx_buffer=
-//	}
+//    if(ch!=NULL)
+//    {
+//        rx_buffer=
+//    }
 //}
 
 uint8_t ros_ch = 0;
 
-//Ïß³ÌÈë¿Ú
+//ÏŸÂ³Ìˆë¿š
 void ros_entry(void *parameter)
 {
     uint8_t i = 0;
-		ros_uart_init();
-	  ros_data msg;
+        ros_uart_init();
+      ros_data msg;
     rt_err_t result;
 
     while (1)
     {
-				result=rt_device_read(ros_uart, 0, &ros_ch, 1);
+                result=rt_device_read(ros_uart, 0, &ros_ch, 1);
         if(result!= 1)
         {
             rt_sem_take(sem_ros, RT_WAITING_FOREVER);
-						result=1;
+                        result=1;
         }
-//				LOG_D("data: %c",ros_ch);
-				//¶ªµ½packer½âÎö£¬³É¹¦ÁËµ÷ÓÃcallback
-				upacker_unpack(&msg_packer, &ros_ch,1);
-				rt_thread_mdelay(1);
-				
+//                LOG_D("data: %c",ros_ch);
+                //Â¶ÂªÂµÂ½packerÂ½â¶Â£Â¬Â³É¹Â¦ÃËµÃ·Óƒcallback
+                upacker_unpack(&msg_packer, &ros_ch,1);
+                rt_thread_mdelay(1);
+                
     }
 }
 
 rt_thread_t ros;
-// ´´½¨¶¯Ì¬Ïß³Ì
+// Â´Â´Â½Â¨Â¶Â¯Ì¬ÏŸÂ³Ì
 int ros_init(void)
 {
     ros = rt_thread_create("Ros",
                              ros_entry, RT_NULL,
                              4096, 9,
                              1);
-    if (ros != NULL) // ·µ»ØÖµÕıÈ·£¬Æô¶¯¸ÃÏß³Ì
+    if (ros != NULL) // Â·ÂµÂ»Ø–ÂµÕ½È·Â£Â¬Æ´Â¶Â¯Â¸Ãß³Ì
     {
         rt_thread_startup(ros);
     }
-		//init packer
-		upacker_init(&msg_packer,handle_callback, uart_send);
+        //init packer
+        upacker_init(&msg_packer,handle_callback, uart_send);
     return 0;
 }
 
 rt_thread_t send;
 
 
-//·¢ËÍcmd1Êı¾İ
+//Â·Â¢Ëcmd1Ê½Â¾İ
 void send_cmd1(){
-		dd.id=0x40;
-		dd.a++;
-		dd.b++;
-//		LOG_D("cmd1 data: %s", d);
+        dd.id=0x40;
+        dd.a++;
+        dd.b++;
+//        LOG_D("cmd1 data: %s", d);
     upacker_pack(&msg_packer, (uint8_t *)&dd, sizeof(dd));
 }     
 void send_entry(void *parameter)
 {
     while (1)
     {
-			send_cmd1();
-			rt_thread_mdelay(100);
+            send_cmd1();
+            rt_thread_mdelay(100);
     }
 }
-// ´´½¨¶¯Ì¬Ïß³Ì
+// Â´Â´Â½Â¨Â¶Â¯Ì¬ÏŸÂ³Ì
 int send_init(void)
 {
     send = rt_thread_create("send",
                              send_entry, RT_NULL,
                              4096, 9,
                              1);
-    if (send != NULL) // ·µ»ØÖµÕıÈ·£¬Æô¶¯¸ÃÏß³Ì
+    if (send != NULL) // Â·ÂµÂ»Ø–ÂµÕ½È·Â£Â¬Æ´Â¶Â¯Â¸Ãß³Ì
     {
         rt_thread_startup(send);
     }
     return 0;
 }
 
-INIT_APP_EXPORT(ros_init); // ×Ô¶¯³õÊ¼»¯
-//INIT_APP_EXPORT(send_init); // ×Ô¶¯³õÊ¼»¯
+INIT_APP_EXPORT(ros_init); // ×”Â¶Â¯Â³ÃµÊ¼Â»Â¯
+//INIT_APP_EXPORT(send_init); // ×”Â¶Â¯Â³ÃµÊ¼Â»Â¯
 
 
