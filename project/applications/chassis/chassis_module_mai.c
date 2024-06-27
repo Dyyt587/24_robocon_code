@@ -75,9 +75,9 @@ int module_mai(struct chassis *chassis, const void *output, const void *input, c
         {
         case CHASSIS_SPEED:
             // 速度控制
-            chassis->present.speed.x_m_s = chassis->offset.speed.x_m_s + ((data->motor1 - data->motor2) / (CHASSIS_2PIR * 60.f)) / 2.f;
-            chassis->present.speed.y_m_s = chassis->offset.speed.y_m_s + ((-data->motor2 + data->motor4) / (CHASSIS_2PIR * 60.f)) / 2.f;
-            chassis->present.speed.z_rad_s = chassis->offset.speed.z_rad_s + (-(data->motor3 + data->motor2) / (CHASSIS_2PIR * 60.f)) / (2.f * (CHASSIS_HALF_A_B));
+            chassis->present.speed.x_m_s = chassis->offset.speed.x_m_s + ((data->motor1 - data->motor2) / CHASSIS_2PIR * 60.f) / 2.f;
+            chassis->present.speed.y_m_s = chassis->offset.speed.y_m_s + ((-data->motor2 + data->motor4) / CHASSIS_2PIR * 60.f) / 2.f;
+            chassis->present.speed.z_rad_s = chassis->offset.speed.z_rad_s + (-(data->motor3 + data->motor2) / CHASSIS_2PIR * 60.f) ;
             break;
         case CHASSIS_POS:
 
@@ -85,9 +85,9 @@ int module_mai(struct chassis *chassis, const void *output, const void *input, c
             // chassis->present.pos.x_m = ((data->motor1 + data->motor2) /  ( conversion)) / 2.f;
             // chassis->present.pos.y_m = ((-data->motor2 + data->motor4 ) /( conversion)) / 2.f;
             // chassis->present.pos.z_rad = (-(-data->motor3 + data->motor2) /( conversion)) / (2.f * CHASSIS_HALF_A_B);
-            chassis->present.pos.x_m = chassis->offset.pos.x_m + (data->motor1 + data->motor2 - data->motor3 - data->motor4) / 4.f / (CHASSIS_2PIR * 60.f);
-            chassis->present.pos.y_m = chassis->offset.pos.y_m + (data->motor1 - data->motor2 - data->motor3 + data->motor4) / 4.f / (CHASSIS_2PIR * 60.f);
-            chassis->present.pos.z_rad = chassis->offset.pos.z_rad - (data->motor1 + data->motor2 + data->motor3 + data->motor4) / CHASSIS_HALF_A_B / 4.f / (CHASSIS_2PIR * 60.f);
+            chassis->present.pos.x_m = chassis->offset.pos.x_m + ((data->motor1 + data->motor2 - data->motor3 - data->motor4) / 4.f )*CHASSIS_MAI_WHELL_R_M;
+            chassis->present.pos.y_m = chassis->offset.pos.y_m + ((data->motor1 - data->motor2 - data->motor3 + data->motor4) / 4.f )*CHASSIS_MAI_WHELL_R_M;
+            chassis->present.pos.z_rad = chassis->offset.pos.z_rad - (data->motor1 + data->motor2 + data->motor3 + data->motor4) /  4.f ;
             //LOG_D("xm:%f,ym:%f,zrad:%f", chassis->present.pos.x_m, chassis->present.pos.y_m, chassis->present.pos.z_rad);
 
             break;
@@ -111,18 +111,18 @@ static int driver_mai(struct chassis *chassis, const void *output, const void *i
         case CHASSIS_SPEED:
             // 速度控制
             // LOG_D("speed get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            data->motor1 = -motor_get_speed(MOTOR_MAI_ID_1);
-            data->motor2 = -motor_get_speed(MOTOR_MAI_ID_2);
-            data->motor3 = -motor_get_speed(MOTOR_MAI_ID_3);
-            data->motor4 = -motor_get_speed(MOTOR_MAI_ID_4);
+            data->motor1 = motor_get_speed(MOTOR_MAI_ID_1);
+            data->motor2 = motor_get_speed(MOTOR_MAI_ID_2);
+            data->motor3 = motor_get_speed(MOTOR_MAI_ID_3);
+            data->motor4 = motor_get_speed(MOTOR_MAI_ID_4);
             break;
         case CHASSIS_POS:
             // 位置控制
             // LOG_D("pos get motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            data->motor1 = -motor_get_pos(MOTOR_MAI_ID_1);
-            data->motor2 = -motor_get_pos(MOTOR_MAI_ID_2);
-            data->motor3 = -motor_get_pos(MOTOR_MAI_ID_3);
-            data->motor4 = -motor_get_pos(MOTOR_MAI_ID_4);
+            data->motor1 = motor_get_pos(MOTOR_MAI_ID_1);
+            data->motor2 = motor_get_pos(MOTOR_MAI_ID_2);
+            data->motor3 = motor_get_pos(MOTOR_MAI_ID_3);
+            data->motor4 = motor_get_pos(MOTOR_MAI_ID_4);
             break;
         default:
             break;
@@ -137,18 +137,18 @@ static int driver_mai(struct chassis *chassis, const void *output, const void *i
         case CHASSIS_SPEED:
             // 速度控制
             //LOG_D("speed set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_speed(MOTOR_MAI_ID_1, -data->motor1);
-            motor_set_speed(MOTOR_MAI_ID_2, -data->motor2);
-            motor_set_speed(MOTOR_MAI_ID_3, -data->motor3);
-            motor_set_speed(MOTOR_MAI_ID_4, -data->motor4);
+            motor_set_speed(MOTOR_MAI_ID_1, data->motor1);
+            motor_set_speed(MOTOR_MAI_ID_2, data->motor2);
+            motor_set_speed(MOTOR_MAI_ID_3, data->motor3);
+            motor_set_speed(MOTOR_MAI_ID_4, data->motor4);
             break;
         case CHASSIS_POS:
             // 位置控制
 //            LOG_D("pos set motor1:%f motor2:%f motor3:%f motor4:%f\n", data->motor1, data->motor2, data->motor3, data->motor4);
-            motor_set_pos(MOTOR_MAI_ID_1, -data->motor1);
-            motor_set_pos(MOTOR_MAI_ID_2, -data->motor2);
-            motor_set_pos(MOTOR_MAI_ID_3, -data->motor3);
-            motor_set_pos(MOTOR_MAI_ID_4, -data->motor4);
+            motor_set_pos(MOTOR_MAI_ID_1, data->motor1);
+            motor_set_pos(MOTOR_MAI_ID_2, data->motor2);
+            motor_set_pos(MOTOR_MAI_ID_3, data->motor3);
+            motor_set_pos(MOTOR_MAI_ID_4, data->motor4);
             break;
         default:
             break;
