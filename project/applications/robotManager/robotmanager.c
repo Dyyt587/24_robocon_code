@@ -289,6 +289,10 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 		rt_thread_mdelay(2000);
+		while(1)
+		{
+			rt_thread_mdelay(100);
+		}
 		findline();
 		rt_thread_mdelay(100);
 	//开机先开环走一段，防止干扰
