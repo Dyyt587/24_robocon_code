@@ -4,10 +4,21 @@
 #define DBG_LVL DBG_DBG
  float pos_x = 0;
  float pos_y = 0;
+ 
+ float offset_x=0;
+ float offset_y=0;
+ 
  float zangle = 0;
  float xangle = 0;
  float yangle = 0;
  float w_z = 0;
+ 
+ 
+ //想要使用的
+ float all_posx=0;
+ float all_posy=0;
+ 
+ 
 static rt_device_t uart = 0;
 
 typedef struct
@@ -22,6 +33,21 @@ typedef struct
     float xangle;
     float yangle;
 } action_angle_t;
+
+void set_offset(float x,float y)
+{
+	offset_x=x;
+	offset_y=y;
+}
+
+
+void clear_action(float x,float y)
+{
+	set_offset(x,y);
+	all_posx=pos_x-offset_x;
+	all_posy=pos_y-offset_y;
+}
+
 
 /**
  * @brief 数据解析函数  如更换MCU平台或更换软件库，只需将串口接收到的值传入该函数即可解析

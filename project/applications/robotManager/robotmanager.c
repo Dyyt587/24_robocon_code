@@ -168,128 +168,44 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 
 
 
+
+
 extern cvdat aball;
 
 void rbmg_handle(void *parameter)
 {
+	
+		extern float line_t;
+		extern char id_tap[20];
+		extern float posx,posy;
+		float kp_line=0.02f;
     extern chassis_t chassis_mai;
 		chassis_speed_t speed;
 		static uint8_t mode=0;
+		chassis_pos_t pos;
 	
-						rt_thread_mdelay(1000);
-////					
-////					speed.y_m_s=1.4f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.0f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(14000);
+		rt_thread_mdelay(2000);
+		
+		while(strcmp(id_tap,(char *)"line")==0)
+		{
+			speed.x_m_s = 0.0f;
+			speed.y_m_s = 0.2f;
+			speed.z_rad_s =kp_line*(line_t-90.0f) ;
+			chassis_set_speed(&chassis_mai,&speed);
+					rt_thread_mdelay(50);
 
-////					speed.y_m_s=0.0f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.7f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(1800);
-////	
-////					speed.y_m_s=1.4f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.0f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(10500);
-////					
-////					
-////					speed.y_m_s=0.0f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.7f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(1800);
-//					
-////					speed.y_m_s=1.4f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.0f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(9500);
-////				
-////					speed.y_m_s=0.0f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.7f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(1800);
-////	
-////	speed.y_m_s=1.4f;
-////					speed.x_m_s=0.0f;
-////					speed.z_rad_s=0.0f;
-////					chassis_set_speed(&chassis_mai,&speed);
-////					rt_thread_mdelay(9500);
-////				
+		}
+		if(posx<4.0f)//第一段
+		{
+				
+		}
+		rt_thread_mdelay(15000);
 
-
-
-//					speed.y_m_s=1.4f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(9000);
-
-//					speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.7f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1800);
-//	
-//					speed.y_m_s=1.4f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(9500);
-//						speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					LOG_D("stop");
-//					rt_thread_mdelay(1000);
-//	
+		
     while (1)
     {			
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-								rt_thread_mdelay(1);
-
-//			if(mode==0)
-//			{
-//					speed.y_m_s=0.5f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1000);
-//				
-//					speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.6f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1000);
-//				LOG_D("1mode:%d",mode);
-//					mode=1;
-//			}
-//			else 
-//			{
-//				LOG_D("2mode:%d",mode);
-//					speed.y_m_s=0.0f;
-//					speed.x_m_s=0.0f;
-//					speed.z_rad_s=0.0f;
-//					chassis_set_speed(&chassis_mai,&speed);
-//					rt_thread_mdelay(1000);
-//			}
+			rt_thread_mdelay(1);
 			
     }
 }

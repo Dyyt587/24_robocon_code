@@ -636,14 +636,19 @@ static void can_rx_thread1(void *parameter)
     //   motor_set_pos(M2006_3_CAN1,0);
     //   motor_set_pos(M2006_4_CAN1,0);
     //   motor_set_speed(M2006_5_CAN1,0);
+    motor_t *motor1 = motor_get(0);
+    motor_t *motor2= motor_get(1);
+    motor_t *motor3 = motor_get(2);
+    motor_t *motor4 = motor_get(3);
 
     while (1)
     {
         // motor_shakdown(0);
-       motor_shakdown(M3508_1_CAN1);
+//       motor_shakdown(M3508_1_CAN1);
         // motor_set_pos(M2006_5_CAN1,-100);
-
-        rt_thread_delay(10);
+//			LOG_D("m1:%.2f,m2:%.2f,m3:%.2f,m4:%.2f",motor1->pid_speed->parameter.out,motor2->pid_speed->parameter.out,motor3->pid_speed->parameter.out,motor4->pid_speed->parameter.out);
+//			LOG_D("current2:%.2f,%.2f,%.2f,%.2f",motor1->pid_speed->parameter.target,motor2->pid_speed->parameter.target,motor3->pid_speed->parameter.target,motor4->pid_speed->parameter.target);
+        rt_thread_delay(100);
     }
 }
 /******************************************************************************
@@ -790,6 +795,8 @@ INIT_COMPONENT_EXPORT(motor_dj_init);
         APID_Set_Integral_Limit(motor_get_pid_speed(id), 2000); \
         APID_Set_Bias_Dead_Zone(motor_get_pid_speed(id), 40);  \
         APID_Set_Bias_Limit(motor_get_pid_speed(id), 2000);    \
+			\
+			        APID_Set_Out_Limit(motor_get_pid_pos(id), 1200);    \
         APID_Set_Integral_Limit(motor_get_pid_pos(id), 200);   \
         APID_Set_Bias_Dead_Zone(motor_get_pid_pos(id), 0.06);  \
     } while (0)

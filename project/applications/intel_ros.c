@@ -22,6 +22,8 @@ upacker_inst msg_packer;//实例
 extern chassis_t chassis_mai;
 rt_size_t ros_size;
 
+float line_t=0.0f;
+char id_tap[20];
 
 xxdate da;
 xxdate dd;
@@ -36,24 +38,9 @@ uart_data Dat;
   */
 static void handle_callback(uint8_t *d, uint16_t size)
 {
-	
-#define CMD1_CODE 0X40
-#define CMD2_CODE 0X41
-		LOG_D("pack len%d", size);
-	static uint32_t i=0;
-	i++;
-	LOG_D("num of data: %d",i);
-	//接收到payload
-    if(d[0] == CMD1_CODE){
-			
-			memcpy(&da,&dd,sizeof(dd));
-        //处理功能1的数据
-//				LOG_D("cmd1 data: %d", d[1]);
-				LOG_D("cmd1 data: %f", da.a);
-    }else if(d[0] == CMD2_CODE){
-        //处理功能2的数据    
-        LOG_D("cmd1 data: %d", d[1]);
-    }
+	sscanf((char *)d,"%s %f\r\n",id_tap,&line_t);
+//	LOG_D("data:%s",d);
+	LOG_D("jiexi: %s %f",id_tap,line_t);
 }
 
 
@@ -142,7 +129,7 @@ void ros_entry(void *parameter)
             rt_sem_take(sem_ros, RT_WAITING_FOREVER);
 						result=1;
         }
-//				LOG_D("data: %d", result);
+//				LOG_D("data: %c",ros_ch);
 				//丢到packer解析，成功了调用callback
 				upacker_unpack(&msg_packer, &ros_ch,1);
 				rt_thread_mdelay(1);
@@ -200,7 +187,7 @@ int send_init(void)
     return 0;
 }
 
-//INIT_APP_EXPORT(ros_init); // 自动初始化
+INIT_APP_EXPORT(ros_init); // 自动初始化
 //INIT_APP_EXPORT(send_init); // 自动初始化
 
 
