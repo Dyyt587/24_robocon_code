@@ -288,7 +288,12 @@ void goops_action(void)
 
 void rbmg_handle(void *parameter)
 {
+	
+	
 		rt_thread_mdelay(2000);
+	
+	
+
 		while(1)
 		{
 			rt_thread_mdelay(100);
@@ -359,4 +364,4 @@ int rbmg_init(void)
     }
     return 0;
 }
-INIT_APP_EXPORT(rbmg_init);
+//INIT_APP_EXPORT(rbmg_init);
