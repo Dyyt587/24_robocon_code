@@ -235,6 +235,7 @@ void turn_action(uint8_t mode)
 //巡线
 void findline(void)
 {
+	int cnt=0;
 	while(1)
 	{
 //		if(strcmp(tmp.id_tap,(char *)"line")==0&&posy<4.0f)
@@ -258,7 +259,10 @@ void findline(void)
 		}
 		else
 		{
+			cnt++;
+			if(cnt>5){
 			break;
+			}
 		}
 	}
 }
@@ -287,6 +291,35 @@ void rbmg_handle(void *parameter)
 		rt_thread_mdelay(2000);
 		findline();
 		rt_thread_mdelay(100);
+	//开机先开环走一段，防止干扰
+	
+	//开环走完毕
+	//巡线开始
+	
+	//如果巡线并且位置大于某个位置才巡线
+	
+	
+	//ops位置大于xxx,为防止视觉干扰，开环走一段
+	
+	//开环结束，已经到达需要转弯的巡线区域
+	
+	//检测到转弯，开始右转
+	
+	//右转完成，并且已经开环周一小段距离
+	//开始巡线
+	
+	//到达可能转弯区域，继续巡线
+	
+	//检测到转弯，开始转弯
+	
+	//完成左转并且开环走一小段距离
+	//开始巡线（即将进入三区域）
+	
+	//碰到第一个t字路口，实现重定位，对定位轮位置进行设置
+	
+	//
+	//
+	//
 		if(strcmp(tmp.id_tap,(char *)"LR")==0)
 		{
 			turn_action(0);
