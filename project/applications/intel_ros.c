@@ -47,7 +47,7 @@ static void handle_callback(uint8_t *d, uint16_t size)
 {
     sscanf((char *)d,"%s %f %f %f\r\n",tmp.id_tap,&tmp.x,&tmp.y,&tmp.k);
 //    LOG_D("data:%s",d);
-    LOG_D("jiexi: %s %f %f %f",tmp.id_tap,tmp.x,tmp.y,tmp.k);
+//    LOG_D("jiexi: %s %f %f %f",tmp.id_tap,tmp.x,tmp.y,tmp.k);
 }
 
 

@@ -165,13 +165,12 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
     // 接收底盘控制数据
     return 0;
 }
-extern float posx,posy;
+extern float pos_x,pos_y;
 
 extern char id_tap[20];
-extern float posx,posy;
-float kp_line=0.01f;
+float kp_line=0.0001f;
 extern chassis_t chassis_mai;
-chassis_speed_t speed;
+static chassis_speed_t speed;
 static uint8_t mode=0;
 chassis_pos_t pos;
 extern visual_date_t tmp;
@@ -180,32 +179,55 @@ extern visual_date_t tmp;
 //转向
 void turn_action(uint8_t mode)
 {
-	while(1)
-	{
-		if(posy>5.0f)//转向
+//	while(1)
+//	{
+//		if(posy>5.0f)//转向
+//		{
+//			if(mode==0)
+//			{
+//				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+//				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/2.0f;
+//				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+//				chassis_set_pos(&chassis_mai,&pos);
+//				rt_thread_mdelay(50);
+//			}
+//			else if(mode==1)
+//			{
+//				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+//				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/2.0f;
+//				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+//				chassis_set_pos(&chassis_mai,&pos);
+//				rt_thread_mdelay(50);
+//			}
+//		}
+//		else 
+//		{
+//			break;
+//		}
+//	}
+		if(mode==0)
 		{
-			if(mode==0)
-			{
-				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/2.0f;
-				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
-				chassis_set_pos(&chassis_mai,&pos);
-				rt_thread_mdelay(50);
-			}
-			else if(mode==1)
-			{
-				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/2.0f;
-				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
-				chassis_set_pos(&chassis_mai,&pos);
-				rt_thread_mdelay(50);
-			}
+			pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/8.0f;
+			pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+			LOG_D("pos2:%f,%f,%f",pos.x_m,pos.y_m,pos.z_rad);
+			chassis_set_pos(&chassis_mai,&pos);
+			rt_thread_mdelay(150000);
 		}
-		else 
+		else if(mode==1)
 		{
-			break;
+			pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/8.0f;
+			pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+			LOG_D("pos2:%f,%f,%f",pos.x_m,pos.y_m,pos.z_rad);
+			chassis_set_pos(&chassis_mai,&pos);
+			rt_thread_mdelay(150000);
 		}
-	}
+		speed.y_m_s=0.1f;
+		speed.x_m_s=0.0f;
+		speed.z_rad_s=0.0f;
+		chassis_set_speed(&chassis_mai,&speed);
+		rt_thread_mdelay(1500);
 }
 
 
@@ -215,11 +237,22 @@ void findline(void)
 {
 	while(1)
 	{
-		if(strcmp(tmp.id_tap,(char *)"line")==0&&posy<4.0f)
+//		if(strcmp(tmp.id_tap,(char *)"line")==0&&posy<4.0f)
+		if(strcmp(tmp.id_tap,(char *)"line")==0)
 		{
 				speed.x_m_s = 0.0f;
 				speed.y_m_s = 0.1f;
-				speed.z_rad_s =-kp_line*(tmp.x  -320.f) ;
+				speed.z_rad_s =kp_line*(tmp.x  -320.f) ;
+				if(speed.z_rad_s>2.0f)
+				{
+						speed.z_rad_s=2.0f;
+						LOG_E("line error");
+				}
+				else if(speed.z_rad_s<-2.0f)
+				{
+						speed.z_rad_s=-2.0f;
+						LOG_E("line error");
+				}
 				chassis_set_speed(&chassis_mai,&speed);
 				rt_thread_mdelay(50);
 		}
@@ -235,7 +268,7 @@ void goops_action(void)
 {
 	while(1)
 	{
-		if(posy>4.0f&&posy<=5.0f)
+		if(pos_y>4.0f&&pos_y<=5.0f)
 		{
 				speed.x_m_s = 0.0f;
 				speed.y_m_s = 0.1f;
@@ -252,8 +285,17 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 		rt_thread_mdelay(2000);
-		
-
+		findline();
+		rt_thread_mdelay(100);
+		if(strcmp(tmp.id_tap,(char *)"LR")==0)
+		{
+			turn_action(0);
+		}
+		else if(strcmp(tmp.id_tap,(char *)"LL")==0)
+		{
+			turn_action(1);
+		}
+		findline();
 		
     while (1)
     {			

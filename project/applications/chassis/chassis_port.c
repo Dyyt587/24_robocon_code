@@ -71,7 +71,7 @@ int chassis_port_plan(struct chassis *chassis, chassis_data_t *outdata)
 // 0.55 正中间 400 90度
 void chassis_port_handle(void *parameter)
 {
-	
+	static int time=0;
 	rt_thread_mdelay(2000);
     // int chassis_set_speed(chassis_t *chassis, chassis_speed_t *data);
     // int chassis_set_pos(chassis_t *chassis, chassis_pos_t *data);
@@ -79,9 +79,12 @@ void chassis_port_handle(void *parameter)
     chassis_speed.y_m_s = 0.0f;
     chassis_speed.z_rad_s = 0.0;
 
-    chassis_pos.x_m = 0.0f;
-    chassis_pos.y_m = 1.0f;
-    chassis_pos.z_rad = 0.0f;
+//    chassis_pos.x_m = 0.0f;
+//    chassis_pos.y_m = 1.0f;
+//    chassis_pos.z_rad = 0.0f;
+	chassis_pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+	chassis_pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+	chassis_pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad;
 //        chassis_set_speed(&chassis_mai, &chassis_speed);
 
 //    chassis_set_pos_plan(&chassis_mai, &chassis_pos);
@@ -90,7 +93,12 @@ void chassis_port_handle(void *parameter)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
 
+			
         chassis_handle(&chassis_mai, 0);
+				chassis_pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
+	chassis_pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
+	chassis_pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad;
+			if(time++%2==0)LOG_D("pos:%f,%f,%f",chassis_pos.x_m,chassis_pos.y_m,chassis_pos.z_rad);
 #endif
 
         rt_thread_mdelay(20);
