@@ -10,6 +10,24 @@
 
 void (*pCalCurve[])(CurveObjectType *curve) = {0, CalCurveSPTA, CalCurveSPTA};
 
+
+void mine_plan(CurveObjectType* curve)
+{
+    if (curve->targetPos > 0)
+    {
+        MotorVelocityCurve(curve);
+    }
+    else
+    {
+        curve->targetPos = -curve->targetPos;
+        curve->currentPos = -curve->currentPos;
+        MotorVelocityCurve(curve);
+        curve->targetPos = -curve->targetPos;
+        curve->currentPos = -curve->currentPos;
+    }
+}
+
+
 float motor_planning(CurveObjectType *curve)
 {
     if (curve->targetPos > 0)

@@ -44,22 +44,22 @@ void chassis_init_curve(CurveObjectType *curve)
     curve->currentPos = 0.0f;
     curve->stepPos = 0.1f; // 位置变化的步长
     //curve->max_pos = 1500.0f;
-    curve->PosMax = FLT_MAX;  // 最大位置限制
-    curve->PosMin = -FLT_MAX; // 最小位置限制
+//    curve->PosMax = FLT_MAX;  // 最大位置限制
+//    curve->PosMin = -FLT_MAX; // 最小位置限制
     curve->aTimes = 0;               // 当前时间步
     curve->maxTimes = 500;           // 总时间步，实际使用时需要根据实际情况计算
     curve->curveMode = CURVE_SPTA;   // 使用S型曲线
     curve->flexible = 10.f;          // S曲线的柔性因子
 }
 
-void chassis_planning_(CurveObjectType *curve, float *out)
-{
-    if (curve->maxTimes)
-    {
-        mine_plan(curve);
-        *out = curve->currentPos;
-    }
-}
+//void chassis_planning_(CurveObjectType *curve, float *out)
+//{
+//    if (curve->maxTimes)
+//    {
+//        motor_planing(curve);
+//        *out = curve->currentPos;
+//    }
+//}
 
 int chassis_set_pos_plan(chassis_t *chassis, chassis_pos_t *data)
 {
