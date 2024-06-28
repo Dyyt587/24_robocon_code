@@ -90,7 +90,7 @@ void chassis_port_handle(void *parameter)
 //        chassis_set_speed(&chassis_mai, &chassis_speed);
 
 //    chassis_set_pos_plan(&chassis_mai, &chassis_pos);
-		chassis_set_pos(&chassis_mai, &chassis_pos);
+	//	chassis_set_pos(&chassis_mai, &chassis_pos);
     while (1)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
@@ -99,7 +99,7 @@ void chassis_port_handle(void *parameter)
 				chassis_pos1.x_m=chassis_get_pos(&chassis_mai)->x_m;
 	chassis_pos1.y_m=chassis_get_pos(&chassis_mai)->y_m;
 	chassis_pos1.z_rad=chassis_get_pos(&chassis_mai)->z_rad;
-			if(time++%2==0)LOG_D("pos:%f,%f,%f",chassis_pos1.x_m,chassis_pos1.y_m,chassis_pos1.z_rad);
+			//if(time++%2==0)LOG_D("pos:%f,%f,%f",chassis_pos1.x_m,chassis_pos1.y_m,chassis_pos1.z_rad);
 #endif
 
         rt_thread_mdelay(20);

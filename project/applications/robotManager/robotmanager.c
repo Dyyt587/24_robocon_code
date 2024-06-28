@@ -168,7 +168,7 @@ int rbmg_chassis_ctrl_callback(abus_topic_t *sub)
 extern float pos_x,pos_y;
 
 extern char id_tap[20];
-float kp_line=0.0001f;
+float kp_line=0.0012f;
 extern chassis_t chassis_mai;
 static chassis_speed_t speed;
 static uint8_t mode=0;
@@ -179,6 +179,11 @@ extern visual_date_t tmp;
 //转向
 void turn_action(uint8_t mode)
 {
+		speed.y_m_s=0.2f;
+		speed.x_m_s=0.0f;
+		speed.z_rad_s=0.0f;
+		chassis_set_speed(&chassis_mai,&speed);
+		rt_thread_mdelay(1500);
 //	while(1)
 //	{
 //		if(posy>5.0f)//转向
@@ -208,22 +213,22 @@ void turn_action(uint8_t mode)
 		if(mode==0)
 		{
 			pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/8.0f;
+			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/2.0f;
 			pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
 			LOG_D("pos2:%f,%f,%f",pos.x_m,pos.y_m,pos.z_rad);
 			chassis_set_pos(&chassis_mai,&pos);
-			rt_thread_mdelay(150000);
+			rt_thread_mdelay(1500);
 		}
 		else if(mode==1)
 		{
 			pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/8.0f;
+			pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/2.0f;
 			pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
 			LOG_D("pos2:%f,%f,%f",pos.x_m,pos.y_m,pos.z_rad);
 			chassis_set_pos(&chassis_mai,&pos);
-			rt_thread_mdelay(150000);
+			rt_thread_mdelay(1500);
 		}
-		speed.y_m_s=0.1f;
+		speed.y_m_s=0.2f;
 		speed.x_m_s=0.0f;
 		speed.z_rad_s=0.0f;
 		chassis_set_speed(&chassis_mai,&speed);
@@ -242,8 +247,8 @@ void findline(void)
 		if(strcmp(tmp.id_tap,(char *)"line")==0)
 		{
 				speed.x_m_s = 0.0f;
-				speed.y_m_s = 0.1f;
-				speed.z_rad_s =kp_line*(tmp.x  -320.f) ;
+				speed.y_m_s = 0.6f;
+				speed.z_rad_s =-kp_line*(tmp.x  -320.f) ;
 				if(speed.z_rad_s>2.0f)
 				{
 						speed.z_rad_s=2.0f;
@@ -260,7 +265,7 @@ void findline(void)
 		else
 		{
 			cnt++;
-			if(cnt>5){
+			if(cnt>3){
 			break;
 			}
 		}
@@ -289,19 +294,15 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 	
-	
+	motor_set_speed(M3508_5_CAN1,100);
 		rt_thread_mdelay(2000);
 	
-	
 
-		while(1)
-		{
-			rt_thread_mdelay(100);
-		}
 		findline();
 		rt_thread_mdelay(100);
 	//开机先开环走一段，防止干扰
-	
+	//chassis_set_pos(&chassis_mai,&(chassis_pos_t){0,0.5,0});
+
 	//开环走完毕
 	//巡线开始
 	
@@ -364,4 +365,4 @@ int rbmg_init(void)
     }
     return 0;
 }
-//INIT_APP_EXPORT(rbmg_init);
+INIT_APP_EXPORT(rbmg_init);
