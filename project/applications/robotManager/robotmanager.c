@@ -294,7 +294,8 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 	
-	motor_set_speed(M3508_5_CAN1,100);
+//	motor_set_speed(M3508_5_CAN1,100);
+//	motor_set_speed(M3508_6_CAN1,100);
 		rt_thread_mdelay(2000);
 	
 
