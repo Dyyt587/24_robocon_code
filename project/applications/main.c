@@ -165,6 +165,7 @@ int main(void)
 
 	//motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
 	//motor_set_pos_plan(M3508_4_CAN1, 3.1415926, 0.02f, 5.f, 0);
+	motor_set_pos_plan(M3508_7_CAN1, 3.1415926/8, 0.02f, 5.f, 0);
 //	motor_set_pos(M3508_1_CAN1, 3.1415926);
 //	motor_set_pos(M3508_2_CAN1, 3.1415926);
 //	motor_set_pos(M3508_3_CAN1, 3.1415926);

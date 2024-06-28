@@ -503,6 +503,7 @@ int motor_dj_ctr(int id, uint16_t cmd, float *arg)
         break;
     case MOTOR_MODE_TORQUE:
         /*返回力矩/电流值*/
+		
         // *arg = __motor->real_current;
         break;
     case MOTOR_MODE_SPEED:
@@ -796,7 +797,7 @@ INIT_COMPONENT_EXPORT(motor_dj_init);
         APID_Set_Bias_Dead_Zone(motor_get_pid_speed(id), 40);  \
         APID_Set_Bias_Limit(motor_get_pid_speed(id), 2000);    \
 			\
-			        APID_Set_Out_Limit(motor_get_pid_pos(id), 1200);    \
+			        APID_Set_Out_Limit(motor_get_pid_pos(id), 600);    \
         APID_Set_Integral_Limit(motor_get_pid_pos(id), 200);   \
         APID_Set_Bias_Dead_Zone(motor_get_pid_pos(id), 0.06);  \
     } while (0)
@@ -843,6 +844,9 @@ static void set_motor_passive_feedback(void)
 #endif
 #if defined(MOTOR_DJ_M3508_ID7_CAN1)
     DJ_DEFAULT_CFG_3508(M3508_7_CAN1);
+		
+		APID_Set_Out_Limit(motor_get_pid_pos(M3508_7_CAN1), 6+00);    \
+
 #endif
 #if defined(MOTOR_DJ_M3508_ID8_CAN1)
     DJ_DEFAULT_CFG_3508(M3508_8_CAN1);

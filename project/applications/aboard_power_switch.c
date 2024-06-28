@@ -1,6 +1,6 @@
 /*
  * @Author: Dyyt587 805207319@qq.com
- * @Date: 2024-03-03 16:29:11
+ * @Date: 2024-03-03 16:29:11  GPIO口控制
  * @LastEditors: Dyyt587 805207319@qq.com
  * @LastEditTime: 2024-03-03 22:31:37
  * @FilePath: \project\applications\aboard_power_switch.c
@@ -51,11 +51,11 @@ int power_init(void)
     rt_pin_mode(SWITCH_5V_1, PIN_MODE_OUTPUT);
 	
 	
-	power_off(SWITCH_24V_1);
-	power_off(SWITCH_24V_2);
-	power_off(SWITCH_24V_3);
-	power_off(SWITCH_24V_4);
-	power_off(SWITCH_5V_1 );
+		power_off(SWITCH_24V_1);
+		power_off(SWITCH_24V_2);
+		power_off(SWITCH_24V_3);
+		power_off(SWITCH_24V_4);
+		power_off(SWITCH_5V_1 );
 	
 	return 0;
 }
