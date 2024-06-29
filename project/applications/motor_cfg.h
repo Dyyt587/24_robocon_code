@@ -47,8 +47,8 @@ extern "C"
      #define MOTOR_DJ_M3508_ID3_CAN1
      #define MOTOR_DJ_M3508_ID4_CAN1
      #define MOTOR_DJ_M3508_ID5_CAN1
-    // #define MOTOR_DJ_M3508_ID6_CAN1
-     //#define MOTOR_DJ_M3508_ID7_CAN1
+     #define MOTOR_DJ_M3508_ID6_CAN1
+     #define MOTOR_DJ_M3508_ID7_CAN1
     // #define MOTOR_DJ_M3508_ID8_CAN1
     // #define MOTOR_DJ_M3508_ID1_CAN2
     // #define MOTOR_DJ_M3508_ID2_CAN2

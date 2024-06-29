@@ -294,52 +294,52 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 	
-//	motor_set_speed(M3508_5_CAN1,100);
-//	motor_set_speed(M3508_6_CAN1,100);
-		rt_thread_mdelay(2000);
+	motor_set_speed(M3508_5_CAN1,-100);
+	motor_set_speed(M3508_6_CAN1,100);
+	rt_thread_mdelay(2000);
 	
 
-		findline();
-		rt_thread_mdelay(100);
-	//开机先开环走一段，防止干扰
-	//chassis_set_pos(&chassis_mai,&(chassis_pos_t){0,0.5,0});
+//		findline();
+//		rt_thread_mdelay(100);
+//	//开机先开环走一段，防止干扰
+//	//chassis_set_pos(&chassis_mai,&(chassis_pos_t){0,0.5,0});
 
-	//开环走完毕
-	//巡线开始
-	
-	//如果巡线并且位置大于某个位置才巡线
-	
-	
-	//ops位置大于xxx,为防止视觉干扰，开环走一段
-	
-	//开环结束，已经到达需要转弯的巡线区域
-	
-	//检测到转弯，开始右转
-	
-	//右转完成，并且已经开环周一小段距离
-	//开始巡线
-	
-	//到达可能转弯区域，继续巡线
-	
-	//检测到转弯，开始转弯
-	
-	//完成左转并且开环走一小段距离
-	//开始巡线（即将进入三区域）
-	
-	//碰到第一个t字路口，实现重定位，对定位轮位置进行设置
-	
-	//
-	//
-	//
-		if(strcmp(tmp.id_tap,(char *)"LR")==0)
-		{
-			turn_action(0);
-		}
-		else if(strcmp(tmp.id_tap,(char *)"LL")==0)
-		{
-			turn_action(1);
-		}
-		findline();
+//	//开环走完毕
+//	//巡线开始
+//	
+//	//如果巡线并且位置大于某个位置才巡线
+//	
+//	
+//	//ops位置大于xxx,为防止视觉干扰，开环走一段
+//	
+//	//开环结束，已经到达需要转弯的巡线区域
+//	
+//	//检测到转弯，开始右转
+//	
+//	//右转完成，并且已经开环周一小段距离
+//	//开始巡线
+//	
+//	//到达可能转弯区域，继续巡线
+//	
+//	//检测到转弯，开始转弯
+//	
+//	//完成左转并且开环走一小段距离
+//	//开始巡线（即将进入三区域）
+//	
+//	//碰到第一个t字路口，实现重定位，对定位轮位置进行设置
+//	
+//	//
+//	//
+//	//
+//		if(strcmp(tmp.id_tap,(char *)"LR")==0)
+//		{
+//			turn_action(0);
+//		}
+//		else if(strcmp(tmp.id_tap,(char *)"LL")==0)
+//		{
+//			turn_action(1);
+//		}
+//		findline();
 		
     while (1)
     {			
