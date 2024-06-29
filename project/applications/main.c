@@ -37,6 +37,7 @@
 //#include "apid_auto_tune_Relayfeedback.h"
 #include "apid_auto_tune_ZNmode.h"
 #include "Trajectory_planning.h"
+#include "steer.h"
 
 /* defined the LED_G pin: PF14 */
 #define LED0_PIN GET_PIN(F, 14)
@@ -110,7 +111,28 @@ int main(void)
 	power_on(SWITCH_5V_1);
 
 	power_off(SWITCH_24V_4);
-
+//	steer_plate(0.0f,1);
+	while(1)
+	{
+		steer_plate(180.0f,0);
+		steer_plate(90.0f,1);
+		steer_plate(90.0f,2);
+		rt_thread_mdelay(2000);
+		steer_plate(0.0f,0);
+		steer_plate(0.0f,1);
+		steer_plate(0.0f,2);
+		rt_thread_mdelay(2000);
+		
+//		steer_plate(90.0f,1);
+//		rt_thread_mdelay(2000);
+//		steer_plate(0.0f,1);
+//		rt_thread_mdelay(2000);
+//		
+//		steer_plate(90.0f,2);
+//		rt_thread_mdelay(2000);
+//		steer_plate(0.0f,2);
+//		rt_thread_mdelay(2000);
+	}
 	// 	rt_adc_device_t adc_dev;
 	// 	rt_uint32_t value;
 	// float 	vol;
