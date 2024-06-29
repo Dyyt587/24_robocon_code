@@ -1,5 +1,6 @@
 #include "drv_action.h"
 #include <rtdbg.h>
+#include <rtdevice.h>
 #define DBG_TAG "drv.action.ops"
 #define DBG_LVL DBG_DBG
  float pos_x = 0;
@@ -126,7 +127,7 @@ void Action_set_zero(void)
 
 
 
-static rt_err_t dbus_uart_rx_ind(rt_device_t dev, rt_size_t size)
+static rt_err_t action_uart_rx_ind(rt_device_t dev, rt_size_t size)
 {
     uint8_t data = 0;
     while (size--)
@@ -152,8 +153,23 @@ int Action_Init(void)
         LOG_E("uart1 open failed");
         return -1;
     }
-
-    if (rt_device_set_rx_indicate(uart, dbus_uart_rx_ind) != RT_EOK)
+struct serial_configure config = {
+		BAUD_RATE_115200,						/* 115200 bits/s */
+		DATA_BITS_8,				/* 8 databits */
+		STOP_BITS_1,				/* 1 stopbit */
+		PARITY_NONE,				/* No parity  */
+		BIT_ORDER_LSB,				/* LSB first sent */
+		NRZ_NORMAL,					/* Normal mode */
+		4096,		/* rxBuf size */
+		4096,		/* txBuf size */
+		RT_SERIAL_FLOWCONTROL_NONE, /* Off flowcontrol */
+		0};
+	if (RT_EOK != rt_device_control(uart, RT_DEVICE_CTRL_CONFIG, &config))
+	{
+		rt_kprintf("change %s(action ops) failed!\n", uart->parent.name);
+	}
+	
+    if (rt_device_set_rx_indicate(uart, action_uart_rx_ind) != RT_EOK)
     {
         LOG_E("uart1 set rx indicate failed");
         return -1;

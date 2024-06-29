@@ -8,6 +8,7 @@
  */
 #include "chassis_port.h"
 #include "chassis_module_mai.h"
+#include "chassis_ops_pos.h"
 //#include "abus_topic.h"
 
 #include <rtthread.h>
@@ -94,7 +95,7 @@ void chassis_port_handle(void *parameter)
     while (1)
     {
 #if defined(CHASSIS_MODULE_MAI) && defined(CHASSIS_MODULE_MAI)
-			
+				chassis_ops_handle(20);
         chassis_handle(&chassis_mai, 0);
 				chassis_pos1.x_m=chassis_get_pos(&chassis_mai)->x_m;
 	chassis_pos1.y_m=chassis_get_pos(&chassis_mai)->y_m;
@@ -130,4 +131,4 @@ int chassis_port_init(void)
     }
     return 0;
 }
-INIT_ENV_EXPORT(chassis_port_init);
+//INIT_ENV_EXPORT(chassis_port_init);

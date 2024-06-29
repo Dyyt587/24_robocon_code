@@ -131,7 +131,7 @@ int main(void)
 
 	/////////////////////////////////////////////////////////
 	// 使用示例
-	motor_set_pos(0, 0);
+	//motor_set_pos(0, 0);
 
 	// static CurveObjectType curve;
 
@@ -165,7 +165,6 @@ int main(void)
 
 	//motor_set_pos_plan(M3508_1_CAN1, 3.1415926, 0.02f, 5.f, 0);
 	//motor_set_pos_plan(M3508_4_CAN1, 3.1415926, 0.02f, 5.f, 0);
-	motor_set_pos_plan(M3508_7_CAN1, 3.1415926/8, 0.02f, 5.f, 0);
 //	motor_set_pos(M3508_1_CAN1, 3.1415926);
 //	motor_set_pos(M3508_2_CAN1, 3.1415926);
 //	motor_set_pos(M3508_3_CAN1, 3.1415926);
@@ -260,10 +259,24 @@ int main(void)
 	ctrl.y=1;
 	ctrl.w=1;
 	//abus_deamon_start();
-	//motor_set_pos(M3508_1_CAN1, 3.1415926*2);
+	//motor_set_pos(M3508_7_CAN1, 3.1415926/2);
+		motor_set_speed(M3508_5_CAN1, -400);
+
+	//	motor_set_pos_plan(M3508_7_CAN1, 3.1415926/8, 0.02f, 5.f, 0);
+
+//extern  float pos_x ;
+//extern  float pos_y ;
+//extern  float zangle ;
+//	while (1)
+//	{
+//LOG_D("x y z %f %f %f",pos_x,pos_y,zangle);
+//		rt_thread_mdelay(20);
+//	}
 	///////////////////////////////////////////////////
 	while (1)
 	{
+			//motor_set_pos(M3508_7_CAN1, 3.1415926*2);
+
 		//abus_publish("chassis_ctrl", &ctrl);
 		// motor_set_pos(	M3508_1_CAN1, 100);
 		rt_pin_write(LED0_PIN, PIN_HIGH);

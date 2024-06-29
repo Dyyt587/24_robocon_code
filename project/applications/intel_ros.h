@@ -1,3 +1,6 @@
+#ifndef INTEL_ROS_H
+#define INTEL_ROS_H
+
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <rtdbg.h>
@@ -41,3 +44,4 @@ typedef struct{
     float y;
     float k;
 }visual_date_t;
+#endif

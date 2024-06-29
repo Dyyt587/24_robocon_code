@@ -87,21 +87,21 @@ rt_err_t ros_uart_rx_ind(rt_device_t dev, rt_size_t size)
 int ros_uart_init(void)
 {
     sem_ros = rt_sem_create("sem_ros", 0, RT_IPC_FLAG_FIFO);
-    ros_uart = rt_device_find("uart7");
+    ros_uart = rt_device_find("uart8");
     if (ros_uart == RT_NULL)
     {
-        LOG_E("uart7 not found");
+        LOG_E("uart8 not found");
         return -1;
     }
     if (rt_device_open(ros_uart, RT_DEVICE_OFLAG_RDWR) != RT_EOK)
     {
-        LOG_E("uart7 open failed");
+        LOG_E("uart8 open failed");
         return -1;
     }
     
     if (rt_device_set_rx_indicate(ros_uart, ros_uart_rx_ind) != RT_EOK)
     {
-        LOG_E("ros_uart7 set rx indicate failed");
+        LOG_E("ros_uart8 set rx indicate failed");
         return -1;
     }
         
