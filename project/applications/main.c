@@ -112,17 +112,17 @@ int main(void)
 
 	power_off(SWITCH_24V_4);
 //	steer_plate(0.0f,1);
-	while(1)
-	{
-		steer_plate(180.0f,0);
-		steer_plate(90.0f,1);
-		steer_plate(90.0f,2);
-		rt_thread_mdelay(2000);
-		steer_plate(0.0f,0);
-		steer_plate(0.0f,1);
-		steer_plate(0.0f,2);
-		rt_thread_mdelay(2000);
-		
+//	while(1)
+//	{
+//		steer_plate(180.0f,0);
+//		steer_plate(90.0f,1);
+//		steer_plate(90.0f,2);
+//		rt_thread_mdelay(2000);
+//		steer_plate(0.0f,0);
+//		steer_plate(0.0f,1);
+//		steer_plate(0.0f,2);
+//		rt_thread_mdelay(2000);
+//	}
 //		steer_plate(90.0f,1);
 //		rt_thread_mdelay(2000);
 //		steer_plate(0.0f,1);
@@ -132,7 +132,7 @@ int main(void)
 //		rt_thread_mdelay(2000);
 //		steer_plate(0.0f,2);
 //		rt_thread_mdelay(2000);
-	}
+	
 	// 	rt_adc_device_t adc_dev;
 	// 	rt_uint32_t value;
 	// float 	vol;
@@ -282,7 +282,7 @@ int main(void)
 	ctrl.w=1;
 	//abus_deamon_start();
 	//motor_set_pos(M3508_7_CAN1, 3.1415926/2);
-		motor_set_speed(M3508_5_CAN1, -400);
+	//	motor_set_speed(M3508_5_CAN1, -400);
 
 	//	motor_set_pos_plan(M3508_7_CAN1, 3.1415926/8, 0.02f, 5.f, 0);
 

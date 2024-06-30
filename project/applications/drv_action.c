@@ -14,6 +14,11 @@
  float yangle = 0;
  float w_z = 0;
  
+ float last_angle=0.0f;
+ float all_angle=0.0f; 
+ 
+ 
+
  
  //想要使用的
  float all_posx=0;
@@ -102,7 +107,18 @@ void Data_Analyse(uint8_t rec)
         break;
     case 4:
         if (ch == 0x0d)
+				//首先，5ms转不到180
         {
+						float offeset=zangle-last_angle;;
+						if(offeset>180.0f)
+						{
+							offeset=offeset-360;
+						}
+						else if(offeset<-180.0f)
+						{
+							offeset=offeset+360;
+						}
+						last_angle=zangle;
             zangle = posture.ActVal[0];
             xangle = posture.ActVal[1];
             yangle = posture.ActVal[2];

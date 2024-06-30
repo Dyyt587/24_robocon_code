@@ -131,4 +131,4 @@ int chassis_port_init(void)
     }
     return 0;
 }
-//INIT_ENV_EXPORT(chassis_port_init);
+INIT_ENV_EXPORT(chassis_port_init);

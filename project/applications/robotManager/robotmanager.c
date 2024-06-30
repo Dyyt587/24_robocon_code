@@ -13,6 +13,7 @@
 #include "drv_visual.h"
 #include "bus_sbus.h"
 #include "intel_ros.h"
+#include "chassis_ops_pos.h"
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
@@ -294,8 +295,8 @@ void goops_action(void)
 void rbmg_handle(void *parameter)
 {
 	
-	motor_set_speed(M3508_5_CAN1,-100);
-	motor_set_speed(M3508_6_CAN1,100);
+//	motor_set_speed(M3508_5_CAN1,-100);
+//	motor_set_speed(M3508_6_CAN1,100);
 	rt_thread_mdelay(2000);
 	
 
@@ -340,7 +341,20 @@ void rbmg_handle(void *parameter)
 //			turn_action(1);
 //		}
 //		findline();
-		
+	rt_thread_mdelay(15000);
+
+chassis_pos_t pos;
+		pos.x_m=0.0f;
+		pos.y_m=6.2f;
+		extern  float zangle ;
+		pos.z_rad=zangle/57.2957804f;
+//chassis_ops_set_pos(&pos);
+		chassis_ops_relative_move(0.0f,6.15f,0.0f);
+//		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
+		rt_thread_mdelay(100);//
+		chassis_ops_relative_move(3.75f,0.0f,0.0f);
+		rt_thread_mdelay(100);
+		chassis_ops_relative_move(0.00f,3.75f,0.0f);
     while (1)
     {			
 			

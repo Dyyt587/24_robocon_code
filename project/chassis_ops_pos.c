@@ -9,23 +9,51 @@ chassis_pos_t chassis_ops_pos;
 
 apid_t ops_x,ops_y,ops_z;
 
+#define THETAR 20.00
 
 extern  float pos_x ;
 extern  float pos_y ;
 extern  float zangle ;
-
+extern float last_angle;
+void ops_debug(void);
 
 
 void chassis_ops_set_pos(chassis_pos_t* pos)
 {
-	chassis_ops_pos = *pos;
+	chassis_ops_pos.x_m = pos->x_m;
+	chassis_ops_pos.y_m = pos->y_m;
+	chassis_ops_pos.z_rad = pos->z_rad;
+}
+//参数单位m
+void chassis_ops_relative_set(float x,float y,float z)
+{
+	chassis_ops_pos.y_m+=y;//目标值
+	chassis_ops_pos.x_m+=x;
+	chassis_ops_pos.z_rad+=z;
+}
+
+void chassis_ops_relative_move(float x,float y,float z)
+{
+	chassis_ops_relative_set(x,y,z);
+	while(1)
+	{
+		if((fabs(chassis_ops_pos.y_m-pos_y/1000)<0.01f)&&(fabs(chassis_ops_pos.x_m-pos_x/1000)<0.01f)&&(fabs(chassis_ops_pos.z_rad*57.2957-zangle)<1.0f))
+		{
+			break;
+		}
+		rt_thread_mdelay(10);
+	}
 }
 
 void chassis_ops_handle(int cycle)
 {
+	float theta=(zangle/180.0f)*3.141592f;//角度
+		APID_Set_Target(&ops_x,chassis_ops_pos.x_m*1000);
+		APID_Set_Target(&ops_y,chassis_ops_pos.y_m*1000);
+		APID_Set_Target(&ops_z,chassis_ops_pos.z_rad*57.2957804f);
 	
 	APID_Set_Present(&ops_x,pos_x);
-	APID_Set_Present(&ops_y,pos_y);
+	APID_Set_Present(&ops_y,pos_y-theta*THETAR);//减少误差，去除旋转过程中y轴
 	APID_Set_Present(&ops_z,zangle);
 	
 	APID_Hander(&ops_x,cycle);
@@ -33,36 +61,72 @@ void chassis_ops_handle(int cycle)
 	APID_Hander(&ops_z,cycle);
 	
 	chassis_ops_speed.x_m_s = APID_Get_Out(&ops_x)/1000.f;
+	//chassis_ops_speed.x_m_s = 0;//APID_Get_Out(&ops_x)/1000.f;
 	chassis_ops_speed.y_m_s = APID_Get_Out(&ops_y)/1000.f;
+	//chassis_ops_speed.y_m_s = 0;//APID_Get_Out(&ops_y)/1000.f;
 	chassis_ops_speed.z_rad_s = APID_Get_Out(&ops_z)/57.2957804f;//180/pi
+	//chassis_ops_speed.z_rad_s = 0;//APID_Get_Out(&ops_z)/57.2957804f;//180/pi
 	
 	chassis_set_speed(chassis,&chassis_ops_speed);
-	
+	ops_debug();
 }
 void ops_debug(void)
 {
-	LOG_D("t_x:%.2f,p_x:%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x));
+	LOG_D("ops:%.2f,%.2f,%.2f",pos_x,pos_y,zangle);
+
+	//LOG_D("t_x:%.2f,%.2f,%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x),APID_Get_Out(&ops_x)/1000.f);
+	//LOG_D("t_y:%f,%f,%f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y),APID_Get_Out(&ops_y)/1000.f);
+	//LOG_D("t_z:%.2f,%.2f,%.2f",APID_Get_Target(&ops_z),APID_Get_Present(&ops_z),APID_Get_Out(&ops_z)/57.2957804f);
 //	LOG_D("t_y:%.2f,p_y:%.2f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y));
 //	LOG_D("t_z:%.2f,p_z:%.2f",APID_Get_Target(&ops_z),APID_Get_Present(&ops_z));
 }
 int chassis_ops_init(void)
 {
-				var_register(&(chassis_ops_pos.x_m), "tarspeed", _f);
-				var_register(&(ops_x.parameter.kp), "kp", _f);
-				var_register(&(ops_y.parameter.ki), "ki", _f);
-				var_register(&(ops_z.parameter.kd), "kd", _f);
-           
+//				var_register(&(chassis_ops_pos.x_m), "tarspeed", _f);
+//				var_register(&(ops_x.parameter.target), "tarspeed", _f);
+//				var_register(&(ops_x.parameter.kp), "kp", _f);
+//				var_register(&(ops_x.parameter.ki), "ki", _f);
+//				var_register(&(ops_x.parameter.kd), "kd", _f);
+//  
+//				var_register(&(chassis_ops_pos.y_m), "tarspeed", _f);
+//				var_register(&(ops_y.parameter.target), "tarspeed", _f);
+//				var_register(&(ops_y.parameter.kp), "kp", _f);
+//				var_register(&(ops_y.parameter.ki), "ki", _f);
+//				var_register(&(ops_y.parameter.kd), "kd", _f);
+	
+////				var_register(&(chassis_ops_pos.z_rad), "tarspeed", _f);
+//				var_register(&(ops_z.parameter.target), "tarspeed", _f);
+//				var_register(&(ops_z.parameter.kp), "kp", _f);
+//				var_register(&(ops_z.parameter.ki), "ki", _f);
+//				var_register(&(ops_z.parameter.kd), "kd", _f);
+
+	
+	APID_Init(&ops_x,PID_POSITION,1.91,0.000,13.058);
+	APID_Init(&ops_y,PID_POSITION,4.91,0.0001,13.085);
+	APID_Init(&ops_z,PID_POSITION,8.75,0.0,900);
+	
+		APID_Set_Target(&ops_x,0);
+		APID_Set_Target(&ops_y,0);
+		APID_Set_Target(&ops_z,0);
+
         APID_Set_Out_Limit(&ops_x, 1000);    
         APID_Set_Integral_Limit(&ops_x, 20); 
         APID_Set_Bias_Dead_Zone(&ops_x, 0.2);  
        // APID_Set_Bias_Limit(&ops_x, 2000);    
 	        APID_Set_Out_Limit(&ops_y, 1000);    
         APID_Set_Integral_Limit(&ops_y, 20); 
-        APID_Set_Bias_Dead_Zone(&ops_y, 0.2);		
- 
-	        APID_Set_Out_Limit(&ops_z, 57.296f*2);    
+        //APID_Set_Bias_Dead_Zone(&ops_y, 0.2);		
+
+	        APID_Set_Out_Limit(&ops_z, 57.296f*4);    
         APID_Set_Integral_Limit(&ops_z, 20); 
-        //APID_Set_Bias_Dead_Zone(&ops_z, 0.2);
+        APID_Set_Bias_Dead_Zone(&ops_z, 0.02);
     return 0;
 }
+
+//
+void tansform_angle()
+{
+	
+}
+
 INIT_ENV_EXPORT(chassis_ops_init);
