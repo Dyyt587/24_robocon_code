@@ -118,6 +118,7 @@ void Data_Analyse(uint8_t rec)
 						{
 							offeset=offeset+360;
 						}
+						all_angle+=offeset;
 						last_angle=zangle;
             zangle = posture.ActVal[0];
             xangle = posture.ActVal[1];

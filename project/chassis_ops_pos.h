@@ -3,6 +3,7 @@
 #include "chassis.h"
 void chassis_ops_handle(int cycle);
 void chassis_ops_set_pos(chassis_pos_t* pos);
-
+chassis_pos_t* chassis_ops_get_pos(void);
 void chassis_ops_relative_move(float x,float y,float z);
+void chassis_ops_rotate(void);
 #endif

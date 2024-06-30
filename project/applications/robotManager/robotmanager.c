@@ -23,13 +23,14 @@ static chassis_ctrl_t ctrl;
 
 
 //有两种模式，一种是上三区的，一种是没上三区的
+
 uint8_t chassis_mode=0;//默认没上三区
 
 
 typedef enum line
 {
     END = 0U,
-    FORWARD,
+    FORWARD,//前进
     ROTATIONL,//左自旋
 		ROTATIONR,//右自旋
 }carline;
@@ -185,32 +186,7 @@ void turn_action(uint8_t mode)
 		speed.z_rad_s=0.0f;
 		chassis_set_speed(&chassis_mai,&speed);
 		rt_thread_mdelay(1500);
-//	while(1)
-//	{
-//		if(posy>5.0f)//转向
-//		{
-//			if(mode==0)
-//			{
-//				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-//				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad+3.1415926f/2.0f;
-//				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
-//				chassis_set_pos(&chassis_mai,&pos);
-//				rt_thread_mdelay(50);
-//			}
-//			else if(mode==1)
-//			{
-//				pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
-//				pos.z_rad=chassis_get_pos(&chassis_mai)->z_rad-3.1415926f/2.0f;
-//				pos.y_m=chassis_get_pos(&chassis_mai)->y_m;
-//				chassis_set_pos(&chassis_mai,&pos);
-//				rt_thread_mdelay(50);
-//			}
-//		}
-//		else 
-//		{
-//			break;
-//		}
-//	}
+
 		if(mode==0)
 		{
 			pos.x_m=chassis_get_pos(&chassis_mai)->x_m;
@@ -273,6 +249,75 @@ void findline(void)
 	}
 }
 
+#define GETBALLSPEED 0.3
+
+/*
+@brief: 进入三区放球区域，开始寻球
+@param：：0表示无球，1表示有球
+*/
+
+
+int LineTracking(float start_posx,float start_posy,float start_posz)
+{
+	pos.x_m=start_posx;//pos.x_s 目标点数值储存变量
+	pos.y_m=start_posy;
+	pos.z_rad=start_posz;
+	while(1)
+	{
+		if(pos.y_m-start_posy<2.7f)//如果车所在的线未循完
+		{
+			pos.y_m=pos.y_m+0.02*GETBALLSPEED;
+			chassis_set_pos(&chassis_mai,&pos); 
+			rt_thread_mdelay(20);
+		}
+		else
+		{
+			
+			
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void get_ball(void) //取球
+{
+	float start_posx=chassis_ops_get_pos()->x_m;//获取当前位置
+	float start_posy=chassis_ops_get_pos()->y_m;//
+	float start_posz=chassis_ops_get_pos()->z_rad;//
+		
+	while(LineTracking(start_posx,start_posy,start_posz)==0)//当车并未找到球
+	{
+		if(pos.x_m-start_posx>2.25)//并且移动距离超过放球区域
+		{
+			while(1)
+			{
+				rt_thread_mdelay(200);
+				LOG_D("finding ball error");//卡死，输出日志
+			}
+		}
+
+		pos.x_m=start_posx;
+		pos.y_m=start_posy;
+		pos.z_rad=start_posz;
+		chassis_set_pos(&chassis_mai,&pos); //绝对运动函数
+		start_posx+=0.8;
+		chassis_set_pos(&chassis_mai,&pos); 
+		rt_thread_mdelay(20);
+
+	}
+	//已经抓到球
+  chassis_ops_relative_move(0,-0.1,0);//往后退一小步
+	chassis_ops_relative_move(0,0,-3.14159/2);//旋转90°
+  chassis_ops_relative_move(0,0.1,0);//再往前走一小步
+	
+	chassis_ops_relative_move(0,2,0);//车向前走
+
+}
+
+
+
+
 //ops行走第二段
 void goops_action(void)
 {
@@ -300,38 +345,7 @@ void rbmg_handle(void *parameter)
 	rt_thread_mdelay(2000);
 	
 
-//		findline();
-//		rt_thread_mdelay(100);
-//	//开机先开环走一段，防止干扰
-//	//chassis_set_pos(&chassis_mai,&(chassis_pos_t){0,0.5,0});
 
-//	//开环走完毕
-//	//巡线开始
-//	
-//	//如果巡线并且位置大于某个位置才巡线
-//	
-//	
-//	//ops位置大于xxx,为防止视觉干扰，开环走一段
-//	
-//	//开环结束，已经到达需要转弯的巡线区域
-//	
-//	//检测到转弯，开始右转
-//	
-//	//右转完成，并且已经开环周一小段距离
-//	//开始巡线
-//	
-//	//到达可能转弯区域，继续巡线
-//	
-//	//检测到转弯，开始转弯
-//	
-//	//完成左转并且开环走一小段距离
-//	//开始巡线（即将进入三区域）
-//	
-//	//碰到第一个t字路口，实现重定位，对定位轮位置进行设置
-//	
-//	//
-//	//
-//	//
 //		if(strcmp(tmp.id_tap,(char *)"LR")==0)
 //		{
 //			turn_action(0);
@@ -341,8 +355,19 @@ void rbmg_handle(void *parameter)
 //			turn_action(1);
 //		}
 //		findline();
+	extern float all_angle;
 	rt_thread_mdelay(15000);
-
+	chassis_pos_t pos1;
+	pos1.x_m=0.0f;
+	pos1.y_m=0.0f;
+	pos1.z_rad=all_angle/57.2957804f+3.1415926/2.0f;
+	chassis_ops_set_pos(&pos1);
+	chassis_ops_rotate();
+	while(1)
+	{
+		
+		rt_thread_mdelay(15);
+	}
 chassis_pos_t pos;
 		pos.x_m=0.0f;
 		pos.y_m=6.2f;
@@ -354,7 +379,13 @@ chassis_pos_t pos;
 		rt_thread_mdelay(100);//
 		chassis_ops_relative_move(3.75f,0.0f,0.0f);
 		rt_thread_mdelay(100);
-		chassis_ops_relative_move(0.00f,3.75f,0.0f);
+		//进入三区
+		chassis_ops_relative_move(0.00f,1.75f,0.0f);
+		rt_thread_mdelay(100);
+		chassis_ops_relative_move(-3.00f,0.0f,0.0f);
+		 
+		
+		
     while (1)
     {			
 			
