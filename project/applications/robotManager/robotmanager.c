@@ -14,6 +14,8 @@
 #include "bus_sbus.h"
 #include "intel_ros.h"
 #include "chassis_ops_pos.h"
+#include "steer.h"
+
 
 uint8_t rbmg_mode = CAB_MODE;
 uint8_t chassis_dir = 0; // 车辆前进方向，以车体坐标系为主
@@ -46,11 +48,6 @@ rt_uint8_t color_type;
 
 
 
-//相对运动函数,这个函数应该是阻塞的,形参一，底盘结构体(映射到chassis_mai)，形参二，相对运动的距离
-void chassis_relative_move(chassis_t*chassis,chassis_pos_t*relative_pos)
-{
-	
-}
 
 
 
@@ -58,91 +55,13 @@ carline chassisState=ROTATIONL;
 //根据红区与蓝区调用不同函数
 void RedMoveHandle(chassis_t*chassis,chassis_pos_t*relative_pos)
 {
-	if(chassis_mode==0)//未上三区
-	{
-		switch(chassisState)
-		{
-			//第一步，从出发点自旋转
-			case ROTATIONL:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				chassisState=FORWARD;
-				break;
-			}
-			//第二步，直走运动距离
-			case FORWARD:
-			{
-				
-				//
-				rt_thread_mdelay(1000);
-				//加识别判断
-				break;
-			}
-			case ROTATIONR:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				//可能也加识别判断（包括定位轮）
-				break;
-			}
-			case END:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				break;
-			}
-		}
-	}
-	else if(chassis_mode==1)//上三区之后的逻辑
-	{
-		
-	}
+
 }
 
 //根据红区与蓝区调用不同函数
 void BlueMoveHandle(chassis_t*chassis,chassis_pos_t*relative_pos)
 {
-	if(chassis_mode==0)//未上三区
-	{
-		switch(chassisState)
-		{
-			//第一步，从出发点自旋转
-			case ROTATIONL:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				chassisState=FORWARD;
-				break;
-			}
-			//第二步，直走运动距离
-			case FORWARD:
-			{
-				
-				//
-				rt_thread_mdelay(1000);
-				//加识别判断
-				break;
-			}
-			case ROTATIONR:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				//可能也加识别判断（包括定位轮）
-				break;
-			}
-			case END:
-			{
-				
-				rt_thread_mdelay(1000);//第一个状态跳转就不判断了
-				break;
-			}
-		}
-	}
-	else if(chassis_mode==1)//上三区之后的逻辑
-	{
-		
-	}
+	
 }
 
 
@@ -264,16 +183,23 @@ int LineTracking(float start_posx,float start_posy,float start_posz)
 	pos.z_rad=start_posz;
 	while(1)
 	{
-		if(pos.y_m-start_posy<2.7f)//如果车所在的线未循完
+		LOG_D("posx%f,posy%f,posz%f",pos.x_m,pos.y_m,pos.z_rad);
+		if(pos.y_m-start_posy<0.7f)//如果车所在的线未循完
 		{
 			pos.y_m=pos.y_m+0.02*GETBALLSPEED;
-			chassis_set_pos(&chassis_mai,&pos); 
+			chassis_ops_set_pos(&pos); 
+			
+			
+			////////////////////
+			//return 1;
+			///////////////////////
 			rt_thread_mdelay(20);
 		}
 		else
 		{
 			
-			
+			LOG_E("line over");
+			rt_thread_mdelay(1000);
 			return 0;
 		}
 	}
@@ -300,18 +226,16 @@ void get_ball(void) //取球
 		pos.x_m=start_posx;
 		pos.y_m=start_posy;
 		pos.z_rad=start_posz;
-		chassis_set_pos(&chassis_mai,&pos); //绝对运动函数
-		start_posx+=0.8;
-		chassis_set_pos(&chassis_mai,&pos); 
-		rt_thread_mdelay(20);
-
+		chassis_ops_move(&pos); //绝对运动函数
+		start_posx+=0.4	;
+		chassis_ops_move(&pos); 
+		rt_thread_mdelay(2000);
 	}
 	//已经抓到球
-  chassis_ops_relative_move(0,-0.1,0);//往后退一小步
+  chassis_ops_relative_move(0,-0.05,0);//往后退一小步
 	chassis_ops_relative_move(0,0,-3.14159/2);//旋转90°
-  chassis_ops_relative_move(0,0.1,0);//再往前走一小步
-	
-	chassis_ops_relative_move(0,2,0);//车向前走
+  chassis_ops_relative_move(0,0.05,0);//再往前走一小步
+	chassis_ops_relative_move(0,0.2,0);//车向前走
 
 }
 
@@ -337,12 +261,21 @@ void goops_action(void)
 	}
 }
 
+//拿球的一些列操作
+void take_ball(void)
+{
+	steer_plate(40.0f,0);//吸盘舵机（吸球）
+	
+	
+	steer_plate(90.0f,1);
+}
+
 void rbmg_handle(void *parameter)
 {
 	
 //	motor_set_speed(M3508_5_CAN1,-100);
 //	motor_set_speed(M3508_6_CAN1,100);
-	rt_thread_mdelay(2000);
+//	rt_thread_mdelay(2000);
 	
 
 
@@ -355,44 +288,83 @@ void rbmg_handle(void *parameter)
 //			turn_action(1);
 //		}
 //		findline();
-	extern float all_angle;
-	rt_thread_mdelay(15000);
-	chassis_pos_t pos1;
-	pos1.x_m=0.0f;
-	pos1.y_m=0.0f;
-	pos1.z_rad=all_angle/57.2957804f+3.1415926/2;
-	chassis_ops_set_pos(&pos1);
-	chassis_ops_rotate();
-	while(1)
-	{
-		
-		rt_thread_mdelay(15);
-	}
-chassis_pos_t pos;
-		pos.x_m=0.0f;
-		pos.y_m=0.0f;
-		extern  float zangle ;
-		pos.z_rad=zangle/57.2957804f;
-//chassis_ops_set_pos(&pos);
-		//chassis_ops_relative_move(0.0f,6.15f,0.0f);
-		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
-		rt_thread_mdelay(10000);//
-//		chassis_ops_relative_move(3.75f,0.0f,0.0f);
-//		rt_thread_mdelay(100);
-//		//进入三区
-//		chassis_ops_relative_move(0.00f,1.75f,0.0f);
-//		rt_thread_mdelay(100);
-//		chassis_ops_relative_move(-3.00f,0.0f,0.0f);
-//		 
-		
-		
-    while (1)
-    {			
-			
-			rt_thread_mdelay(1);
-			
-    }
+//	extern float all_angle;
+//	rt_thread_mdelay(15000);
+//	chassis_pos_t pos1;
+//	pos1.x_m=0.0f;
+//	pos1.y_m=0.0f;
+//	pos1.z_rad=all_angle/57.2957804f+3.1415926/2;
+
+
+//	chassis_ops_relative_move(0.0f,0.0f,3.14/2.0f);
+////	chassis_ops_set_pos(&pos1);
+//	chassis_ops_rotate();
+//	while(1)
+//	{
+//		
+//		rt_thread_mdelay(15);
+//	}
+//chassis_pos_t pos;
+//		pos.x_m=0.0f;
+//		pos.y_m=0.0f;
+//		extern  float zangle ;
+//		pos.z_rad=zangle/57.2957804f;
+////chassis_ops_set_pos(&pos);
+//		//chassis_ops_relative_move(0.0f,6.15f,0.0f);
+//		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
+//		rt_thread_mdelay(10000);//
+////		chassis_ops_relative_move(3.75f,0.0f,0.0f);
+////		rt_thread_mdelay(100);
+////		//进入三区
+////		chassis_ops_relative_move(0.00f,1.75f,0.0f);
+////		rt_thread_mdelay(100);
+////		chassis_ops_relative_move(-3.00f,0.0f,0.0f);
+////		 
+//		
+//		
+		//get_ball();
+//    while (1)
+//    {			
+//			extern visual_date_t tmp;
+//			if(strcmp("+",tmp.id_tap)==0)
+//			{
+//				chassis_pos_t pos1;
+//				pos1.x_m=0.00001*(tmp.x-320);
+//				pos1.y_m=0.00001*(tmp.y-240);
+//				pos1.z_rad=0;
+//				chassis_ops_relative_move(pos1.x_m,pos1.y_m,pos1.z_rad);
+//			}
+
+//			rt_thread_mdelay(20);
+//			
+//    }
+			while(1)
+			{
+				
+				rt_thread_mdelay(10);
+//				steer_plate(0.0f,0);
+			}
+
 }
+
+
+//去区域三的函数
+void go_area3(void)
+{
+		chassis_pos_t pos_3a;
+		pos_3a.x_m=0.0f;
+		pos_3a.y_m=0.0f;
+		extern  float zangle ;
+		pos_3a.z_rad=zangle/57.2957804f;
+		chassis_ops_relative_move(0.0f,6.15f,0.0f);
+		rt_thread_mdelay(1000);//
+		chassis_ops_relative_move(3.75f,0.0f,0.0f);
+		rt_thread_mdelay(1000);
+		chassis_ops_relative_move(0.0f,3.75f,0.0f);
+		rt_thread_mdelay(1000);
+}
+
+
 
 int rbmg_init(void)
 {

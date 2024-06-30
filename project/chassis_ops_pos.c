@@ -62,7 +62,7 @@ void chassis_ops_relative_move(float x,float y,float z)
 	chassis_ops_relative_set(x,y,z);
 	while(1)
 	{
-		if((fabs(chassis_ops_pos.y_m-pos_y/1000)<0.01f)&&(fabs(chassis_ops_pos.x_m-pos_x/1000)<0.01f)&&(fabs(chassis_ops_pos.z_rad*57.2957-zangle)<1.0f))
+		if((fabs(chassis_ops_pos.y_m-pos_y/1000)<0.01f)&&(fabs(chassis_ops_pos.x_m-pos_x/1000)<0.01f))
 		{
 			break;
 		}
@@ -130,7 +130,7 @@ void ops_debug(void)
 {
 //	LOG_D("ops:%.2f,%.2f,%.2f",pos_x,pos_y,all_angle);
 
-	LOG_D("t_x:%.2f,%.2f,%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x),APID_Get_Out(&ops_x)/1000.f);
+	//LOG_D("t_x:%.2f,%.2f,%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x),APID_Get_Out(&ops_x)/1000.f);
 	//LOG_D("t_y:%f,%f,%f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y),APID_Get_Out(&ops_y)/1000.f);
 	//LOG_D("t_z:%.2f,%.2f,%.2f",APID_Get_Target(&ops_z),APID_Get_Present(&ops_z),APID_Get_Out(&ops_z)/57.2957804f);
 //	LOG_D("t_y:%.2f,p_y:%.2f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y));
@@ -179,10 +179,5 @@ int chassis_ops_init(void)
   return 0;
 }
 
-//
-void tansform_angle()
-{
-	
-}
 
 INIT_ENV_EXPORT(chassis_ops_init);
