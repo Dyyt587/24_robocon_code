@@ -44,7 +44,7 @@ void chassis_ops_relative_set(float x,float y,float z)
 	chassis_ops_pos.z_rad+=z;
 }
 //参数单位m
-void chassis_ops_move(chassis_pos_t* pos)
+void chassis_ops_move(chassis_pos_t* pos) 
 {
 	chassis_ops_set_pos(pos);
 	
@@ -100,6 +100,7 @@ void chassis_ops_handle(int cycle)
 
 void chassis_ops_rotate(void)
 {
+	APID_STOP(&ops_x);
 	APID_STOP(&ops_y);
 	APID_Set_Target(&ops_z,chassis_ops_pos.z_rad*57.2957804f);
 
@@ -113,17 +114,23 @@ void chassis_ops_rotate(void)
 	}
 	rt_thread_mdelay(100);
 	float error_offset = chassis_ops_pos.y_m*1000 - pos_y;
-	chassis_ops_offeset.y_m -=error_offset;
-	
-	chassis_ops_pos.y_m = APID_Get_Present(&ops_y);
-	
+	chassis_ops_offeset.y_m -=error_offset/1000;
+	chassis_ops_pos.y_m = chassis_ops_offeset.y_m;
+
+		float error_offsetx = chassis_ops_pos.x_m*1000 - pos_x;
+	chassis_ops_offeset.x_m -=error_offsetx/1000;
+	chassis_ops_pos.x_m = chassis_ops_offeset.x_m;
+	LOG_W("ops_pos_y %f offset %f",chassis_ops_pos.y_m,error_offset);
+	LOG_W("ops_pos_x %f offset %f",chassis_ops_pos.x_m,error_offsetx);
+APID_Enable(&ops_x);
 APID_Enable(&ops_y);
+
 }
 void ops_debug(void)
 {
-	LOG_D("ops:%.2f,%.2f,%.2f",pos_x,pos_y,all_angle);
+//	LOG_D("ops:%.2f,%.2f,%.2f",pos_x,pos_y,all_angle);
 
-	//LOG_D("t_x:%.2f,%.2f,%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x),APID_Get_Out(&ops_x)/1000.f);
+	LOG_D("t_x:%.2f,%.2f,%.2f",APID_Get_Target(&ops_x),APID_Get_Present(&ops_x),APID_Get_Out(&ops_x)/1000.f);
 	//LOG_D("t_y:%f,%f,%f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y),APID_Get_Out(&ops_y)/1000.f);
 	//LOG_D("t_z:%.2f,%.2f,%.2f",APID_Get_Target(&ops_z),APID_Get_Present(&ops_z),APID_Get_Out(&ops_z)/57.2957804f);
 //	LOG_D("t_y:%.2f,p_y:%.2f",APID_Get_Target(&ops_y),APID_Get_Present(&ops_y));

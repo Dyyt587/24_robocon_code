@@ -360,7 +360,7 @@ void rbmg_handle(void *parameter)
 	chassis_pos_t pos1;
 	pos1.x_m=0.0f;
 	pos1.y_m=0.0f;
-	pos1.z_rad=all_angle/57.2957804f+3.1415926/2.0f;
+	pos1.z_rad=all_angle/57.2957804f+3.1415926/2;
 	chassis_ops_set_pos(&pos1);
 	chassis_ops_rotate();
 	while(1)
@@ -370,20 +370,20 @@ void rbmg_handle(void *parameter)
 	}
 chassis_pos_t pos;
 		pos.x_m=0.0f;
-		pos.y_m=6.2f;
+		pos.y_m=0.0f;
 		extern  float zangle ;
 		pos.z_rad=zangle/57.2957804f;
 //chassis_ops_set_pos(&pos);
-		chassis_ops_relative_move(0.0f,6.15f,0.0f);
-//		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
-		rt_thread_mdelay(100);//
-		chassis_ops_relative_move(3.75f,0.0f,0.0f);
-		rt_thread_mdelay(100);
-		//进入三区
-		chassis_ops_relative_move(0.00f,1.75f,0.0f);
-		rt_thread_mdelay(100);
-		chassis_ops_relative_move(-3.00f,0.0f,0.0f);
-		 
+		//chassis_ops_relative_move(0.0f,6.15f,0.0f);
+		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
+		rt_thread_mdelay(10000);//
+//		chassis_ops_relative_move(3.75f,0.0f,0.0f);
+//		rt_thread_mdelay(100);
+//		//进入三区
+//		chassis_ops_relative_move(0.00f,1.75f,0.0f);
+//		rt_thread_mdelay(100);
+//		chassis_ops_relative_move(-3.00f,0.0f,0.0f);
+//		 
 		
 		
     while (1)
