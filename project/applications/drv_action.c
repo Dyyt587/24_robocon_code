@@ -14,8 +14,8 @@
  float yangle = 0;
  float w_z = 0;
  
- float last_angle=0.0f;
- float all_angle=0.0f; 
+
+
  
  
 
@@ -40,19 +40,7 @@ typedef struct
     float yangle;
 } action_angle_t;
 
-void set_offset(float x,float y)
-{
-	offset_x=x;
-	offset_y=y;
-}
 
-
-void clear_action(float x,float y)
-{
-	set_offset(x,y);
-	all_posx=pos_x-offset_x;
-	all_posy=pos_y-offset_y;
-}
 
 
 /**
@@ -109,6 +97,7 @@ void Data_Analyse(uint8_t rec)
         if (ch == 0x0d)
 				//首先，5ms转不到180
         {
+<<<<<<< Updated upstream
 						float offeset=zangle-last_angle;;
 						if(offeset>180.0f)
 						{
@@ -120,6 +109,9 @@ void Data_Analyse(uint8_t rec)
 						}
 						all_angle+=offeset;
 						last_angle=zangle;
+=======
+						
+>>>>>>> Stashed changes
             zangle = posture.ActVal[0];
             xangle = posture.ActVal[1];
             yangle = posture.ActVal[2];

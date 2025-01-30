@@ -279,6 +279,7 @@ void rbmg_handle(void *parameter)
 	
 
 
+<<<<<<< Updated upstream
 //		if(strcmp(tmp.id_tap,(char *)"LR")==0)
 //		{
 //			turn_action(0);
@@ -345,6 +346,28 @@ void rbmg_handle(void *parameter)
 //				steer_plate(0.0f,0);
 			}
 
+=======
+	  rt_thread_mdelay(15000);
+
+		chassis_pos_t pos1;
+		pos1.x_m=0.0f;
+		pos1.y_m=0.0f;
+		extern  float zangle ;
+		pos1.z_rad=zangle/57.2957804f+3.1415926/2.0;
+		chassis_ops_set_pos(&pos1);
+//		chassis_ops_relative_move(0.0f,6.15f,0.0f);
+////		chassis_ops_relative_move(0.0f,0.f,-3.1415926f/2.f);
+//		rt_thread_mdelay(100);//
+//		chassis_ops_relative_move(3.75f,0.0f,0.0f);
+//		rt_thread_mdelay(100);
+//		chassis_ops_relative_move(0.00f,3.75f,0.0f);
+    while (1)
+    {			
+			
+			rt_thread_mdelay(5);
+			
+    }
+>>>>>>> Stashed changes
 }
 
 

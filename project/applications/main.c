@@ -282,7 +282,7 @@ int main(void)
 	ctrl.w=1;
 	//abus_deamon_start();
 	//motor_set_pos(M3508_7_CAN1, 3.1415926/2);
-	//	motor_set_speed(M3508_5_CAN1, -400);
+//		motor_set_speed(M3508_5_CAN1, -100);
 
 	//	motor_set_pos_plan(M3508_7_CAN1, 3.1415926/8, 0.02f, 5.f, 0);
 

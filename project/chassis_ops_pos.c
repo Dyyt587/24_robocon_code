@@ -15,7 +15,7 @@ apid_t ops_x,ops_y,ops_z;
 extern  float pos_x ;
 extern  float pos_y ;
 extern  float zangle ;
-extern float last_angle;
+
 void ops_debug(void);
 
 void relocation_action(chassis_pos_t* standard)
@@ -72,6 +72,7 @@ void chassis_ops_relative_move(float x,float y,float z)
 extern float all_angle; 
 void chassis_ops_handle(int cycle)
 {
+<<<<<<< Updated upstream
 	float theta=(all_angle/180.0f)*3.141592f;//角度
 	APID_Set_Target(&ops_x,chassis_ops_pos.x_m*1000);
 	APID_Set_Target(&ops_y,chassis_ops_pos.y_m*1000);
@@ -81,6 +82,15 @@ void chassis_ops_handle(int cycle)
 	//APID_Set_Present(&ops_y,pos_y-	theta*THETAR);//减少误差，去除旋转过程中y轴
 	APID_Set_Present(&ops_y,pos_y);//减少误差，去除旋转过程中y轴
 	APID_Set_Present(&ops_z,all_angle);
+=======
+		APID_Set_Target(&ops_x,chassis_ops_pos.x_m*1000);
+		APID_Set_Target(&ops_y,chassis_ops_pos.y_m*1000);
+		APID_Set_Target(&ops_z,chassis_ops_pos.z_rad*57.2957804f);
+	
+	APID_Set_Present(&ops_x,pos_x);
+	APID_Set_Present(&ops_y,pos_y);//减少误差，去除旋转过程中y轴
+	APID_Set_Present(&ops_z,zangle);
+>>>>>>> Stashed changes
 	
 	APID_Hander(&ops_x,cycle);
 	APID_Hander(&ops_y,cycle);
@@ -158,7 +168,7 @@ int chassis_ops_init(void)
 
 	
 	APID_Init(&ops_x,PID_POSITION,1.91,0.000,13.058);
-	APID_Init(&ops_y,PID_POSITION,4.91,0.0001,13.085);
+	APID_Init(&ops_y,PID_POSITION,4.91,0.000,13.085);
 	APID_Init(&ops_z,PID_POSITION,8.75,0.0,900);
 	
 	APID_Set_Target(&ops_x,0);
