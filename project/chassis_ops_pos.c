@@ -74,6 +74,7 @@ void chassis_ops_handle(int cycle)
 {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	float theta=(all_angle/180.0f)*3.141592f;//角度
 	APID_Set_Target(&ops_x,chassis_ops_pos.x_m*1000);
 	APID_Set_Target(&ops_y,chassis_ops_pos.y_m*1000);
@@ -84,6 +85,8 @@ void chassis_ops_handle(int cycle)
 	APID_Set_Present(&ops_y,pos_y);//减少误差，去除旋转过程中y轴
 	APID_Set_Present(&ops_z,all_angle);
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 		APID_Set_Target(&ops_x,chassis_ops_pos.x_m*1000);

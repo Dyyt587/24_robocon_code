@@ -281,6 +281,7 @@ void rbmg_handle(void *parameter)
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 //		if(strcmp(tmp.id_tap,(char *)"LR")==0)
 //		{
 //			turn_action(0);
@@ -350,6 +351,10 @@ void rbmg_handle(void *parameter)
 =======
 	  rt_thread_mdelay(15000);
 
+=======
+	  rt_thread_mdelay(15000);
+
+>>>>>>> Stashed changes
 =======
 	  rt_thread_mdelay(15000);
 

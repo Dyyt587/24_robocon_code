@@ -99,6 +99,7 @@ void Data_Analyse(uint8_t rec)
         {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 						float offeset=zangle-last_angle;;
 						if(offeset>180.0f)
 						{
@@ -110,6 +111,9 @@ void Data_Analyse(uint8_t rec)
 						}
 						all_angle+=offeset;
 						last_angle=zangle;
+=======
+						
+>>>>>>> Stashed changes
 =======
 						
 >>>>>>> Stashed changes
